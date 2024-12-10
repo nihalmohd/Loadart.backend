@@ -1,12 +1,13 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import { database } from './Model/Config.js';
 
 
 dotenv.config();
 
 const app = express();
-
+database();
 
 app.use(express.json());
 app.use(cors({
