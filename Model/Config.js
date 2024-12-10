@@ -1,9 +1,9 @@
-import pg from "pg";
+import pkg from "pg"; 
 import dotenv from "dotenv";
 
 dotenv.config();
 
-const { Pool } = pg;
+const { Pool } = pkg; 
 
 
 const pool = new Pool({
@@ -12,32 +12,16 @@ const pool = new Pool({
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
+    ssl: { rejectUnauthorized: false }, 
 });
 
-// DB_HOST="loadartmain1.cfcwe62c4ss7.eu-north-1.rds.amazonaws.com"    
-// DB_PORT="5432"                  
-// DB_USER="admin_loadart"     
-// DB_PASSWORD="l.12345678"  
-// DB_NAME="postgres"
-
-var client1 = new pg.Client({
-    host: "loadartmain1.cfcwe62c4ss7.eu-north-1.rds.amazonaws.com",
-    port:"5432",
-    user:"admin_loadart",
-    password: "l.12345678",
-    database: "postgres",
-    ssl: false
-}); 
-// client1.connect();
 
 export const database = async () => {
     try {
-        const client = await client1.connect();
-        console.log("Connected to PostgreSQL successfully!");
-        client.release(); 
-    } catch (err) {
-        console.error("Error connecting to PostgreSQL:", err);
-        throw err;
+        await pool.connect();
+        console.log("Connected to PostgreSQL database successfully!");
+    } catch (error) {
+        console.error("Error connecting to PostgreSQL:", error.message);
     }
 };
 
