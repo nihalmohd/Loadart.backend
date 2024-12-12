@@ -3,18 +3,25 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { database } from "./Model/Config.js";
 
-dotenv.config(); // Load environment variables
+dotenv.config(); 
 
 const app = express();
+const corsOptions = {
+    origin: process.env.FRONTENDURL,  
+    methods: ['DELETE', 'GET', 'POST', 'PUT'],  
+    allowedHeaders: ['Content-Type', 'Authorization'], 
+    credentials: true, 
+};
+app.use(cors(corsOptions));
 app.use(express.json());
-app.use(cors());
 
-// Connect to the database
+
 database();
 
 app.get("/", (req, res) => {
     res.send("Hello, Loadart Backend!");
 });
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
