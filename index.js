@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { database } from "./Model/Config.js";
-import { TranspoterRouter } from "./controller/Transpoter.js";
+import { TranspoterRouter } from "./routes/Transpoter.js";
 
 dotenv.config(); 
 

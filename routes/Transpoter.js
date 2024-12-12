@@ -1,7 +1,8 @@
 import express from 'express';
+import { Register } from '../controller/TranspoterSignUp.js';
 
 
-const TranspoterRouter = express.Router()
+export const TranspoterRouter = express.Router()
 
 TranspoterRouter.get("/", (req, res) => {
     res.send("Hello, Loadart Transpoter side call recieved!");
@@ -9,10 +10,4 @@ TranspoterRouter.get("/", (req, res) => {
     
 });
 
-
-
-
-
-
-
-export {TranspoterRouter}
+TranspoterRouter.post("/Register",Register)
