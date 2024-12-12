@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { database } from "./Model/Config.js";
+import { TranspoterRouter } from "./controller/Transpoter.js";
 
 dotenv.config(); 
 
@@ -21,6 +22,9 @@ database();
 app.get("/", (req, res) => {
     res.send("Hello, Loadart Backend!");
 });
+
+app.use('/Transpoter',TranspoterRouter)
+
 
 
 const PORT = process.env.PORT || 5000;
