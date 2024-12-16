@@ -12,7 +12,7 @@ const pool = new Pool({
     port: 5432,
     user: "admin_loadart",
     password: "l.12345678",
-    database: process.env.DB_NAME,
+    database: "postgres",
     ssl: { rejectUnauthorized: false }, 
 });
 
