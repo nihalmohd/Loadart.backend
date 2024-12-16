@@ -5,13 +5,6 @@ dotenv.config();
 
 const { Pool } = pkg; 
 
-// PORT=5000
-// FRONTEND_URL=http://localhost:5173
-// DB_HOST=loadartmain1.cfcwe62c4ss7.eu-north-1.rds.amazonaws.com
-// DB_PORT=5432
-// DB_USER=admin_loadart
-// DB_PASSWORD=l.12345678
-// DB_NAME=postgres
 
 
 const pool = new Pool({
@@ -19,7 +12,7 @@ const pool = new Pool({
     port: 5432,
     user: "admin_loadart",
     password: "l.12345678",
-    database: "postgres",
+    database: process.env.DB_NAME,
     ssl: { rejectUnauthorized: false }, 
 });
 
