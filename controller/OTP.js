@@ -2,39 +2,32 @@ import axios from 'axios';
 
 let generatedOtp = null;
 
-export const SentOtp = async (req, res) => {
-  const { phoneNumber } = req.body;
+export const SentOtp = async(req,res)=>{
+    const { MobileNumber } = req.body;
 
-  generatedOtp = Math.floor(100000 + Math.random() * 900000);
 
-  const apiKey = "1607100000000330634";
-  const senderId = 'CVSIFS';
-  const apiUrl = `http://sapteleservices.com/SMS_API/sendsms.php`;
+  generatedOtp = Math.floor(1000 + Math.random() * 9000);
 
-  const params = {
-    mobile: phoneNumber,
-    message: `Hi ${phoneNumber}, Your login OTP is ${generatedOtp} for TMK. CVS Info Solutions`,
-    sender: senderId,
-    authkey: apiKey,
-  };
-
+  const username = process.env.SMS_USERNAME;
+  const password = process.env.SMS_PASSWORD;
+  const senderId = process.env.SENDER_ID;
+  const tid = process.env.TID;
+  const mobile = MobileNumber
+  const message = `Hi ${mobile}, Your login OTP is ${generatedOtp} for TMK. CVS Info Solutions`
   try {
-    const response = await axios.get(apiUrl, { params });
-    console.log('Full Response:', response.data);
-
-    if (response.status === 200) {
-      res.json({ message: 'OTP sent successfully!' });
+    const response = await axios.post(`https://sapteleservices.com/SMS_API/sendsms.php?username=${username}&password=${password}&mobile=${mobile}&sendername=${senderId}&message=${message}&routetype=1&tid=${tid}`);
+     if (response.status === 200) {
+      res.status(200).json({ message: 'OTP sent successfully!' });
     } else {
       res.status(400).json({ message: 'Failed to send OTP' });
     }
   } catch (error) {
-    console.error('Error Details:', error.response?.data || error.message);
     res.status(500).json({ message: 'Error sending OTP', error: error.message });
   }
-};
+}
 
 export const VerifyOTP = (req,res)=>{
-    const { phoneNumber, otp } = req.body;
+    const { MobileNumber, otp } = req.body;
 
     if (otp == generatedOtp) {
       res.json({ message: 'OTP verified successfully!' });
