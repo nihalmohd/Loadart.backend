@@ -12,6 +12,19 @@ export const Register = async (req, res) => {
         }
 
         await pool.query('BEGIN');
+        const checkMobileQuery = `
+        SELECT transporters_mob 
+        FROM loadart.transporters 
+        WHERE transporters_mob = $1;
+    `;
+    const mobileResult = await pool.query(checkMobileQuery, [MobileNumber]);
+    if (mobileResult.rows.length > 0) {
+        return res.status(409).json({
+            error: 'Mobile number already exists',
+            status: 'Conflict detected',
+        });
+    }
+
 
         const userTypeQuery = `
             SELECT user_types_id 

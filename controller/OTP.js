@@ -11,22 +11,6 @@ export const SentOtp = async (req, res) => {
     }
 
     try {
-
-        const checkMobileQuery = `
-            SELECT transporters_phone 
-            FROM loadart.transporters 
-            WHERE transporters_phone = $1;
-        `;
-        const mobileResult = await pool.query(checkMobileQuery, [MobileNumber]);
-
-        if (mobileResult.rows.length > 0) {
-            return res.status(409).json({
-                error: 'Mobile number already exists',
-                status: 'Conflict detected',
-            });
-        }
-
-
         generatedOtp = Math.floor(1000 + Math.random() * 9000);
 
         const username = process.env.SMS_USERNAME;
