@@ -13,22 +13,6 @@ export const Register = async (req, res) => {
 
         await pool.query('BEGIN');
 
-
-        const checkMobileQuery = `
-            SELECT transporters_phone 
-            FROM loadart.transporters 
-            WHERE transporters_phone = $1;
-        `;
-        const mobileResult = await pool.query(checkMobileQuery, [MobileNumber]);
-
-        if (mobileResult.rows.length > 0) {
-            await pool.query('ROLLBACK'); 
-            return res.status(200).json({
-                message: 'Mobile number already exists',
-                status: 'Data found successfully',
-            });
-        }
-
         const userTypeQuery = `
             SELECT user_types_id 
             FROM loadart.user_types 
