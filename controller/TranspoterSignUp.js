@@ -1,31 +1,33 @@
 import pool from "../Model/Config.js";
+import { generateAccessToken, generateRefreshToken } from "../Utils/JwtGenerator.js";
 
 export const Register = async (req, res) => {
     try {
         const { transporters_name, company, transporters_email, transporters_phone, MobileNumber } = req.body;
 
-
-        if (!transporters_name || !company || !transporters_phone || !MobileNumber ) {
+        if (!transporters_name || !company || !transporters_phone || !MobileNumber) {
             return res.status(400).json({
                 error: 'Missing required fields: transporters_name, company, transporters_phone, Mobile number',
             });
         }
 
         await pool.query('BEGIN');
+
         const checkMobileQuery = `
-        SELECT transporters_mob 
-        FROM loadart.transporters 
-        WHERE transporters_mob = $1;
-    `;
-    const mobileResult = await pool.query(checkMobileQuery, [MobileNumber]);
-    if (mobileResult.rows.length > 0) {
-        return res.status(409).json({
-            error: 'Mobile number already exists',
-            status: 'Conflict detected',
-        });
-    }
+            SELECT transporters_mob 
+            FROM loadart.transporters 
+            WHERE transporters_mob = $1;
+        `;
+        const mobileResult = await pool.query(checkMobileQuery, [MobileNumber]);
+        if (mobileResult.rows.length > 0) {
+            await pool.query('ROLLBACK');
+            return res.status(409).json({
+                error: 'Mobile number already exists',
+                status: 'Conflict detected',
+            });
+        }
 
-
+ 
         const userTypeQuery = `
             SELECT user_types_id 
             FROM loadart.user_types 
@@ -46,6 +48,7 @@ export const Register = async (req, res) => {
         const transporterValues = [transporters_name, company, transporters_email || null, transporters_phone, MobileNumber];
         await pool.query(transporterQuery, transporterValues);
 
+
         const userQuery = `
             INSERT INTO loadart.users (users_name, users_mobile, user_types_id) 
             VALUES ($1, $2, $3);
@@ -55,7 +58,28 @@ export const Register = async (req, res) => {
 
         await pool.query('COMMIT');
 
-        res.status(200).json({ message: 'Registration successful' });
+
+        const userPayload = { id: MobileNumber, username: transporters_name };
+        const accessToken = generateAccessToken(userPayload);
+        const refreshToken = generateRefreshToken(userPayload);
+
+        
+        res.cookie('accessToken', accessToken, {
+            httpOnly: true,
+            secure: false, 
+            sameSite: 'strict',
+            maxAge: 15 * 60 * 1000, s
+        });
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: false, 
+            sameSite: 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000, 
+        });
+
+
+        res.status(200).json({ message: 'Registration successful', login: true });
     } catch (error) {
         console.error('Error during registration:', error);
         await pool.query('ROLLBACK');

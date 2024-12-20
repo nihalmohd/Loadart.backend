@@ -1,12 +1,14 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import cookieParser from 'cookie-parser';
 import { database } from "./Model/Config.js";
 import { TranspoterRouter } from "./routes/Transpoter.js";
 
 dotenv.config(); 
 
 const app = express();
+app.use(cookieParser());
 const corsOptions = {
     origin: process.env.FRONTENDURL,  
     methods: ['DELETE', 'GET', 'POST', 'PUT'],  
