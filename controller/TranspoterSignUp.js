@@ -10,7 +10,7 @@ export const Register = async (req, res) => {
                 error: 'Missing required fields: transporters_name, company,  Mobile number',
             });
         }
-
+    
         await pool.query('BEGIN');
 
         const userTypeQuery = `
@@ -43,7 +43,7 @@ export const Register = async (req, res) => {
 
         await pool.query('COMMIT');
 
-
+       
         const userPayload = { id: MobileNumber, username: transporters_name };
         const accessToken = generateAccessToken(userPayload);
         const refreshToken = generateRefreshToken(userPayload);
@@ -53,7 +53,7 @@ export const Register = async (req, res) => {
             httpOnly: true,
             secure: false, 
             sameSite: 'strict',
-            maxAge: 15 * 60 * 1000, s
+            maxAge: 15 * 60 * 1000, 
         });
 
         res.cookie('refreshToken', refreshToken, {
