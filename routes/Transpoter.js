@@ -4,6 +4,7 @@ import { SentOtp, VerifyOTP } from '../controller/OTP.js';
 import { Refresh } from '../controller/CheckingAccessToken.js';
 import { Logout } from '../controller/Logout.js';
 import { updateTransporterBasicDetails } from '../controller/UpdateProfile.js';
+import { updateGstnAndInsertDocs } from '../controller/UpdateProfileDocuments.js';
 
 
 export const TranspoterRouter = express.Router()
@@ -18,6 +19,7 @@ TranspoterRouter.post("/Register",Register)
 TranspoterRouter.post("/send-otp",SentOtp)
 TranspoterRouter.post("/Verify-otp",VerifyOTP)
 TranspoterRouter.post("/updateTransporterBasicDetails",updateTransporterBasicDetails)
+TranspoterRouter.post("/updateTransporterDocumentsDetails",updateGstnAndInsertDocs)
 
 
 TranspoterRouter.get("/Refresh",Refresh)
