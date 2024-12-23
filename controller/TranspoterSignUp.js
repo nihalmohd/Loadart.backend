@@ -5,29 +5,14 @@ export const Register = async (req, res) => {
     try {
         const { transporters_name, company, transporters_email, transporters_phone, MobileNumber } = req.body;
 
-        if (!transporters_name || !company || !transporters_phone || !MobileNumber) {
+        if (!transporters_name || !company || !MobileNumber) {
             return res.status(400).json({
-                error: 'Missing required fields: transporters_name, company, transporters_phone, Mobile number',
+                error: 'Missing required fields: transporters_name, company,  Mobile number',
             });
         }
 
         await pool.query('BEGIN');
 
-        const checkMobileQuery = `
-            SELECT transporters_mob 
-            FROM loadart.transporters 
-            WHERE transporters_mob = $1;
-        `;
-        const mobileResult = await pool.query(checkMobileQuery, [MobileNumber]);
-        if (mobileResult.rows.length > 0) {
-            await pool.query('ROLLBACK');
-            return res.status(409).json({
-                error: 'Mobile number already exists',
-                status: 'Conflict detected',
-            });
-        }
-
- 
         const userTypeQuery = `
             SELECT user_types_id 
             FROM loadart.user_types 
@@ -45,7 +30,7 @@ export const Register = async (req, res) => {
             INSERT INTO loadart.transporters (transporters_name, company, transporters_email, transporters_phone, transporters_mob) 
             VALUES ($1, $2, $3, $4, $5);
         `;
-        const transporterValues = [transporters_name, company, transporters_email || null, transporters_phone, MobileNumber];
+        const transporterValues = [transporters_name, company, transporters_email || null, transporters_phone || null, MobileNumber];
         const result = await pool.query(transporterQuery, transporterValues);
 
 
