@@ -36,13 +36,37 @@ export const SentOtp = async (req, res) => {
 };
 
 
-export const VerifyOTP = (req,res)=>{
+export const VerifyOTP = async (req, res) => {
     const { MobileNumber, otp } = req.body;
-
-    if (otp == generatedOtp) {
-      res.json({ message: 'OTP verified successfully!' });
-      generatedOtp = null; 
-    } else {
-      res.status(400).json({ message: 'Invalid OTP' });
+    if (!MobileNumber || !otp) {
+        return res.status(400).json({ error: 'Mobile number and OTP are required' });
     }
-}
+    try {
+        if (otp == generatedOtp) {
+            const checkMobileQuery = `
+                SELECT *
+                FROM loadart.transporters 
+                WHERE transporters_mob = $1;
+            `;
+            const mobileResult = await pool.query(checkMobileQuery, [MobileNumber]);
+
+            if (mobileResult.rows.length > 0) {
+
+                res.status(200).json({ 
+                    message: 'OTP verified successfully!',
+                    data: mobileResult.rows[0], 
+                });
+                generatedOtp = null;
+            } else {
+
+                res.status(404).json({ error: 'Data not found' });
+            }
+        } else {
+
+            res.status(400).json({ error: 'Invalid OTP' });
+        }
+    } catch (error) {
+        console.error('Error during OTP verification:', error.message);
+        res.status(500).json({ error: 'Internal Server Error', details: error.message });
+    }
+};

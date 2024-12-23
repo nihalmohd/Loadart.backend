@@ -46,7 +46,7 @@ export const Register = async (req, res) => {
             VALUES ($1, $2, $3, $4, $5);
         `;
         const transporterValues = [transporters_name, company, transporters_email || null, transporters_phone, MobileNumber];
-        await pool.query(transporterQuery, transporterValues);
+        const result = await pool.query(transporterQuery, transporterValues);
 
 
         const userQuery = `
@@ -79,7 +79,7 @@ export const Register = async (req, res) => {
         });
 
 
-        res.status(200).json({ message: 'Registration successful', login: true });
+        res.status(200).json({ message: 'Registration successful', Data:result });
     } catch (error) {
         console.error('Error during registration:', error);
         await pool.query('ROLLBACK');
