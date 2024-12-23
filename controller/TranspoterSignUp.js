@@ -27,12 +27,14 @@ export const Register = async (req, res) => {
         const userTypeId = userTypeResult.rows[0].user_types_id;
 
         const transporterQuery = `
-            INSERT INTO loadart.transporters (transporters_name, company, transporters_email, transporters_phone, transporters_mob) 
-            VALUES ($1, $2, $3, $4, $5);
-        `;
+        INSERT INTO loadart.transporters (transporters_name, company, transporters_email, transporters_phone, transporters_mob) 
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING *; -- Ensures the inserted row is returned
+    `;
         const transporterValues = [transporters_name, company, transporters_email || null, transporters_phone || null, MobileNumber];
         const result = await pool.query(transporterQuery, transporterValues);
-
+    
+       
 
         const userQuery = `
             INSERT INTO loadart.users (users_name, users_mobile, user_types_id) 
@@ -40,7 +42,7 @@ export const Register = async (req, res) => {
         `;
         const userValues = [transporters_name, MobileNumber, userTypeId];
         await pool.query(userQuery, userValues);
-
+        
         await pool.query('COMMIT');
 
        
@@ -63,8 +65,9 @@ export const Register = async (req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000, 
         });
 
-
-        res.status(200).json({ message: 'Registration successful', Data:result });
+        
+        res.status(200).json({ message: 'Registration successful', Data:result.rows[0] });
+        
     } catch (error) {
         console.error('Error during registration:', error);
         await pool.query('ROLLBACK');
