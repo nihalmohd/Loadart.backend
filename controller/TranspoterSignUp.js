@@ -66,7 +66,7 @@ export const Register = async (req, res) => {
         });
 
         
-        res.status(200).json({ message: 'Registration successful', Data:result.rows[0] });
+        res.status(200).json({ message: 'Registration successful', Data:result.rows[0],accessToken,refreshToken });
         
     } catch (error) {
         console.error('Error during registration:', error);
