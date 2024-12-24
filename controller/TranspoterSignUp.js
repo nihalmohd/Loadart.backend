@@ -3,9 +3,9 @@ import { generateAccessToken, generateRefreshToken } from "../Utils/JwtGenerator
 
 export const Register = async (req, res) => {
     try {
-        const { transporters_name, company, transporters_email, transporters_phone, MobileNumber } = req.body;
+        const { transporters_name, company, transporters_email, transporters_phone, transporters_mob } = req.body;
 
-        if (!transporters_name || !company || !MobileNumber) {
+        if (!transporters_name || !company || !transporters_mob) {
             return res.status(400).json({
                 error: 'Missing required fields: transporters_name, company,  Mobile number',
             });
@@ -31,7 +31,7 @@ export const Register = async (req, res) => {
         VALUES ($1, $2, $3, $4, $5)
         RETURNING *; -- Ensures the inserted row is returned
     `;
-        const transporterValues = [transporters_name, company, transporters_email || null, transporters_phone || null, MobileNumber];
+        const transporterValues = [transporters_name, company, transporters_email || null, transporters_phone || null, transporters_mob];
         const result = await pool.query(transporterQuery, transporterValues);
     
        
@@ -40,13 +40,13 @@ export const Register = async (req, res) => {
             INSERT INTO loadart.users (users_name, users_mobile, user_types_id) 
             VALUES ($1, $2, $3);
         `;
-        const userValues = [transporters_name, MobileNumber, userTypeId];
+        const userValues = [transporters_name, transporters_mob, userTypeId];
         await pool.query(userQuery, userValues);
         
         await pool.query('COMMIT');
 
        
-        const userPayload = { id: MobileNumber, username: transporters_name };
+        const userPayload = { id: transporters_mob, username: transporters_name };
         const accessToken = generateAccessToken(userPayload);
         const refreshToken = generateRefreshToken(userPayload);
 

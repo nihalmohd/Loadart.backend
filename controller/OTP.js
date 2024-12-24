@@ -4,9 +4,9 @@ import pool from '../Model/Config.js';
 let generatedOtp = null;
 
 export const SentOtp = async (req, res) => {
-    const { MobileNumber } = req.body;
+    const { transporters_mob } = req.body;
 
-    if (!MobileNumber) {
+    if (!transporters_mob) {
         return res.status(400).json({ error: 'Mobile number is required' });
     }
 
@@ -17,11 +17,11 @@ export const SentOtp = async (req, res) => {
         const password = process.env.SMS_PASSWORD;
         const senderId = process.env.SENDER_ID;
         const tid = process.env.TID;
-        const message = `Hi ${MobileNumber}, Your login OTP is ${generatedOtp} for TMK. CVS Info Solutions`;
+        const message = `Hi ${transporters_mob}, Your login OTP is ${generatedOtp} for TMK. CVS Info Solutions`;
 
 
         const response = await axios.post(
-            `https://sapteleservices.com/SMS_API/sendsms.php?username=${username}&password=${password}&mobile=${MobileNumber}&sendername=${senderId}&message=${message}&routetype=1&tid=${tid}`
+            `https://sapteleservices.com/SMS_API/sendsms.php?username=${username}&password=${password}&mobile=${transporters_mob}&sendername=${senderId}&message=${message}&routetype=1&tid=${tid}`
         );
 
         if (response.status === 200) {
@@ -37,8 +37,8 @@ export const SentOtp = async (req, res) => {
 
 
 export const VerifyOTP = async (req, res) => {
-    const { MobileNumber, otp } = req.body;
-    if (!MobileNumber || !otp) {
+    const { transporters_mob, otp } = req.body;
+    if (!transporters_mob || !otp) {
         return res.status(400).json({ error: 'Mobile number and OTP are required' });
     }
     try {
@@ -48,7 +48,7 @@ export const VerifyOTP = async (req, res) => {
                 FROM loadart.transporters 
                 WHERE transporters_mob = $1;
             `;
-            const mobileResult = await pool.query(checkMobileQuery, [MobileNumber]);
+            const mobileResult = await pool.query(checkMobileQuery, [transporters_mob]);
 
             if (mobileResult.rows.length > 0) {
 
