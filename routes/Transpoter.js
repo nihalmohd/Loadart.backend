@@ -6,6 +6,7 @@ import { Logout } from '../controller/Logout.js';
 import { updateTransporterBasicDetails } from '../controller/UpdateProfile.js';
 import { updateGstnAndInsertDocs } from '../controller/UpdateProfileDocuments.js';
 import { addLoad } from '../controller/AddLoad.js';
+import { getLoadsByUserId } from '../controller/GetLoadsByUserid.js';
 
 
 export const TranspoterRouter = express.Router()
@@ -15,6 +16,9 @@ TranspoterRouter.get("/", (req, res) => {
     console.log("Hello, Loadart Transpoter side call recieved!");
     
 });
+TranspoterRouter.get("/Refresh",Refresh)
+TranspoterRouter.get("/Logout",Logout)
+TranspoterRouter.get("/getLoadsByUserId/:user_id", getLoadsByUserId);
 
 TranspoterRouter.post("/Register",Register)
 TranspoterRouter.post("/send-otp",SentOtp)
@@ -24,6 +28,4 @@ TranspoterRouter.post("/updateTransporterDocumentsDetails",updateGstnAndInsertDo
 TranspoterRouter.post("/AddLoad",addLoad)
 
 
-TranspoterRouter.get("/Refresh",Refresh)
-TranspoterRouter.get("/Logout",Logout)
 
