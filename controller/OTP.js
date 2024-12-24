@@ -57,10 +57,7 @@ export const VerifyOTP = async (req, res) => {
                     data: mobileResult.rows[0], 
                 });
                 generatedOtp = null;
-            } else {
-
-                res.status(404).json({ error: 'Data not found' });
-            }
+            } 
         } else {
 
             res.status(400).json({ error: 'Invalid OTP' });
