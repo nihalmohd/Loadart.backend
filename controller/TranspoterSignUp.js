@@ -38,10 +38,11 @@ export const Register = async (req, res) => {
 
         const userQuery = `
             INSERT INTO loadart.users (users_name, users_mobile, user_types_id) 
-            VALUES ($1, $2, $3);
+            VALUES ($1, $2, $3)
+            RETURNING *; -- Ensures the inserted row is returned
         `;
         const userValues = [transporters_name, transporters_mob, userTypeId];
-        await pool.query(userQuery, userValues);
+        const UserData = await pool.query(userQuery, userValues);
         
         await pool.query('COMMIT');
 
@@ -66,7 +67,7 @@ export const Register = async (req, res) => {
         });
 
         
-        res.status(200).json({ message: 'Registration successful', Data:result.rows[0],accessToken,refreshToken });
+        res.status(200).json({ message: 'Registration successful', Data:result.rows[0],accessToken,refreshToken,User:UserData.rows[0] });
         
     } catch (error) {
         console.error('Error during registration:', error);
