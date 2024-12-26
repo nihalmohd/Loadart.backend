@@ -52,10 +52,15 @@ export const addLoad = async (req, res) => {
 
         const result = await pool.query(insertLoadQuery, insertValues);
 
-        res.status(201).json({
-            message: "Load added successfully",
-            data: result.rows[0],
-        });
+        if(result){
+            res.status(201).json({
+                message: "Load added successfully",
+                data: result.rows[0],
+            });
+        }else{
+            res.status(422).json({message:"Unprocessable Entity please check values in table and your entry"})
+        }
+
     } catch (error) {
         console.error("Error adding load:", error.message);
         res.status(500).json({ message: "Internal server error" });

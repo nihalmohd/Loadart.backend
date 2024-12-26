@@ -21,7 +21,7 @@ export const getLoadsByUserId = async (req, res) => {
 
 
         if (result.rows.length === 0) {
-            return res.status(404).json({ message: "No loads found for the given user ID." });
+            return res.status(200).json({ message: "No loads found for the given user ID." });
         }
 
         res.status(200).json({
