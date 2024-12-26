@@ -14,6 +14,7 @@ import { getAllMaterials } from '../controller/getMetirials.js';
 import { getAllTruckCapacities } from '../controller/getTruckCapacities.js';
 import { getAllTruckTypes } from '../controller/getAllTruckTypes.js';
 import { getAllTruckManufacturers } from '../controller/getAllTruckManufactures.js';
+import { getAllTruckModels } from '../controller/getAllTruckModles.js';
 
 
 
@@ -35,6 +36,7 @@ TranspoterRouter.get("/getAllMaterials", getAllMaterials);
 TranspoterRouter.get("/getAllTruckCapacities", getAllTruckCapacities);
 TranspoterRouter.get("/getAllTruckTypes", getAllTruckTypes);
 TranspoterRouter.get("/getAllTruckManufacturers", getAllTruckManufacturers);
+TranspoterRouter.get("/getAllTruckModels", getAllTruckModels);
 
 TranspoterRouter.post("/Register",Register)
 TranspoterRouter.post("/send-otp",SentOtp)
