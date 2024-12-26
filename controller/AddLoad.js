@@ -7,7 +7,6 @@ export const addLoad = async (req, res) => {
         pickupDate,
         material_id,
         capacity_id,
-        truck_id,
         truck_type_id,
         comment,
         user_id,
@@ -20,7 +19,6 @@ export const addLoad = async (req, res) => {
         !pickupDate ||
         !material_id ||
         !capacity_id ||
-        !truck_id ||
         !truck_type_id ||
         !user_id ||
         !no_of_trucks
@@ -31,8 +29,8 @@ export const addLoad = async (req, res) => {
    
     const insertLoadQuery = `
         INSERT INTO loadart.loads 
-        ("pickupLoc_id", "deliveryLoc_id", "pickupDate", "material_id", "capacity_id", "truck_id", "truck_type_id", "comment", "user_id", "no_of_trucks")
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+        ("pickupLoc_id", "deliveryLoc_id", "pickupDate", "material_id", "capacity_id",  "truck_type_id", "comment", "user_id", "no_of_trucks")
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
         RETURNING *;
     `;
 
@@ -43,7 +41,6 @@ export const addLoad = async (req, res) => {
             pickupDate,
             material_id,
             capacity_id,
-            truck_id,
             truck_type_id,
             comment || null, 
             user_id,
