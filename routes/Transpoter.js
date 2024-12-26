@@ -18,6 +18,7 @@ import { getAllTruckModels } from '../controller/getAllTruckModles.js';
 import { insertTruck } from '../controller/AddTruck.js';
 import { getTrucksByUserId } from '../controller/getTruckByUserId.js';
 import { getAllLoads } from '../controller/getLoads.js';
+import { getPaginatedTrucks } from '../controller/getTrucks.js';
 
 
 
@@ -42,6 +43,7 @@ TranspoterRouter.get("/getAllTruckManufacturers", getAllTruckManufacturers);
 TranspoterRouter.get("/getAllTruckModels", getAllTruckModels);
 TranspoterRouter.get("/getTrucksByUserId", getTrucksByUserId);
 TranspoterRouter.get("/getAllLoads", getAllLoads);
+TranspoterRouter.get("/getPaginatedTrucks", getPaginatedTrucks);
 
 TranspoterRouter.post("/Register",Register)
 TranspoterRouter.post("/send-otp",SentOtp)
