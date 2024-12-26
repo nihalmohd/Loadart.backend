@@ -8,6 +8,7 @@ import { updateGstnAndInsertDocs } from '../controller/UpdateProfileDocuments.js
 import { addLoad } from '../controller/AddLoad.js';
 import { getLoadsByUserId } from '../controller/GetLoadsByUserid.js';
 import { getAllStates } from '../controller/getAllStates.js';
+import { getDistrictsByStateId } from '../controller/getDistrictsByStateid.js';
 
 
 export const TranspoterRouter = express.Router()
@@ -21,6 +22,7 @@ TranspoterRouter.get("/Refresh",Refresh)
 TranspoterRouter.get("/Logout",Logout)
 TranspoterRouter.get("/getLoadsByUserId", getLoadsByUserId);
 TranspoterRouter.get("/getAllStates", getAllStates);
+TranspoterRouter.get("/getDistrictsByStateId", getDistrictsByStateId);
 
 TranspoterRouter.post("/Register",Register)
 TranspoterRouter.post("/send-otp",SentOtp)
