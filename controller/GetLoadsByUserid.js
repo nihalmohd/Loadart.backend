@@ -1,7 +1,7 @@
 import pool from "../Model/Config.js";
 
 export const getLoadsByUserId = async (req, res) => {
-    const { user_id } = req.params;
+    const { user_id } = req.query;
 
   
     if (!user_id) {

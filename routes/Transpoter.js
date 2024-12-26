@@ -18,7 +18,7 @@ TranspoterRouter.get("/", (req, res) => {
 });
 TranspoterRouter.get("/Refresh",Refresh)
 TranspoterRouter.get("/Logout",Logout)
-TranspoterRouter.get("/getLoadsByUserId/:user_id", getLoadsByUserId);
+TranspoterRouter.get("/getLoadsByUserId", getLoadsByUserId);
 
 TranspoterRouter.post("/Register",Register)
 TranspoterRouter.post("/send-otp",SentOtp)
