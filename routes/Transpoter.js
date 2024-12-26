@@ -10,6 +10,7 @@ import { getLoadsByUserId } from '../controller/GetLoadsByUserid.js';
 import { getAllStates } from '../controller/getAllStates.js';
 import { getDistrictsByStateId } from '../controller/getDistrictsByStateid.js';
 import { getDocumentsByTransporterId, getTransporterById } from '../controller/getTransporterById.js';
+import { getAllMaterials } from '../controller/getMetirials.js';
 
 
 
@@ -27,6 +28,7 @@ TranspoterRouter.get("/getAllStates", getAllStates);
 TranspoterRouter.get("/getDistrictsByStateId", getDistrictsByStateId);
 TranspoterRouter.get("/getTranporterById", getTransporterById);
 TranspoterRouter.get("/getDocumentsByTransporterId", getDocumentsByTransporterId);
+TranspoterRouter.get("/getAllMaterials", getAllMaterials);
 
 TranspoterRouter.post("/Register",Register)
 TranspoterRouter.post("/send-otp",SentOtp)
