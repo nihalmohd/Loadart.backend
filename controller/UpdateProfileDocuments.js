@@ -3,20 +3,9 @@ import pool from "../Model/Config.js";
 export const updateGstnAndInsertDocs = async (req, res) => {
     const {
         transporters_id,
-        gstn,
         transporter_docs, 
     } = req.body;
 
-   
-    const updateQuery = `
-        UPDATE loadart.transporters
-        SET gstin = $1
-        WHERE transporters_id = $2
-        RETURNING *;
-    `;
-    const updateValues = [gstn, transporters_id];
-
-    
     const insertDocsQuery = `
         INSERT INTO loadart.transporter_docs 
         (transporter_docs_name, doc_types_id, transporter_docs_images, transpoters_id)
@@ -53,7 +42,7 @@ export const updateGstnAndInsertDocs = async (req, res) => {
 
         
         res.status(200).json({
-            message: "GSTN updated and document details inserted successfully",
+            message: " Document details inserted successfully",
             transporter: updateResult.rows[0], 
             transporter_docs: insertedDocs, 
         });
