@@ -4,7 +4,7 @@ import { SentOtp, VerifyOTP } from '../controller/OTP.js';
 import { Refresh } from '../controller/CheckingAccessToken.js';
 import { Logout } from '../controller/Logout.js';
 import { updateTransporterBasicDetails } from '../controller/UpdateProfile.js';
-import { updateGstnAndInsertDocs } from '../controller/UpdateProfileDocuments.js';
+import { insertTransporterDocs } from '../controller/UpdateProfileDocuments.js';
 import { addLoad } from '../controller/AddLoad.js';
 import { getLoadsByUserId } from '../controller/GetLoadsByUserid.js';
 import { getAllStates } from '../controller/getAllStates.js';
@@ -49,7 +49,7 @@ TranspoterRouter.post("/Register",Register)
 TranspoterRouter.post("/send-otp",SentOtp)
 TranspoterRouter.post("/Verify-otp",VerifyOTP)
 TranspoterRouter.post("/updateTransporterBasicDetails",updateTransporterBasicDetails)
-TranspoterRouter.post("/updateTransporterDocumentsDetails",updateGstnAndInsertDocs)
+TranspoterRouter.post("/updateTransporterDocumentsDetails",insertTransporterDocs)
 TranspoterRouter.post("/AddLoad",addLoad)
 TranspoterRouter.post("/insertTruck", insertTruck);
 
