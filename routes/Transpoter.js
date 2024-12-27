@@ -19,6 +19,7 @@ import { insertTruck } from '../controller/AddTruck.js';
 import { getTrucksByUserId } from '../controller/getTruckByUserId.js';
 import { getAllLoads } from '../controller/getLoads.js';
 import { getPaginatedTrucks } from '../controller/getTrucks.js';
+import { getMatchingLoads } from '../controller/SerachLoads.js';
 
 
 
@@ -52,6 +53,7 @@ TranspoterRouter.post("/updateTransporterBasicDetails",updateTransporterBasicDet
 TranspoterRouter.post("/updateTransporterDocumentsDetails",insertTransporterDocs)
 TranspoterRouter.post("/AddLoad",addLoad)
 TranspoterRouter.post("/insertTruck", insertTruck);
+TranspoterRouter.post("/getMatchingLoads", getMatchingLoads);
 
 
 
