@@ -7,11 +7,11 @@ export const getMatchingLoads = async (req, res) => {
         pickupDate,
         material_id,
         capacity_id,
-        truck_type_id, // Included truck_type_id
+        truck_type_id, 
     } = req.body;
 
     try {
-        // SQL query to fetch matching loads
+       
         const query = `
             SELECT *
             FROM loadart.loads
@@ -24,7 +24,7 @@ export const getMatchingLoads = async (req, res) => {
                 ($6::integer IS NULL OR "truck_type_id" = $6); -- Updated truck_type_id
         `;
 
-        // Parameterized values
+        
         const values = [
             pickupLoc_id || null,
             deliveryLoc_id || null,
@@ -34,20 +34,20 @@ export const getMatchingLoads = async (req, res) => {
             truck_type_id || null,
         ];
 
-        // Execute the query
+        
         const result = await pool.query(query, values);
 
         if (result.rows.length === 0) {
             return res.status(404).json({ message: "No matching loads found." });
         }
 
-        // Send success response
+        
         res.status(200).json({
             message: "Matching loads retrieved successfully.",
             data: result.rows,
         });
     } catch (error) {
-        // Handle errors
+        
         console.error("Error retrieving matching loads:", error.message);
         res.status(500).json({ message: "Internal server error" });
     }

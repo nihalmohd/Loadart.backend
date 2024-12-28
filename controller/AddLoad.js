@@ -2,8 +2,8 @@ import pool from "../Model/Config.js";
 
 export const addLoad = async (req, res) => {
     const {
-        pickupLoc_id,
-        deliveryLoc_id, 
+        pickupLoc,
+        deliveryLoc, 
         pickupDate,
         material_id,
         capacity_id,
@@ -14,8 +14,8 @@ export const addLoad = async (req, res) => {
     } = req.body;
 
     if (
-        !pickupLoc_id ||
-        !deliveryLoc_id ||
+        !pickupLoc ||
+        !deliveryLoc ||
         !pickupDate ||
         !material_id ||
         !capacity_id ||
@@ -29,15 +29,15 @@ export const addLoad = async (req, res) => {
    
     const insertLoadQuery = `
         INSERT INTO loadart.loads 
-        ("pickupLoc_id", "deliveryLoc_id", "pickupDate", "material_id", "capacity_id",  "truck_type_id", "comment", "user_id", "no_of_trucks")
+        ("pickupLoc", "deliveryLoc", "pickupDate", "material_id", "capacity_id",  "truck_type_id", "comment", "user_id", "no_of_trucks")
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
         RETURNING *;
     `;
 
     try {
         const insertValues = [
-            pickupLoc_id,
-            deliveryLoc_id,
+            pickupLoc,
+            deliveryLoc,
             pickupDate,
             material_id,
             capacity_id,
