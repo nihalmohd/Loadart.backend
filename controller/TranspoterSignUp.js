@@ -5,7 +5,6 @@ export const Register = async (req, res) => {
     try {
         const { transporters_name, company, transporters_email, transporters_phone, transporters_mob } = req.body;
 
-       
         if (!transporters_name || !company || !transporters_mob) {
             return res.status(400).json({
                 error: 'Missing required fields: transporters_name, company, Mobile number',
@@ -14,7 +13,7 @@ export const Register = async (req, res) => {
 
         await pool.query('BEGIN');
 
-        
+      
         const existingTransporterQuery = `
             SELECT * 
             FROM loadart.transporters 
@@ -23,7 +22,19 @@ export const Register = async (req, res) => {
         const existingTransporterResult = await pool.query(existingTransporterQuery, [transporters_mob]);
 
         if (existingTransporterResult.rows.length > 0) {
-            
+           
+            const userTypeQuery = `
+                SELECT * 
+                FROM loadart.user_types 
+                WHERE user_types_id = (
+                    SELECT user_types_id 
+                    FROM loadart.users 
+                    WHERE users_mobile = $1
+                );
+            `;
+            const userTypeResult = await pool.query(userTypeQuery, [transporters_mob]);
+
+           
             const updateTransporterQuery = `
                 UPDATE loadart.transporters
                 SET 
@@ -48,6 +59,7 @@ export const Register = async (req, res) => {
             return res.status(200).json({
                 message: 'Transporter updated successfully',
                 data: updatedTransporter.rows[0],
+                User: userTypeResult.rows[0], 
             });
         }
 
