@@ -23,16 +23,12 @@ export const Register = async (req, res) => {
 
         if (existingTransporterResult.rows.length > 0) {
            
-            const userTypeQuery = `
-                SELECT * 
-                FROM loadart.user_types 
-                WHERE user_types_id = (
-                    SELECT user_types_id 
-                    FROM loadart.users 
-                    WHERE users_mobile = $1
-                );
-            `;
-            const userTypeResult = await pool.query(userTypeQuery, [transporters_mob]);
+            const query = `
+            SELECT * 
+            FROM loadart.users 
+            WHERE users_mobile = $1;
+        `;
+        const result = await pool.query(query, [transporters_mob]);
 
            
             const updateTransporterQuery = `
@@ -59,7 +55,7 @@ export const Register = async (req, res) => {
             return res.status(200).json({
                 message: 'Transporter updated successfully',
                 data: updatedTransporter.rows[0],
-                User: userTypeResult.rows[0], 
+                User: result.rows[0], 
             });
         }
 
