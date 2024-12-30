@@ -2,8 +2,8 @@ import pool from "../Model/Config.js";
 
 export const getMatchingLoads = async (req, res) => {
     const {
-        pickupLoc_id,
-        deliveryLoc_id,
+        pickupLoc,
+        deliveryLoc,
         pickupDate,
         material_id,
         capacity_id,
@@ -16,8 +16,8 @@ export const getMatchingLoads = async (req, res) => {
             SELECT *
             FROM loadart.loads
             WHERE 
-                ($1::text IS NULL OR "pickupLoc_id" = $1) AND
-                ($2::text IS NULL OR "deliveryLoc_id" = $2) AND
+                ($1::text IS NULL OR "pickupLoc" = $1) AND
+                ($2::text IS NULL OR "deliveryLoc" = $2) AND
                 ($3::date IS NULL OR "pickupDate" = $3) AND
                 ($4::integer IS NULL OR "material_id" = $4) AND
                 ($5::integer IS NULL OR "capacity_id" = $5) AND
@@ -26,8 +26,8 @@ export const getMatchingLoads = async (req, res) => {
 
         
         const values = [
-            pickupLoc_id || null,
-            deliveryLoc_id || null,
+            pickupLoc || null,
+            deliveryLoc || null,
             pickupDate || null,
             material_id || null,
             capacity_id || null,
