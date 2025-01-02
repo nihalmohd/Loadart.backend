@@ -1,30 +1,43 @@
 import pool from "../Model/Config.js";
 
-export const getPostTrucks = async (req, res) => {
-    const { page = 1 } = req.query; 
-    const limit = 20;
-    const offset = (page - 1) * limit; 
+export const getMatchingPostTrucks = async (req, res) => {
+    const {
+        postTrucks_dateTime,
+        postTrucks_from,
+        postTrucks_to,
+        postTrucks_capacity_id,
+    } = req.body;
 
     try {
-       
         const query = `
-        SELECT *
-        FROM loadart."postTrucks"
-        LIMIT $1 OFFSET $2;
-    `;
-        const result = await pool.query(query, [limit, offset]);
+            SELECT *
+            FROM loadart."postTrucks"
+            WHERE 
+                ($1::timestamp IS NULL OR "postTrucks_dateTime" = $1) AND
+                ($2::text IS NULL OR "postTrucks_from" = $2) AND
+                ($3::text IS NULL OR "postTrucks_to" = $3) AND
+                ($4::integer IS NULL OR "postTrucks_capacity_id" = $4);
+        `;
+
+        const values = [
+            postTrucks_dateTime || null,
+            postTrucks_from || null,
+            postTrucks_to || null,
+            postTrucks_capacity_id || null,
+        ];
+
+        const result = await pool.query(query, values);
 
         if (result.rows.length === 0) {
-            return res.status(404).json({ message: "No postTrucks data found." });
+            return res.status(404).json({ message: "No matching postTrucks found." });
         }
 
         res.status(200).json({
-            message: "postTrucks data retrieved successfully.",
-            currentPage: page,
+            message: "Matching postTrucks retrieved successfully.",
             data: result.rows,
         });
     } catch (error) {
-        console.error("Error retrieving postTrucks data:", error.message);
+        console.error("Error retrieving matching postTrucks:", error.message);
         res.status(500).json({ message: "Internal server error" });
     }
 };
