@@ -1,17 +1,24 @@
 import pool from "../Model/Config.js";
 
 export const getPostTrucks = async (req, res) => {
-    const { page = 1 } = req.query; 
+    const { page = 1 } = req.query;
     const limit = 20;
-    const offset = (page - 1) * limit; 
+    const offset = (page - 1) * limit;
 
     try {
-       
         const query = `
-        SELECT *
-        FROM loadart."postTrucks"
-        LIMIT $1 OFFSET $2;
-    `;
+            SELECT 
+                pt.*, 
+                t.*
+            FROM 
+                loadart."postTrucks" pt
+            JOIN 
+                loadart."trucks" t
+            ON 
+                pt.truck_id = t.truck_id
+            LIMIT $1 OFFSET $2;
+        `;
+
         const result = await pool.query(query, [limit, offset]);
 
         if (result.rows.length === 0) {
