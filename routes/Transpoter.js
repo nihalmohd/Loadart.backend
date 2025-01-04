@@ -26,6 +26,7 @@ import { getMatchingPostTrucks } from '../controller/SearchTruck.js';
 import { insertBidsLoad } from '../controller/LoadBids.js';
 import { getBidsLoadWithDetails } from '../controller/ViewAllBids.js';
 import { myBids } from '../controller/Mybids.js';
+import { insertBidsTruck } from '../controller/TruckBids.js';
 
 
 
@@ -66,5 +67,6 @@ TranspoterRouter.post("/getMatchingLoads", getMatchingLoads);
 TranspoterRouter.post("/postTruck", insertPostTrucks);
 TranspoterRouter.post("/getMatchingPostTrucks", getMatchingPostTrucks);
 TranspoterRouter.post("/insertBidsLoad", insertBidsLoad);
+TranspoterRouter.post("/insertBidsTruck", insertBidsTruck);
 
 
