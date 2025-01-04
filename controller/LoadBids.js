@@ -1,25 +1,25 @@
 import pool from "../Model/Config.js";
 
 export const insertBidsLoad = async (req, res) => {
-    const { bidsLoad_amount, load_id, user_id } = req.body;
+    const { bidsLoad_amount, load_id, user_id, postTrucks_id } = req.body;
 
     try {
-        // Ensure all required fields are provided
-        if (!bidsLoad_amount || !load_id || !user_id) {
+       
+        if (!bidsLoad_amount || !load_id || !user_id || !postTrucks_id) {
             return res.status(400).json({ message: "All fields are required." });
         }
 
         const query = `
-            INSERT INTO Loadart."bidsLoad" ("bidsLoad_amount", "load_id", "user_id")
-            VALUES ($1, $2, $3)
+            INSERT INTO Loadart."bidsLoad" ("bidsLoad_amount", "load_id", "user_id", "postTrucks_id")
+            VALUES ($1, $2, $3, $4)
             RETURNING *;
         `;
 
-        // Execute query
-        const result = await pool.query(query, [bidsLoad_amount, load_id, user_id]);
+       
+        const result = await pool.query(query, [bidsLoad_amount, load_id, user_id, postTrucks_id]);
 
-        // Return success response
-        res.status(201).json({
+      
+       return res.status(201).json({
             message: "Bid inserted successfully.",
             data: result.rows[0],
         });
@@ -28,4 +28,3 @@ export const insertBidsLoad = async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 };
- 

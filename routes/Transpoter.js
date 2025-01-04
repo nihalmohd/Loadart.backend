@@ -24,6 +24,7 @@ import { insertPostTrucks } from '../controller/postTruck.js';
 import { getPostTrucks } from '../controller/getPostedTrucks.js';
 import { getMatchingPostTrucks } from '../controller/SearchTruck.js';
 import { insertBidsLoad } from '../controller/LoadBids.js';
+import { getBidsLoadWithDetails } from '../controller/ViewAllBids.js';
 
 
 
@@ -50,6 +51,7 @@ TranspoterRouter.get("/getTrucksByUserId", getTrucksByUserId);
 TranspoterRouter.get("/getAllLoads", getAllLoads);
 TranspoterRouter.get("/getPaginatedTrucks", getPaginatedTrucks);
 TranspoterRouter.get("/getPostTrucks", getPostTrucks);
+TranspoterRouter.get("/viewAllBids", getBidsLoadWithDetails);
 
 TranspoterRouter.post("/Register",Register)
 TranspoterRouter.post("/send-otp",SentOtp)
