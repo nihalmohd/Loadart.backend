@@ -22,7 +22,7 @@ export const getLoadSchedulesByUser = async (req, res) => {
 
         // Check if no data found
         if (result.rows.length === 0) {
-            return res.status(404).json({ message: "No data found for the given users_id." });
+            return res.status(200).json({ message: "No data found for the given users_id." });
         }
 
         // Send response
