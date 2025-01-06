@@ -15,7 +15,7 @@ export const getAllLoads = async (req, res) => {
         const result = await pool.query(fetchLoadsQuery, [limit, offset]);
 
         if (result.rows.length === 0) {
-            return res.status(404).json({ message: "No loads found for the specified page." });
+            return res.status(200).json({ message: "No loads found for the specified page." });
         }
 
         res.status(200).json({

@@ -10,7 +10,7 @@ export const getAllMaterials = async (req, res) => {
         const result = await pool.query(fetchMaterialsQuery);
 
         if (result.rows.length === 0) {
-            return res.status(404).json({ message: "No materials found." });
+            return res.status(200).json({ message: "No materials found." });
         }
 
         res.status(200).json({

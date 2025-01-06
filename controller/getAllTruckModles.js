@@ -10,7 +10,7 @@ export const getAllTruckModels = async (req, res) => {
         const result = await pool.query(fetchTruckModelsQuery);
 
         if (result.rows.length === 0) {
-            return res.status(404).json({ message: "No truck models found." });
+            return res.status(200).json({ message: "No truck models found." });
         }
 
         res.status(200).json({

@@ -10,7 +10,7 @@ export const getAllTruckCapacities = async (req, res) => {
         const result = await pool.query(fetchTruckCapacitiesQuery);
 
         if (result.rows.length === 0) {
-            return res.status(404).json({ message: "No truck capacities found." });
+            return res.status(200).json({ message: "No truck capacities found." });
         }
 
         res.status(200).json({

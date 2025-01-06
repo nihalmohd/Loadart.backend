@@ -19,7 +19,7 @@ export const getTransporterById = async (req, res) => {
         const result = await pool.query(fetchDocumentQuery, [transporters_id]);
 
         if (result.rows.length === 0) {
-            return res.status(404).json({ message: "No transporter found for the given transporter ID." });
+            return res.status(200).json({ message: "No transporter found for the given transporter ID." });
         }
 
         res.status(200).json({
@@ -50,7 +50,7 @@ export const getDocumentsByTransporterId = async (req, res) => {
         const result = await pool.query(fetchDocumentsQuery, [transporters_id]);
 
         if (result.rows.length === 0) {
-            return res.status(404).json({ message: "No documents found for the given transporter ID." });
+            return res.status(200).json({ message: "No documents found for the given transporter ID." });
         }
 
         res.status(200).json({

@@ -39,7 +39,7 @@ export const getBidsLoadWithDetails = async (req, res) => {
 
         
         if (result.rows.length === 0) {
-            return res.status(404).json({ message: "No data found for the given load_id." });
+            return res.status(200).json({ message: "No data found." });
         }
 
         res.status(200).json({

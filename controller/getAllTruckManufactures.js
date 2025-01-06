@@ -10,7 +10,7 @@ export const getAllTruckManufacturers = async (req, res) => {
         const result = await pool.query(fetchTruckManufacturersQuery);
 
         if (result.rows.length === 0) {
-            return res.status(404).json({ message: "No truck manufacturers found." });
+            return res.status(200).json({ message: "No truck manufacturers found." });
         }
 
         res.status(200).json({

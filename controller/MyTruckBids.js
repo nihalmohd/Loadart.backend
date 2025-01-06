@@ -40,7 +40,7 @@ export const getTruckBidsForUser = async (req, res) => {
 
         
         if (result.rows.length === 0) {
-            return res.status(404).json({ message: "No bids found for the given user_id and postTrucks_id." });
+            return res.status(200).json({ message: "No bids found for the given user_id and postTrucks_id." });
         }
 
         
