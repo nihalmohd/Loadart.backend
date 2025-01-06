@@ -19,7 +19,7 @@ export const getTrucksByUserId = async (req, res) => {
         const result = await pool.query(fetchTrucksQuery, [user_id, limit]);
 
         if (result.rows.length === 0) {
-            return res.status(404).json({ message: "No trucks found for the given user_id." });
+            return res.status(200).json({ message: "No trucks found for the given user_id." });
         }
 
         res.status(200).json({
