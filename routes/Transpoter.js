@@ -32,6 +32,7 @@ import { getTruckBidsForUser } from '../controller/UsersController/MyTruckBids.j
 import { updateAndInsertSchedules } from '../controller/UsersController/LoadSchedules.js';
 import { getLoadSchedulesByUser } from '../controller/UsersController/getLoadSchedulebyUserid.js';
 import { updateBidsTruckAndInsertSchedule } from '../controller/UsersController/TruckSchedules.js';
+import { getTruckSchedulesByUserId } from '../controller/UsersController/getTruckScheduleByUserid.js';
 
 
 
@@ -63,6 +64,7 @@ TranspoterRouter.get("/MyAllBids", myBids);
 TranspoterRouter.get("/viewAllBidsTruck", getTruckBidsWithDetails);
 TranspoterRouter.get("/MyAllTruckBids",getTruckBidsForUser );
 TranspoterRouter.get("/loadschedules", getLoadSchedulesByUser);
+TranspoterRouter.get("/truckschedules", getTruckSchedulesByUserId);
 
 
 TranspoterRouter.post("/Register",Register)
