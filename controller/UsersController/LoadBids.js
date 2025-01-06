@@ -1,4 +1,4 @@
-import pool from "../Model/Config.js";
+import pool from "../../Model/Config.js";
 
 export const insertBidsLoad = async (req, res) => {
     const { bidsLoad_amount, load_id, user_id, postTrucks_id } = req.body;

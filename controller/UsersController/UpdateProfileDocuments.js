@@ -1,4 +1,4 @@
-import pool from "../Model/Config.js";
+import pool from "../../Model/Config.js";
 
 export const insertTransporterDocs = async (req, res) => {
     const { transporters_id, transporter_docs } = req.body;

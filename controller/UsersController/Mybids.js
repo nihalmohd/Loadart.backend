@@ -1,12 +1,12 @@
-import pool from "../Model/Config.js";
+import pool from "../../Model/Config.js";
 
-export const getBidsLoadWithDetails = async (req, res) => {
-    const { load_id } = req.query;
+export const myBids = async (req, res) => {
+    const { load_id, user_id } = req.query;
 
     try {
         
-        if (!load_id) {
-            return res.status(400).json({ message: "load_id is required." });
+        if (!load_id || !user_id) {
+            return res.status(400).json({ message: "Both load_id and user_id are required." });
         }
 
         
@@ -31,18 +31,19 @@ export const getBidsLoadWithDetails = async (req, res) => {
             ON 
                 bl.load_id = l.loads_id
             WHERE 
-                bl.load_id = $1;
+                bl.load_id = $1 AND bl.user_id = $2;
         `;
 
-      
-        const result = await pool.query(query, [load_id]);
+        
+        const result = await pool.query(query, [load_id, user_id]);
 
         
         if (result.rows.length === 0) {
-            return res.status(200).json({ message: "No data found." });
+            return res.status(200).json({ message: "No data found for the given load_id and user_id." });
         }
 
-        res.status(200).json({
+        
+        return res.status(200).json({
             message: "Data retrieved successfully.",
             data: result.rows,
         });

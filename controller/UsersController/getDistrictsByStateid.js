@@ -1,4 +1,4 @@
-import pool from "../Model/Config.js";
+import pool from "../../Model/Config.js";
 
 export const getDistrictsByStateId = async (req, res) => {
     const { states_id } = req.query; 

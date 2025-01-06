@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cookieParser from 'cookie-parser';
 import { database } from "./Model/Config.js";
 import { TranspoterRouter } from "./routes/Transpoter.js";
+import { AdminRouter } from "./routes/Admin.js";
 
 dotenv.config(); 
 
@@ -26,6 +27,7 @@ app.get("/", (req, res) => {
 });
 
 app.use('/Transpoter',TranspoterRouter)
+app.use('/Transpoter',AdminRouter)
 
 
 

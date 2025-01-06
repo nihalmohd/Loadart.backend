@@ -1,4 +1,4 @@
-import { generateAccessToken, verifyRefreshToken } from "../Utils/JwtGenerator.js";
+import { generateAccessToken, verifyRefreshToken } from "../../Utils/JwtGenerator.js";
 
 
 export const Refresh = (req, res) => {

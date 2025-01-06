@@ -1,5 +1,5 @@
 import axios from "axios";
-import pool from "../Model/Config.js";
+import pool from "../../Model/Config.js";
 
 const otpStore = new Map();
 

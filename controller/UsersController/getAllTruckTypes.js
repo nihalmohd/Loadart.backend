@@ -1,4 +1,4 @@
-import pool from "../Model/Config.js"; 
+import pool from "../../Model/Config.js"; 
 
 export const getAllTruckTypes = async (req, res) => {
     const fetchTruckTypesQuery = `

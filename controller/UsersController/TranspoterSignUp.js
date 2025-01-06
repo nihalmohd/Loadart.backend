@@ -1,5 +1,5 @@
-import pool from "../Model/Config.js";
-import { generateAccessToken, generateRefreshToken } from "../Utils/JwtGenerator.js";
+import pool from "../../Model/Config.js";
+import { generateAccessToken, generateRefreshToken } from "../../Utils/JwtGenerator.js";
 
 export const Register = async (req, res) => {
     try {

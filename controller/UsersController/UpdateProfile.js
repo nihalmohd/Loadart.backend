@@ -1,4 +1,4 @@
-import pool from "../Model/Config.js";
+import pool from "../../Model/Config.js";
 
 export const updateTransporterBasicDetails = async (req, res) => {
     const { addressline1, addressline2, state_id, district_id, transporter_id, gstin } = req.body;

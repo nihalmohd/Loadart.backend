@@ -1,4 +1,4 @@
-import pool from "../Model/Config.js";
+import pool from "../../Model/Config.js";
 
 export const getAllLoads = async (req, res) => {
     const page = parseInt(req.query.page) || 1; 

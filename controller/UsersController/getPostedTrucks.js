@@ -1,4 +1,4 @@
-import pool from "../Model/Config.js";
+import pool from "../../Model/Config.js";
 
 export const getPostTrucks = async (req, res) => {
     const { page = 1 } = req.query;

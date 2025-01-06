@@ -1,4 +1,4 @@
-import pool from "../Model/Config.js";
+import pool from "../../Model/Config.js";
 
 export const getTruckBidsForUser = async (req, res) => {
     const { user_id, postTrucks_id } = req.query;
