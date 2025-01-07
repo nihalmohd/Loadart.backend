@@ -23,9 +23,9 @@ export const getBidsLoadWithDetails = async (req, res) => {
             ON 
                 bl.user_id = u.users_id
             JOIN 
-                Loadart."postTrucks" pt
+                Loadart."trucks" pt
             ON 
-                bl."postTrucks_id" = pt."postTrucks_id"
+                bl."trucks_id" = pt."truck_id"
             JOIN 
                 Loadart."loads" l
             ON 
