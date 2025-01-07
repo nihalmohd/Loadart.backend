@@ -1,6 +1,6 @@
 import express from 'express';
 import { editUserType, getAllUserTypes, insertUserTypes, updateUserTypeStatus } from '../controller/AdminController/UserTypes.js';
-import { insertTruckType } from '../controller/AdminController/TruckTypes.js';
+import { getAllTruckTypes, insertTruckType, updateTruckTypeName } from '../controller/AdminController/TruckTypes.js';
 
 
 
@@ -13,6 +13,7 @@ AdminRouter.get("/", (req, res) => {
 });
 //get//
 AdminRouter.get("/getAllUserTypes",getAllUserTypes)
+AdminRouter.get("/GetAllTrucktypes", getAllTruckTypes);
 //post//
 AdminRouter.post("/inserUserType",insertUserTypes)
 AdminRouter.post("/editUserType",editUserType)
@@ -20,3 +21,4 @@ AdminRouter.post("/insertTrucktypes", insertTruckType);
 
 //update//
 AdminRouter.patch("/updateUserTypeStatus", updateUserTypeStatus);
+AdminRouter.patch("/updateTruckTypeName", updateTruckTypeName);
