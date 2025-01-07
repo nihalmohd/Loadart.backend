@@ -96,3 +96,44 @@ export const updateTruckTypeName = async (req, res) => {
     }
 };
 
+
+
+export const updateTruckTypeStatus = async (req, res) => {
+    try {
+        const { truck_types_id, truck_types_status } = req.body;
+
+        if (!truck_types_id || truck_types_status === undefined) {
+            return res.status(400).json({
+                error: "Both truck_types_id and truck_types_status are required.",
+            });
+        }
+
+        const query = `
+            UPDATE "loadart"."truck_types"
+            SET "truck_types_status" = $1
+            WHERE "truck_types_id" = $2
+            RETURNING *;
+        `;
+
+        const result = await pool.query(query, [truck_types_status, truck_types_id]);
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({
+                error: "Truck type not found with the given ID.",
+            });
+        }
+
+        return res.status(200).json({
+            message: "Truck type status updated successfully.",
+            data: result.rows[0],
+        });
+    } catch (error) {
+        console.error("Error updating truck type status:", error);
+
+        return res.status(500).json({
+            error: "Internal Server Error",
+            details: error.message,
+        });
+    }
+};
+
