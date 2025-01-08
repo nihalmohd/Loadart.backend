@@ -6,7 +6,7 @@ export const getTruckBidsForUser = async (req, res) => {
     try {
         
         if (!user_id ) {
-            return res.status(400).json({ message: "user_id  are required." });
+            return res.status(400).json({ message: "user_id are required." });
         }
 
         
@@ -31,7 +31,8 @@ export const getTruckBidsForUser = async (req, res) => {
             ON 
                 bt.loads_id = l.loads_id
             WHERE 
-                bt.user_id = $1 
+                bt.user_id = $1 AND 
+               
         `;
 
         

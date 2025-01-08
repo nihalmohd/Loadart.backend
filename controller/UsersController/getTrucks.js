@@ -7,7 +7,7 @@ export const getPaginatedTrucks = async (req, res) => {
 
     const fetchTrucksQuery = `
         SELECT *
-        FROM loadart.trucks
+        FROM loadart."postTrucks"
         LIMIT $1 OFFSET $2;
     `;
 
