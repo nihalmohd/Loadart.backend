@@ -1,11 +1,11 @@
 import pool from "../../Model/Config.js";
 
 export const myBids = async (req, res) => {
-    const { load_id, user_id } = req.query;
+    const {  user_id } = req.query;
 
     try {
         
-        if (!load_id || !user_id) {
+        if ( !user_id) {
             return res.status(400).json({ message: "Both load_id and user_id are required." });
         }
 
@@ -31,15 +31,15 @@ export const myBids = async (req, res) => {
             ON 
                 bl.load_id = l.loads_id
             WHERE 
-                bl.load_id = $1 AND bl.user_id = $2;
+               bl.user_id = $1;
         `;
 
         
-        const result = await pool.query(query, [load_id, user_id]);
+        const result = await pool.query(query, [ user_id]);
 
         
         if (result.rows.length === 0) {
-            return res.status(200).json({ message: "No data found for the given load_id and user_id." });
+            return res.status(200).json({ message: "No data found for the given  user_id." });
         }
 
         
