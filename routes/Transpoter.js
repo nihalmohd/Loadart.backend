@@ -23,13 +23,13 @@ import { getMatchingLoads } from '../controller/UsersController/SerachLoads.js';
 import { insertPostTrucks } from '../controller/UsersController/postTruck.js';
 import { getPostTrucks } from '../controller/UsersController/getPostedTrucks.js';
 import { getMatchingPostTrucks } from '../controller/UsersController/SearchTruck.js';
-import { insertBidsLoad } from '../controller/UsersController/LoadBids.js';
+import { insertBidsLoad, updateBidsLoadStatus } from '../controller/UsersController/LoadBids.js';
 import { getBidsLoadWithDetails } from '../controller/UsersController/ViewAllBids.js';
 import { myBids } from '../controller/UsersController/Mybids.js';
-import { insertBidsTruck } from '../controller/UsersController/TruckBids.js';
+import { insertBidsTruck, updateBidsTruckStatus } from '../controller/UsersController/TruckBids.js';
 import { getTruckBidsWithDetails } from '../controller/UsersController/getAllTruckBids.js';
 import { getTruckBidsForUser } from '../controller/UsersController/MyTruckBids.js';
-import { updateAndInsertSchedules, updateBidsLoadStatus } from '../controller/UsersController/LoadSchedules.js';
+import { updateAndInsertSchedules } from '../controller/UsersController/LoadSchedules.js';
 import { getLoadSchedulesByUser } from '../controller/UsersController/getLoadSchedulebyUserid.js';
 import { updateBidsTruckAndInsertSchedule } from '../controller/UsersController/TruckSchedules.js';
 import { getTruckSchedulesByUserId } from '../controller/UsersController/getTruckScheduleByUserid.js';
@@ -83,5 +83,6 @@ TranspoterRouter.post("/insertLoadSchedule",updateAndInsertSchedules)
 TranspoterRouter.post("/truckschedules", updateBidsTruckAndInsertSchedule);
 
 TranspoterRouter.patch("/bidsLoadStatus", updateBidsLoadStatus);
+TranspoterRouter.patch("/bidsTruckStatus", updateBidsTruckStatus);
 
 
