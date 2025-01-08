@@ -1,6 +1,5 @@
 import pool from "../../Model/Config.js";
 
-
 export const getLoadSchedulesByUser = async (req, res) => {
     const { users_id } = req.query;
 
@@ -10,11 +9,19 @@ export const getLoadSchedulesByUser = async (req, res) => {
             return res.status(400).json({ message: "users_id is required." });
         }
 
-        // SQL query to fetch data by users_id
+        // SQL query to join load_schedules with trucks based on truck_id
         const query = `
-            SELECT * 
-            FROM Loadart."load_schedules"
-            WHERE "users_id" = $1;
+            SELECT 
+                schedules.*,
+                trucks.*
+            FROM 
+                Loadart."load_schedules" AS schedules
+            LEFT JOIN 
+                Loadart."trucks" AS trucks
+            ON 
+                schedules."truck_id" = trucks."truck_id"
+            WHERE 
+                schedules."users_id" = $1;
         `;
 
         // Execute query
@@ -22,7 +29,7 @@ export const getLoadSchedulesByUser = async (req, res) => {
 
         // Check if no data found
         if (result.rows.length === 0) {
-            return res.status(200).json({ message: "No data found for the given users_id." });
+            return res.status(200).json({ message: "No data found for the given users_id.",data:[] });
         }
 
         // Send response

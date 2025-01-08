@@ -8,7 +8,7 @@ export const updateAndInsertSchedules = async (req, res) => {
         delivery_loc,
         materials_id,
         users_id,
-        postTrucks_id,
+        truck_id,
         loads_id,
     } = req.body;
 
@@ -20,7 +20,7 @@ export const updateAndInsertSchedules = async (req, res) => {
             !delivery_loc ||
             !materials_id ||
             !users_id ||
-            !postTrucks_id ||
+            !truck_id ||
             !loads_id
         ) {
             return res.status(400).json({ message: "All fields are required." });
@@ -44,7 +44,7 @@ export const updateAndInsertSchedules = async (req, res) => {
         
         const insertQuery = `
             INSERT INTO Loadart."load_schedules" 
-            ("schedules_date", "pickup_loc", "delivery_loc", "materials_id", "users_id", "postTrucks_id", "loads_id")
+            ("schedules_date", "pickup_loc", "delivery_loc", "materials_id", "users_id", "truck_id", "loads_id")
             VALUES ($1, $2, $3, $4, $5, $6, $7)
             RETURNING *;
         `;
@@ -54,7 +54,7 @@ export const updateAndInsertSchedules = async (req, res) => {
             delivery_loc,
             materials_id,
             users_id,
-            postTrucks_id,
+            truck_id,
             loads_id,
         ]);
 
