@@ -31,7 +31,7 @@ export const getTruckBidsForUser = async (req, res) => {
             ON 
                 bt.loads_id = l.loads_id
             WHERE 
-                bt.user_id = $1 AND 
+                bt.user_id = $1  
                
         `;
 
