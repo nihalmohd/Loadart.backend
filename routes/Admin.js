@@ -7,8 +7,8 @@ import { getAllTruckTypes, insertTruckType, updateTruckTypeName, updateTruckType
 export const AdminRouter = express.Router()
 
 AdminRouter.get("/", (req, res) => {
-    res.send("Hello, Loadart Transpoter side call recieved!");
-    console.log("Hello, Loadart Transpoter side call recieved!");
+    res.send("Hello, Loadart Admin side call recieved!");
+    console.log("Hello, Loadart Admin side call recieved!");
     
 });
 //get//

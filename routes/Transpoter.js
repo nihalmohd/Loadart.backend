@@ -33,6 +33,8 @@ import { updateAndInsertSchedules } from '../controller/UsersController/LoadSche
 import { getLoadSchedulesByUser } from '../controller/UsersController/getLoadSchedulebyUserid.js';
 import { updateBidsTruckAndInsertSchedule } from '../controller/UsersController/TruckSchedules.js';
 import { getTruckSchedulesByUserId } from '../controller/UsersController/getTruckScheduleByUserid.js';
+import { updateTruckSchedule } from '../controller/UsersController/updateTruckSchedules.js';
+import { updateLoadSchedule } from '../controller/UsersController/updateLoadReciepts.js';
 
 
 
@@ -84,5 +86,7 @@ TranspoterRouter.post("/truckschedules", updateBidsTruckAndInsertSchedule);
 
 TranspoterRouter.patch("/bidsLoadStatus", updateBidsLoadStatus);
 TranspoterRouter.patch("/bidsTruckStatus", updateBidsTruckStatus);
+TranspoterRouter.patch("/updateLoadSchedule", updateLoadSchedule);
+TranspoterRouter.patch("/updateTruckSchedule", updateTruckSchedule);
 
 
