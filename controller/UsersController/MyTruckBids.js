@@ -4,18 +4,17 @@ export const getTruckBidsForUser = async (req, res) => {
     const { user_id } = req.query;
 
     try {
-        
-        if (!user_id ) {
-            return res.status(400).json({ message: "user_id are required." });
+        if (!user_id) {
+            return res.status(400).json({ message: "user_id is required." });
         }
 
-        
         const query = `
             SELECT 
                 bt.*, 
                 u.*, 
                 pt.*, 
-                l.* 
+                l.*, 
+                t.* 
             FROM 
                 Loadart."bidsTruck" bt
             JOIN 
@@ -30,20 +29,20 @@ export const getTruckBidsForUser = async (req, res) => {
                 Loadart."loads" l
             ON 
                 bt.loads_id = l.loads_id
+            JOIN 
+                Loadart."trucks" t
+            ON 
+                pt.truck_id = t.truck_id
             WHERE 
-                bt.user_id = $1  
-               
+                bt.user_id = $1;
         `;
 
-        
         const result = await pool.query(query, [user_id]);
 
-        
         if (result.rows.length === 0) {
             return res.status(200).json({ message: "No bids found for the given user_id." });
         }
 
-        
         res.status(200).json({
             message: "Bids retrieved successfully.",
             data: result.rows,
