@@ -21,15 +21,23 @@ export const Register = async (req, res) => {
         `;
         const existingTransporterResult = await pool.query(existingTransporterQuery, [brokers_mob]);
 
-        if (existingTransporterResult.rows.length > 0) {
-           
-            const query = `
+    if (existingTransporterResult.rows.length > 0) {
+        const userTypeFindQuery = `
+        SELECT user_types_id 
+        FROM loadart.user_types 
+        WHERE user_types_name = 'Broker';
+    `;
+    const userTypefoundResult = await pool.query(userTypeFindQuery);
+        const userTypeId = userTypefoundResult.rows[0].user_types_id;
+    
+        const query = `
             SELECT * 
             FROM loadart.users 
-            WHERE users_mobile = $1;
+            WHERE users_mobile = $1 
+            AND user_types_id = $2;
         `;
-        const result = await pool.query(query, [brokers_mob]);
-
+        const result = await pool.query(query, [brokers_mob, userTypeId]);
+    
            
             const updateTransporterQuery = `
                 UPDATE loadart.brokers
