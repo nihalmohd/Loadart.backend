@@ -1,7 +1,7 @@
 import express from 'express';
 import { SentOtp, VerifyOTP } from '../controller/UsersController/OTP.js';
 import { Register } from '../controller/UsersController/BrokerRegister.js';
-import { insertBrokerDocs, updateBrokerBasicDetails } from '../controller/UsersController/BrokerUpdatePtofile.js';
+import { getBrokerById, getDocumentsBybrokersId, insertBrokerDocs, updateBrokerBasicDetails } from '../controller/UsersController/BrokerUpdatePtofile.js';
 
 
 export const BrokerRouter = express.Router()
@@ -13,6 +13,8 @@ BrokerRouter.get("/", (req, res) => {
     
 });
 //get//
+BrokerRouter.get("/getBrokerById",getBrokerById)
+BrokerRouter.get("/getDocumentsBybrokersId",getDocumentsBybrokersId)
 
 //post//
 BrokerRouter.post("/send-otp",SentOtp)
