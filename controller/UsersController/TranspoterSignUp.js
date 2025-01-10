@@ -22,13 +22,21 @@ export const Register = async (req, res) => {
         const existingTransporterResult = await pool.query(existingTransporterQuery, [transporters_mob]);
 
         if (existingTransporterResult.rows.length > 0) {
-           
-            const query = `
-            SELECT * 
-            FROM loadart.users 
-            WHERE users_mobile = $1;
+            const userTypeFindQuery = `
+            SELECT user_types_id 
+            FROM loadart.user_types 
+            WHERE user_types_name = 'Transporter';
         `;
-        const result = await pool.query(query, [transporters_mob]);
+        const userTypefoundResult = await pool.query(userTypeFindQuery);
+            const userTypeId = userTypefoundResult.rows[0].user_types_id;
+        
+            const query = `
+                SELECT * 
+                FROM loadart.users 
+                WHERE users_mobile = $1 
+                AND user_types_id = $2;
+            `;
+        const result = await pool.query(query, [transporters_mob,userTypeId]);
 
            
             const updateTransporterQuery = `
