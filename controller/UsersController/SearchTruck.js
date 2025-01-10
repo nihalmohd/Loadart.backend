@@ -10,15 +10,22 @@ export const getMatchingPostTrucks = async (req, res) => {
 
     try {
         const query = `
-            SELECT *
-            FROM loadart."postTrucks"
-            WHERE 
-                ($1::timestamp IS NULL OR "postTrucks_dateTime" = $1) AND
-                ($2::text IS NULL OR "postTrucks_from" = $2) AND
-                ($3::text IS NULL OR "postTrucks_to" = $3) AND
-                ($4::integer IS NULL OR "postTrucks_capacity_id" = $4);
-        `;
-
+        SELECT 
+            pt.*, 
+            t.*  
+        FROM 
+            loadart."postTrucks" pt
+        LEFT JOIN 
+            loadart."trucks" t
+        ON 
+            pt."truck_id" = t."truck_id"
+        WHERE 
+            ($1::timestamp IS NULL OR pt."postTrucks_dateTime" = $1) AND
+            ($2::text IS NULL OR pt."postTrucks_from" = $2) AND
+            ($3::text IS NULL OR pt."postTrucks_to" = $3) AND
+            ($4::integer IS NULL OR pt."postTrucks_capacity_id" = $4);
+    `;
+    
         const values = [
             postTrucks_dateTime || null,
             postTrucks_from || null,

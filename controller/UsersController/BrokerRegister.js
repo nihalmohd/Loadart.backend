@@ -1,0 +1,128 @@
+import pool from "../../Model/Config.js";
+import { generateAccessToken, generateRefreshToken } from "../../Utils/JwtGenerator.js";
+
+export const Register = async (req, res) => {
+    try {
+        const { brokers_name, company, brokers_email, brokers_phone, brokers_mob } = req.body;
+
+        if (!brokers_name || !brokers_mob) {
+            return res.status(400).json({
+                error: 'Missing required fields: brokers_name, Mobile number',
+            });
+        }
+
+        await pool.query('BEGIN');
+
+      
+        const existingTransporterQuery = `
+            SELECT * 
+            FROM loadart.brokers 
+            WHERE brokers_mob = $1;
+        `;
+        const existingTransporterResult = await pool.query(existingTransporterQuery, [brokers_mob]);
+
+        if (existingTransporterResult.rows.length > 0) {
+           
+            const query = `
+            SELECT * 
+            FROM loadart.users 
+            WHERE users_mobile = $1;
+        `;
+        const result = await pool.query(query, [brokers_mob]);
+
+           
+            const updateTransporterQuery = `
+                UPDATE loadart.brokers
+                SET 
+                    brokers_name = COALESCE($1, brokers_name),
+                    company = COALESCE($2, company),
+                    brokers_email = COALESCE($3, brokers_email),
+                    brokers_phone = COALESCE($4, brokers_phone)
+                WHERE brokers_mob = $5
+                RETURNING *;
+            `;
+            const updateTransporterValues = [
+                brokers_name,
+                company,
+                brokers_email || null,
+                brokers_phone || null,
+                brokers_mob,
+            ];
+            const updatedTransporter = await pool.query(updateTransporterQuery, updateTransporterValues);
+
+            await pool.query('COMMIT');
+
+            return res.status(200).json({
+                message: 'Transporter updated successfully',
+                data: updatedTransporter.rows[0],
+                User: result.rows[0], 
+            });
+        }
+
+        
+        const userTypeQuery = `
+            SELECT user_types_id 
+            FROM loadart.user_types 
+            WHERE user_types_name = 'Broker';
+        `;
+        const userTypeResult = await pool.query(userTypeQuery);
+
+        if (userTypeResult.rows.length === 0) {
+            throw new Error('User type "Transporter" not found');
+        }
+        const userTypeId = userTypeResult.rows[0].user_types_id;
+
+        
+        const transporterQuery = `
+            INSERT INTO loadart.brokers (brokers_name, company, brokers_email, brokers_phone, brokers_mob) 
+            VALUES ($1, $2, $3, $4, $5)
+            RETURNING *;
+        `;
+        const transporterValues = [brokers_name, company, brokers_email || null, brokers_phone || null, brokers_mob];
+        const result = await pool.query(transporterQuery, transporterValues);
+
+        
+        const userQuery = `
+            INSERT INTO loadart.users (users_name, users_mobile, user_types_id) 
+            VALUES ($1, $2, $3)
+            RETURNING *;
+        `;
+        const userValues = [brokers_name, brokers_mob, userTypeId];
+        const UserData = await pool.query(userQuery, userValues);
+
+        await pool.query('COMMIT');
+
+        
+        const userPayload = { id: brokers_mob, username: brokers_name };
+        const accessToken = generateAccessToken(userPayload);
+        const refreshToken = generateRefreshToken(userPayload);
+
+        
+        res.cookie('accessToken', accessToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'strict',
+            maxAge: 15 * 60 * 1000,
+        });
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
+
+        
+        res.status(200).json({ 
+            message: 'Registration successful', 
+            data: result.rows[0], 
+            accessToken, 
+            refreshToken, 
+            User: UserData.rows[0],
+        });
+    } catch (error) {
+        console.error('Error during registration:', error);
+        await pool.query('ROLLBACK');
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
