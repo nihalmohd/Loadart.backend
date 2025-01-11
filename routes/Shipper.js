@@ -1,6 +1,6 @@
 import express from 'express';
 import { Register } from '../controller/UsersController/ShipperRegister.js';
-import { insertShipperDocs, updateShipperBasicDetails } from '../controller/UsersController/ShipperUpdateProfile.js';
+import { getDocumentsByShipperId, getShipperById, insertShipperDocs, updateShipperBasicDetails } from '../controller/UsersController/ShipperUpdateProfile.js';
 
 
 export const ShipperRouter = express.Router()
@@ -12,6 +12,8 @@ ShipperRouter.get("/", (req, res) => {
 });
 
 //get//
+ShipperRouter.get("/getShipperById",getShipperById)
+ShipperRouter.get("/getDocsByUserId",getDocumentsByShipperId)
 
 //post//
 ShipperRouter.post("/Register",Register)

@@ -77,3 +77,69 @@ export const insertShipperDocs = async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 };
+
+
+export const getShipperById = async (req, res) => {
+    const { shippers_id} = req.query; 
+
+    
+    if (!shippers_id) {
+        return res.status(400).json({ message: "Shipper ID is required." });
+    }
+
+    const fetchDocumentQuery = `
+        SELECT *
+        FROM loadart.shippers
+        WHERE "shippers_id" = $1
+        LIMIT 1;
+    `;
+
+    try {
+        const result = await pool.query(fetchDocumentQuery, [shippers_id]);
+
+        if (result.rows.length === 0) {
+            return res.status(200).json({ message: "No Shipper found for the given Shipper ID." });
+        }
+
+        res.status(200).json({
+            message: "Shipper retrieved successfully.",
+            data: result.rows[0],
+        });
+    } catch (error) {
+        console.error("Error retrieving Shipper:", error.message);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+export const getDocumentsByShipperId = async (req, res) => {
+    const { shippers_id } = req.query; 
+
+    if (!shippers_id) {
+        return res.status(400).json({ message: "shipper ID is required." });
+    }
+
+    const fetchDocumentsQuery = `
+        SELECT *
+        FROM loadart.shipper_docs
+        WHERE "shippers_id" = $1;
+    `;
+
+    try {
+        const result = await pool.query(fetchDocumentsQuery, [shippers_id]);
+
+        if (result.rows.length === 0) {
+            return res.status(200).json({ message: "No documents found for the given shipper ID." });
+        }
+
+        res.status(200).json({
+            message: "Documents retrieved successfully.",
+            data: result.rows,  
+        });
+    } catch (error) {
+        console.error("Error retrieving documents:", error.message);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+
+
