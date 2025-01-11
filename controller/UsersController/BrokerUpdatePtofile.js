@@ -22,15 +22,15 @@ export const updateBrokerBasicDetails = async (req, res) => {
         const result = await pool.query(updateQuery, updateValues);
 
         if (result.rows.length === 0) {
-            return res.status(404).json({ message: "Transporter not found or no changes made." });
+            return res.status(404).json({ message: "Broker not found or no changes made." });
         }
 
         res.status(200).json({
-            message: "Transporter updated successfully",
+            message: "Broker updated successfully",
             data: result.rows[0],
         });
     } catch (error) {
-        console.error("Error updating transporter:", error.message);
+        console.error("Error updating Broker:", error.message);
         res.status(500).json({ message: "Internal server error" });
     }
 };
@@ -82,7 +82,7 @@ export const getBrokerById = async (req, res) => {
 
     
     if (!brokers_id) {
-        return res.status(400).json({ message: "Transporter ID is required." });
+        return res.status(400).json({ message: "Broker ID is required." });
     }
 
     const fetchDocumentQuery = `
@@ -96,15 +96,15 @@ export const getBrokerById = async (req, res) => {
         const result = await pool.query(fetchDocumentQuery, [brokers_id]);
 
         if (result.rows.length === 0) {
-            return res.status(200).json({ message: "No transporter found for the given transporter ID." });
+            return res.status(200).json({ message: "No Broker found for the given Broker ID." });
         }
 
         res.status(200).json({
-            message: "Transporter retrieved successfully.",
+            message: "Broker retrieved successfully.",
             data: result.rows[0],
         });
     } catch (error) {
-        console.error("Error retrieving transporter:", error.message);
+        console.error("Error retrieving Broker:", error.message);
         res.status(500).json({ message: "Internal server error" });
     }
 };
@@ -114,7 +114,7 @@ export const getDocumentsBybrokersId = async (req, res) => {
     const { brokers_id } = req.query; 
 
     if (!brokers_id) {
-        return res.status(400).json({ message: "Transporter ID is required." });
+        return res.status(400).json({ message: "Broker ID is required." });
     }
 
     const fetchDocumentsQuery = `
@@ -127,7 +127,7 @@ export const getDocumentsBybrokersId = async (req, res) => {
         const result = await pool.query(fetchDocumentsQuery, [brokers_id]);
 
         if (result.rows.length === 0) {
-            return res.status(200).json({ message: "No documents found for the given transporter ID." });
+            return res.status(200).json({ message: "No documents found for the given Broker ID." });
         }
 
         res.status(200).json({

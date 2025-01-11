@@ -59,11 +59,31 @@ export const Register = async (req, res) => {
             const updatedTransporter = await pool.query(updateTransporterQuery, updateTransporterValues);
 
             await pool.query('COMMIT');
+            const userPayload = { id: transporters_mob, username: transporters_name };
+            const accessToken = generateAccessToken(userPayload);
+            const refreshToken = generateRefreshToken(userPayload);
+    
+            
+            res.cookie('accessToken', accessToken, {
+                httpOnly: true,
+                secure: false,
+                sameSite: 'strict',
+                maxAge: 15 * 60 * 1000,
+            });
+    
+            res.cookie('refreshToken', refreshToken, {
+                httpOnly: true,
+                secure: false,
+                sameSite: 'strict',
+                maxAge: 7 * 24 * 60 * 60 * 1000,
+            });
 
             return res.status(200).json({
                 message: 'Transporter updated successfully',
                 data: updatedTransporter.rows[0],
                 User: result.rows[0], 
+                accessToken,
+                refreshToken
             });
         }
 
