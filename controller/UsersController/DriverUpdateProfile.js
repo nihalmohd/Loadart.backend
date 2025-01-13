@@ -36,3 +36,45 @@ export const updateDriverBasicDetails = async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 };
+
+export const insertDriverDocs = async (req, res) => {
+    const { drivers_id, drivers_doc } = req.body;
+
+    if (!drivers_id || !drivers_doc || drivers_doc.length === 0) {
+        return res.status(400).json({ message: "Drivers id and document details are required." });
+    }
+
+    const insertDocsQuery = `
+        INSERT INTO loadart.driver_docs
+        (driver_docs_name, doc_types_id, driver_docs_images, drivers_id)
+        VALUES ($1, $2, $3, $4)
+        RETURNING *;
+    `;
+
+    try {
+        await pool.query("BEGIN");
+
+        const insertedDocs = [];
+        for (const doc of drivers_doc) {
+            const { name, type_id, image } = doc;
+            const insertResult = await pool.query(insertDocsQuery, [
+                name,
+                type_id,
+                image,
+                drivers_id,
+            ]);
+            insertedDocs.push(insertResult.rows[0]);
+        }
+
+        await pool.query("COMMIT");
+
+        res.status(200).json({
+            message: "Document details inserted successfully.",
+            drivers_doc: insertedDocs,
+        });
+    } catch (error) {
+        await pool.query("ROLLBACK");
+        console.error("Error inserting Drivers docs:", error.message);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
