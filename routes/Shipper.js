@@ -13,7 +13,7 @@ ShipperRouter.get("/", (req, res) => {
 
 //get//
 ShipperRouter.get("/getShipperById",getShipperById)
-ShipperRouter.get("/getDocsByUserId",getDocumentsByShipperId)
+ShipperRouter.get("/getShipperDocsByUserId",getDocumentsByShipperId)
 
 //post//
 ShipperRouter.post("/Register",Register)

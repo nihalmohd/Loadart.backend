@@ -7,6 +7,7 @@ import { TranspoterRouter } from "./routes/Transpoter.js";
 import {AdminRouter} from "./routes/Admin.js"
 import { BrokerRouter } from "./routes/Broker.js";
 import { ShipperRouter } from "./routes/Shipper.js";
+import { DriverRouter } from "./routes/Driver.js";
  
 
 dotenv.config(); 
@@ -32,6 +33,7 @@ app.get("/", (req, res) => {
 app.use('/Transpoter',TranspoterRouter)
 app.use('/Broker',BrokerRouter)
 app.use('/Shipper',ShipperRouter)
+app.use('/Driver',DriverRouter)
 app.use('/Admin',AdminRouter)
 
 
