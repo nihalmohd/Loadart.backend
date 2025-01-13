@@ -1,6 +1,6 @@
 import express from 'express';
 import { Register } from '../controller/UsersController/DriverRegister.js';
-import { insertDriverDocs, updateDriverBasicDetails } from '../controller/UsersController/DriverUpdateProfile.js';
+import { getDocumentsByDriverId, getDriverById, insertDriverDocs, updateDriverBasicDetails } from '../controller/UsersController/DriverUpdateProfile.js';
 
 
 export const DriverRouter = express.Router()
@@ -14,6 +14,7 @@ DriverRouter.get("/", (req, res) => {
 DriverRouter.post("/Register",Register)
 DriverRouter.post("/InsertDriverDocs",insertDriverDocs)
 //get//
-DriverRouter.get("/",)
+DriverRouter.get("/getDriverById",getDriverById)
+DriverRouter.get('/getDocByDriverId',getDocumentsByDriverId)
 //patch//
 DriverRouter.patch("/UpdateDriverBasicDetails",updateDriverBasicDetails)
