@@ -14,14 +14,14 @@ export const Register = async (req, res) => {
         await pool.query('BEGIN');
 
       
-        const existingTransporterQuery = `
+        const existingBrokerrQuery = `
             SELECT * 
             FROM loadart.brokers 
             WHERE brokers_mob = $1;
         `;
-        const existingTransporterResult = await pool.query(existingTransporterQuery, [brokers_mob]);
+        const existingBrokerrResult = await pool.query(existingBrokerrQuery, [brokers_mob]);
 
-    if (existingTransporterResult.rows.length > 0) {
+    if (existingBrokerrResult.rows.length > 0) {
         const userTypeFindQuery = `
         SELECT user_types_id 
         FROM loadart.user_types 
@@ -39,7 +39,7 @@ export const Register = async (req, res) => {
         const result = await pool.query(query, [brokers_mob, userTypeId]);
     
            
-            const updateTransporterQuery = `
+            const updateBrokerrQuery = `
                 UPDATE loadart.brokers
                 SET 
                     brokers_name = COALESCE($1, brokers_name),
@@ -49,14 +49,14 @@ export const Register = async (req, res) => {
                 WHERE brokers_mob = $5
                 RETURNING *;
             `;
-            const updateTransporterValues = [
+            const updateBrokerrValues = [
                 brokers_name,
                 company,
                 brokers_email || null,
                 brokers_phone || null,
                 brokers_mob,
             ];
-            const updatedTransporter = await pool.query(updateTransporterQuery, updateTransporterValues);
+            const updatedBrokerr = await pool.query(updateBrokerrQuery, updateBrokerrValues);
 
             await pool.query('COMMIT');
             const userPayload = { id: brokers_mob, username: brokers_name };
@@ -80,8 +80,8 @@ export const Register = async (req, res) => {
     
 
             return res.status(200).json({
-                message: 'Transporter updated successfully',
-                data: updatedTransporter.rows[0],
+                message: 'Broker updated successfully',
+                data: updatedBrokerr.rows[0],
                 User: result.rows[0],
                 accessToken,
                 refreshToken 
@@ -97,18 +97,18 @@ export const Register = async (req, res) => {
         const userTypeResult = await pool.query(userTypeQuery);
 
         if (userTypeResult.rows.length === 0) {
-            throw new Error('User type "Transporter" not found');
+            throw new Error('User type "Broker" not found');
         }
         const userTypeId = userTypeResult.rows[0].user_types_id;
 
         
-        const transporterQuery = `
+        const BrokerrQuery = `
             INSERT INTO loadart.brokers (brokers_name, company, brokers_email, brokers_phone, brokers_mob) 
             VALUES ($1, $2, $3, $4, $5)
             RETURNING *;
         `;
-        const transporterValues = [brokers_name, company, brokers_email || null, brokers_phone || null, brokers_mob];
-        const result = await pool.query(transporterQuery, transporterValues);
+        const BrokerrValues = [brokers_name, company, brokers_email || null, brokers_phone || null, brokers_mob];
+        const result = await pool.query(BrokerrQuery, BrokerrValues);
 
         
         const userQuery = `
