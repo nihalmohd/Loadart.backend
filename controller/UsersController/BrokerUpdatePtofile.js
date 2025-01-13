@@ -39,44 +39,75 @@ export const insertBrokerDocs = async (req, res) => {
     const { brokers_id, brokers_docs } = req.body;
 
     if (!brokers_id || !brokers_docs || brokers_docs.length === 0) {
-        return res.status(400).json({ message: "brokers id and document details are required." });
+        return res.status(400).json({ message: "Brokers ID and document details are required." });
     }
 
-    const insertDocsQuery = `
+    const selectQuery = `
+        SELECT * 
+        FROM loadart.broker_docs 
+        WHERE brokers_id = $1 AND broker_docs_name = $2;
+    `;
+
+    const insertQuery = `
         INSERT INTO loadart.broker_docs 
         (broker_docs_name, doc_types_id, broker_docs_images, brokers_id)
         VALUES ($1, $2, $3, $4)
         RETURNING *;
     `;
 
+    const updateQuery = `
+        UPDATE loadart.broker_docs
+        SET 
+            doc_types_id = $1,
+            broker_docs_images = $2
+        WHERE 
+            brokers_id = $3 AND broker_docs_name = $4
+        RETURNING *;
+    `;
+
     try {
         await pool.query("BEGIN");
 
-        const insertedDocs = [];
+        const processedDocs = [];
         for (const doc of brokers_docs) {
             const { name, type_id, image } = doc;
-            const insertResult = await pool.query(insertDocsQuery, [
-                name,
-                type_id,
-                image,
-                brokers_id,
-            ]);
-            insertedDocs.push(insertResult.rows[0]);
+
+            
+            const existingDoc = await pool.query(selectQuery, [brokers_id, name]);
+
+            if (existingDoc.rows.length > 0) {
+                
+                const updatedDoc = await pool.query(updateQuery, [
+                    type_id,
+                    image,
+                    brokers_id,
+                    name,
+                ]);
+                processedDocs.push(updatedDoc.rows[0]);
+            } else {
+               
+                const insertedDoc = await pool.query(insertQuery, [
+                    name,
+                    type_id,
+                    image,
+                    brokers_id,
+                ]);
+                processedDocs.push(insertedDoc.rows[0]);
+            }
         }
 
         await pool.query("COMMIT");
 
         res.status(200).json({
-            message: "Document details inserted successfully.",
-            brokers_docs: insertedDocs,
+            message: "Document details processed successfully.",
+            brokers_docs: processedDocs,
         });
     } catch (error) {
         await pool.query("ROLLBACK");
-        console.error("Error inserting brokers docs:", error.message);
+        console.error("Error processing brokers docs:", error.message);
         res.status(500).json({ message: "Internal server error" });
     }
 };
-
 export const getBrokerById = async (req, res) => {
     const { brokers_id} = req.query; 
 
