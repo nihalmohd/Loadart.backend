@@ -107,7 +107,7 @@ export const Register = async (req, res) => {
             VALUES ($1, $2, $3, $4, $5)
             RETURNING *;
         `;
-        const BrokerrValues = [brokers_name, company, brokers_email || null, brokers_phone || null, brokers_mob];
+        const BrokerrValues = [brokers_name, company || null, brokers_email || null, brokers_phone || null, brokers_mob];
         const result = await pool.query(BrokerrQuery, BrokerrValues);
 
         
