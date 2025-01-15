@@ -83,8 +83,8 @@ export const Register = async (req, res) => {
                 message: 'Broker updated successfully',
                 data: updatedBrokerr.rows[0],
                 User: result.rows[0],
-                accessToken,
-                refreshToken 
+                accessToken, 
+                refreshToken    
             });
         }
 
