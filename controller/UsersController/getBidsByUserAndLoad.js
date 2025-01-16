@@ -1,11 +1,11 @@
 import pool from "../../Model/Config.js";
 
 export const getBidsByUserAndLoad = async (req, res) => {
-    const { user_id, load_id } =  req.query;
+    const { user_id, loads_id } =  req.query;
 
     try {
         // Validate input
-        if (!user_id || !load_id) {
+        if (!user_id || !loads_id) {
             return res.status(400).json({ message: "Both user_id and load_id are required." });
         }
 
@@ -17,7 +17,7 @@ export const getBidsByUserAndLoad = async (req, res) => {
                 pt.*, 
                 l.*
             FROM 
-                Loadart."bidsLoad" bl
+                Loadart."bidsTruck" bl
             JOIN 
                 Loadart."users" u
             ON 
@@ -25,17 +25,17 @@ export const getBidsByUserAndLoad = async (req, res) => {
             JOIN 
                 Loadart."trucks" pt
             ON 
-                bl."trucks_id" = pt."truck_id"
+                bl."trucks_id" = pt."trucks_id"
             JOIN 
                 Loadart."loads" l
             ON 
-                bl.load_id = l.loads_id
+                bl.loads_id = l.loads_id
             WHERE 
-                bl.user_id = $1 AND bl.load_id = $2;
+                bl.user_id = $1 AND bl.loads_id = $2;
         `;
 
         // Execute the query
-        const result = await pool.query(query, [user_id, load_id]);
+        const result = await pool.query(query, [user_id, loads_id]);
 
         // Check if data is found
         if (result.rows.length === 0) {
