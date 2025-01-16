@@ -1,25 +1,34 @@
 import pool from "../../Model/Config.js";
 
 export const getTrucksByUserId = async (req, res) => {
-    const { user_id } = req.query; 
+    const { user_id, trucks_status } = req.query;
     const limit = 20;
 
     if (!user_id) {
         return res.status(400).json({ message: "user_id is required in query parameters." });
     }
 
-    const fetchTrucksQuery = `
+    let fetchTrucksQuery = `
         SELECT *
-        FROM loadart.trucks
+        FROM Loadart."trucks"
         WHERE "user_id" = $1
-        LIMIT $2;
     `;
 
+    const queryParams = [user_id];
+
+    if (trucks_status) {
+        fetchTrucksQuery += ` AND "trucks_status" = $2`;
+        queryParams.push(trucks_status);
+    }
+
+    fetchTrucksQuery += ` LIMIT $${queryParams.length + 1};`;
+    queryParams.push(limit);
+
     try {
-        const result = await pool.query(fetchTrucksQuery, [user_id, limit]);
+        const result = await pool.query(fetchTrucksQuery, queryParams);
 
         if (result.rows.length === 0) {
-            return res.status(200).json({ message: "No trucks found for the given user_id." });
+            return res.status(200).json({ message: "No trucks found for the given criteria." });
         }
 
         res.status(200).json({

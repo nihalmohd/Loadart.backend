@@ -74,6 +74,7 @@ TranspoterRouter.get("/getBidsByUserAndTruck",getTruckBidsForUserAndPostTruck );
 
 
 
+
 TranspoterRouter.post("/Register",Register)
 TranspoterRouter.post("/send-otp",SentOtp)
 TranspoterRouter.post("/Verify-otp",VerifyOTP)
