@@ -6,13 +6,13 @@ export const getAllLoads = async (req, res) => {
     const offset = (page - 1) * limit; 
 
     const fetchLoadsQuery = `
-        SELECT *
-        FROM loadart.loads
-        LIMIT $1 OFFSET $2;
-    `;
-
+    SELECT *
+    FROM Loadart."loads"
+    WHERE "loads_status" != $1
+    LIMIT $2 OFFSET $3;
+`;
     try {
-        const result = await pool.query(fetchLoadsQuery, [limit, offset]);
+        const result = await pool.query(fetchLoadsQuery, [3,limit, offset]);
 
         if (result.rows.length === 0) {
             return res.status(200).json({ message: "No loads found for the specified page." });

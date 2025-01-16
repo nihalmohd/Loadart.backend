@@ -42,6 +42,19 @@ export const updateAndInsertSchedules = async (req, res) => {
                 .status(404)
                 .json({ message: "No matching row found in bidsLoad table for update." });
         }
+        const updateStatusQuery = `
+            UPDATE Loadart."loads"
+            SET "loads_status" = $1
+            WHERE "loads_id" = $2;
+        `;
+
+        const updateStatusResult = await pool.query(updateStatusQuery, [3, loads_id]);
+
+        if (updateStatusResult.rowCount === 0) {
+            return res
+                .status(404)
+                .json({ message: "No matching row found in loads table for update." });
+        }
 
         
         const insertQuery = `
