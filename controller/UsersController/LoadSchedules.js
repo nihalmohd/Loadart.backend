@@ -7,6 +7,7 @@ export const updateAndInsertSchedules = async (req, res) => {
         pickup_loc,
         delivery_loc,
         materials_id,
+        user_id,
         users_id,
         truck_id,
         loads_id,
@@ -19,6 +20,7 @@ export const updateAndInsertSchedules = async (req, res) => {
             !pickup_loc ||
             !delivery_loc ||
             !materials_id ||
+            !user_id||
             !users_id ||
             !truck_id ||
             !loads_id
@@ -53,7 +55,7 @@ export const updateAndInsertSchedules = async (req, res) => {
             pickup_loc,
             delivery_loc,
             materials_id,
-            users_id,
+            user_id,
             truck_id,
             loads_id,
         ]);
