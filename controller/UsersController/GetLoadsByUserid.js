@@ -10,16 +10,13 @@ export const getLoadsByUserId = async (req, res) => {
 
 
     const fetchLoadsQuery = `
-        SELECT *
-        FROM loadart.loads
-        WHERE "user_id" = $1;
-    `;
+    SELECT *
+    FROM loadart.loads
+    WHERE "user_id" = $1 AND "loads_status" != 3;
+`;
 
-    try {
-
-        const result = await pool.query(fetchLoadsQuery, [user_id]);
-
-
+try {
+    const result = await pool.query(fetchLoadsQuery, [user_id]);
         if (result.rows.length === 0) {
             return res.status(200).json({ message: "No loads found." });
         }

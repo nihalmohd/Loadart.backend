@@ -23,7 +23,7 @@ export const getTruckSchedulesByUserId = async (req, res) => {
         if (result.rowCount === 0) {
             return res.status(200).json({ message: "No schedules found for the given user_id.",data:[]});
         }
-
+ 
         
         res.status(200).json({
             message: "Truck schedules fetched successfully.",
