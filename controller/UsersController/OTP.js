@@ -4,8 +4,9 @@ import pool from "../../Model/Config.js";
 const otpStore = new Map();
 
 export const SentOtp = async (req, res) => {
-  const { transporters_mob } = req.body;
 
+  const { transporters_mob } = req.body;
+    
   if (!transporters_mob) {
     return res.status(400).json({ error: "Mobile number is required" });
   }
@@ -52,7 +53,7 @@ export const VerifyOTP = async (req, res) => {
     if (!storedData) {
       return res
         .status(400)
-        .json({ error: "No OTP found for this mobile number" });
+        .json({ error: "No OTP found for this mobile number" }); 
     }
 
     const { otp: storedOtp, expiry } = storedData;

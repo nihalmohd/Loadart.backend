@@ -15,7 +15,7 @@ dotenv.config();
 const app = express();
 app.use(cookieParser());
 const corsOptions = {
-    origin: process.env.FRONTENDURL,  
+    origin: process.env.FRONTEND_URL,  
     methods: ['DELETE', 'GET', 'POST', 'PUT'],  
     allowedHeaders: ['Content-Type', 'Authorization'], 
     credentials: true, 
@@ -41,4 +41,5 @@ app.use('/Admin',AdminRouter)
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}/`);
+    
 });

@@ -26,5 +26,5 @@ BrokerRouter.post("/Verify-otp",VerifyOTP)
 BrokerRouter.post("/Register",Register)
 BrokerRouter.post("/insertBrokerProfileDoc",insertBrokerDocs)
 
-//patch//
-BrokerRouter.patch("/UpdateBrokerProfile",updateBrokerBasicDetails)
+//patch// 
+BrokerRouter.patch("/UpdateBrokerProfile",updateBrokerBasicDetails) 
