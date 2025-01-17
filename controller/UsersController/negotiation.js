@@ -28,3 +28,33 @@ export const insertNegotiation = async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 };
+
+
+export const getNegotiationByUserAndBid = async (req, res) => {
+    const { user_id, bid_id } = req.query;
+
+    if (!user_id || !bid_id) {
+        return res.status(400).json({ message: "Both user_id and bid_id are required as query parameters." });
+    }
+
+    const selectQuery = `
+        SELECT * FROM loadart.negotiations
+        WHERE user_id = $1 AND bid_id = $2;
+    `;
+
+    try {
+        const result = await pool.query(selectQuery, [user_id, bid_id]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: "No matching negotiation found." });
+        }
+
+        res.status(200).json({
+            message: "Negotiation retrieved successfully.",
+            negotiation: result.rows,
+        });
+    } catch (error) {
+        console.error("Error retrieving negotiation:", error.message);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};

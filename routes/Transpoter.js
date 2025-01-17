@@ -37,8 +37,8 @@ import { updateTruckSchedule } from '../controller/UsersController/updateTruckSc
 import { updateLoadSchedule } from '../controller/UsersController/updateLoadReciepts.js';
 import { getBidsByUserAndLoad } from '../controller/UsersController/getBidsByUserAndLoad.js';
 import { getTruckBidsForUserAndPostTruck } from '../controller/UsersController/getBidsByUserAndTruck.js';
-import { insertNegotiation } from '../controller/UsersController/negotiation.js';
-import { insertTruckNegotiation } from '../controller/UsersController/TruckNegotiation.js';
+import { getNegotiationByUserAndBid, insertNegotiation } from '../controller/UsersController/negotiation.js';
+import { getTruckNegotiationByUserAndBid, insertTruckNegotiation } from '../controller/UsersController/TruckNegotiation.js';
 
 
 
@@ -73,6 +73,8 @@ TranspoterRouter.get("/loadschedules", getLoadSchedulesByUser);
 TranspoterRouter.get("/truckschedules", getTruckSchedulesByUserId);
 TranspoterRouter.get("/getBidsByUserAndLoadId",getBidsByUserAndLoad);
 TranspoterRouter.get("/getBidsByUserAndTruck",getTruckBidsForUserAndPostTruck );
+TranspoterRouter.get("/getTruckNegotiationByUserAndBid",getTruckNegotiationByUserAndBid);
+TranspoterRouter.get("/getNegotiationByUserAndBid",getNegotiationByUserAndBid)
 
 
 
