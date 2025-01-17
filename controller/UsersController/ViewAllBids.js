@@ -12,26 +12,26 @@ export const getBidsLoadWithDetails = async (req, res) => {
         
         const query = `
             SELECT 
-                bl.*,
+                bt.*,
                 u.*, 
-                pt.*, 
+                t.*, 
                 l.*
             FROM 
-                Loadart."bidsLoad" bl
+                Loadart."bidsTruck" bt
             JOIN 
                 Loadart."users" u
             ON 
-                bl.user_id = u.users_id
+                bt.user_id = u.users_id
             JOIN 
-                Loadart."trucks" pt
+                Loadart."trucks" t
             ON 
-                bl."trucks_id" = pt."truck_id"
+                bt."Trucks_id" = t."truck_id"
             JOIN 
                 Loadart."loads" l
             ON 
-                bl.load_id = l.loads_id
+                bt.loads_id = l.loads_id
             WHERE 
-                bl.load_id = $1;
+                bt.loads_id = $1;
         `;
 
       
