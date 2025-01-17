@@ -37,6 +37,7 @@ import { updateTruckSchedule } from '../controller/UsersController/updateTruckSc
 import { updateLoadSchedule } from '../controller/UsersController/updateLoadReciepts.js';
 import { getBidsByUserAndLoad } from '../controller/UsersController/getBidsByUserAndLoad.js';
 import { getTruckBidsForUserAndPostTruck } from '../controller/UsersController/getBidsByUserAndTruck.js';
+import { insertNegotiation } from '../controller/UsersController/negotiation.js';
 
 
 
@@ -89,6 +90,7 @@ TranspoterRouter.post("/insertBidsLoad", insertBidsLoad);
 TranspoterRouter.post("/insertBidsTruck", insertBidsTruck);
 TranspoterRouter.post("/insertLoadSchedule",updateAndInsertSchedules)
 TranspoterRouter.post("/truckschedules", updateBidsTruckAndInsertSchedule);
+TranspoterRouter.post("/negotiations",insertNegotiation)
 
 TranspoterRouter.patch("/bidsLoadStatus", updateBidsLoadStatus);
 TranspoterRouter.patch("/bidsTruckStatus", updateBidsTruckStatus);
