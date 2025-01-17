@@ -25,7 +25,7 @@ export const getBidsLoadWithDetails = async (req, res) => {
             JOIN 
                 Loadart."trucks" t
             ON 
-                bt."Trucks_id" = t."truck_id"
+                bt."trucks_id" = t."truck_id"
             JOIN 
                 Loadart."loads" l
             ON 
