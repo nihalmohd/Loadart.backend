@@ -1,45 +1,45 @@
 import pool from "../../Model/Config.js";
 
 export const getTruckBidsWithDetails = async (req, res) => {
-    const { postTruck_id } = req.query;
+    const { trucks_id } = req.query;
 
     try {
         
-        if (!postTruck_id) {
-            return res.status(400).json({ message: "postTruck_id is required." });
+        if (!trucks_id) {
+            return res.status(400).json({ message: "trucks_id is required." });
         }
 
         
         const query = `
             SELECT 
-                bt.*, 
+                bl.*, 
                 u.*, 
-                pt.*, 
+                t.*, 
                 l.* 
             FROM 
-                Loadart."bidsTruck" bt
+                Loadart."bidsLoad" bl
             JOIN 
                 Loadart."users" u
             ON 
-                bt.user_id = u.users_id
+                bl.user_id = u.users_id
             JOIN 
-                Loadart."postTrucks" pt
+                Loadart."trucks" t
             ON 
-                bt."postTrucks_id" = pt."postTrucks_id"
+                bl."trucks_id" = t."truck_id"
             JOIN 
                 Loadart."loads" l
             ON 
-                bt.loads_id = l.loads_id
+                bl.load_id = l.loads_id
             WHERE 
-                bt."postTrucks_id" = $1;
+                bl."trucks_id" = $1;
         `;
 
        
-        const result = await pool.query(query, [postTruck_id]);
+        const result = await pool.query(query, [trucks_id]);
 
         
         if (result.rows.length === 0) {
-            return res.status(200).json({ message: "No bids found for the given postTruck_id." });
+            return res.status(200).json({ message: "No bids found for the given trucks_id." });
         }
 
         
