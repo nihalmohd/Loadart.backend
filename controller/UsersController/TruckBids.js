@@ -1,23 +1,23 @@
 import pool from "../../Model/Config.js";
 
 export const insertBidsTruck = async (req, res) => {
-    const { bidsTruck_amount, postTrucks_id, user_id, loads_id } = req.body;
+    const { bidsTruck_amount, trucks_id, user_id, loads_id } = req.body;
 
     try {
-        if (!bidsTruck_amount || !postTrucks_id || !user_id || !loads_id) {
+        if (!bidsTruck_amount || !trucks_id || !user_id || !loads_id) {
             return res.status(400).json({ message: "All fields are required." });
         }
 
         const query = `
             INSERT INTO Loadart."bidsTruck" 
-            ("bidsTruck_amount", "postTrucks_id", "user_id", "loads_id")
+            ("bidsTruck_amount", "trucks_id", "user_id", "loads_id")
             VALUES ($1, $2, $3, $4)
             RETURNING *;
         `;
 
         const result = await pool.query(query, [
             bidsTruck_amount,
-            postTrucks_id,
+            trucks_id,
             user_id,
             loads_id,
         ]);
