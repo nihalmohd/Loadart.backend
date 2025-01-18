@@ -12,7 +12,6 @@ export const getTruckBidsForUser = async (req, res) => {
             SELECT 
                 bt.*, 
                 u.*, 
-                pt.*, 
                 l.*, 
                 t.* 
             FROM 
@@ -22,17 +21,13 @@ export const getTruckBidsForUser = async (req, res) => {
             ON 
                 bt.user_id = u.users_id
             JOIN 
-                Loadart."postTrucks" pt
-            ON 
-                bt."postTrucks_id" = pt."postTrucks_id"
-            JOIN 
                 Loadart."loads" l
             ON 
                 bt.loads_id = l.loads_id
             JOIN 
                 Loadart."trucks" t
             ON 
-                pt.truck_id = t.truck_id
+                bt.trucks_id = t.truck_id
             WHERE 
                 bt.user_id = $1;
         `;
