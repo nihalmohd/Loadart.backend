@@ -7,8 +7,11 @@ export const updateBidsTruckAndInsertSchedule = async (req, res) => {
         pickup_loc, 
         delivery_loc, 
         user_id, 
-        postTrucks_id, 
-        loads_id 
+        trucks_id, 
+        loads_id ,
+        users_id,
+        materials_id
+
     } = req.body;
 
     try {
@@ -19,8 +22,10 @@ export const updateBidsTruckAndInsertSchedule = async (req, res) => {
             !pickup_loc || 
             !delivery_loc || 
             !user_id || 
-            !postTrucks_id || 
-            !loads_id
+            !trucks_id || 
+            !loads_id ||
+            !users_id||
+            !materials_id
         ) {
             return res.status(400).json({ message: "All fields are required." });
         }
@@ -32,9 +37,9 @@ export const updateBidsTruckAndInsertSchedule = async (req, res) => {
         const updateQuery = `
             UPDATE Loadart."bidsTruck"
             SET "bidsTruck_status" = 3
-            WHERE "user_id" = $1 AND "postTrucks_id" = $2;
+            WHERE "user_id" = $1 AND "trucks_id" = $2;
         `;
-        const updateResult = await pool.query(updateQuery, [user_id, postTrucks_id]);
+        const updateResult = await pool.query(updateQuery, [user_id, trucks_id]);
 
         if (updateResult.rowCount === 0) {
             await pool.query("ROLLBACK");
@@ -44,7 +49,7 @@ export const updateBidsTruckAndInsertSchedule = async (req, res) => {
         // Insert into truck_schedules table
         const insertQuery = `
             INSERT INTO Loadart."truck_schedules" 
-            ("truckSchedules_date", "vehicle_reg", "pickup_loc", "delivery_loc", "user_id", "postTrucks_id", "loads_id")
+            ("truckSchedules_date", "vehicle_reg", "pickup_loc", "delivery_loc", "user_id", "trucks_id", "loads_id")
             VALUES ($1, $2, $3, $4, $5, $6, $7)
             RETURNING *;
         `;
@@ -53,10 +58,25 @@ export const updateBidsTruckAndInsertSchedule = async (req, res) => {
             vehicle_reg, 
             pickup_loc, 
             delivery_loc, 
-            user_id, 
-            postTrucks_id, 
+            user_id,
+            trucks_id, 
             loads_id
         ]);
+        const insertLoadQuery = `
+        INSERT INTO Loadart."load_schedules" 
+        ("schedules_date", "pickup_loc", "delivery_loc", "materials_id", "users_id", "truck_id", "loads_id")
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        RETURNING *;
+    `;
+    const insertLoadResult = await pool.query(insertLoadQuery, [
+        truckSchedules_date,
+        pickup_loc,
+        delivery_loc,
+        materials_id,
+        users_id,
+        trucks_id,
+        loads_id,
+    ]);
 
         // Commit the transaction
         await pool.query("COMMIT");
@@ -65,6 +85,7 @@ export const updateBidsTruckAndInsertSchedule = async (req, res) => {
         res.status(201).json({
             message: "bidsTruck updated and truck_schedules inserted successfully.",
             schedule: insertResult.rows[0],
+            LoadSchedules:insertLoadResult.rows[0]
         });
     } catch (error) {
         // Rollback the transaction on error
