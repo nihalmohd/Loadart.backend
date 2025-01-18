@@ -11,6 +11,7 @@ export const updateAndInsertSchedules = async (req, res) => {
         users_id,
         truck_id,
         loads_id,
+        vehicle_reg,
     } = req.body;
 
     try {
@@ -68,15 +69,32 @@ export const updateAndInsertSchedules = async (req, res) => {
             pickup_loc,
             delivery_loc,
             materials_id,
-            user_id,
+            users_id,
             truck_id,
             loads_id,
         ]);
+        const insertTruckQuery = `
+        INSERT INTO Loadart."truck_schedules" 
+        ("truckSchedules_date", "vehicle_reg", "pickup_loc", "delivery_loc", "user_id", "trucks_id", "loads_id")
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        RETURNING *;
+    `;
+    const insertTruckResult = await pool.query(insertTruckQuery, [
+        schedules_date, 
+        vehicle_reg, 
+        pickup_loc, 
+        delivery_loc, 
+        user_id, 
+        truck_id, 
+        loads_id
+    ]);
+
 
        
         res.status(201).json({
             message: "Schedule inserted and bidsLoad updated successfully.",
             schedule: insertResult.rows[0],
+            TruckSchedule:insertTruckResult.rows[0]
         });
     } catch (error) {
         console.error("Error updating and inserting schedules:", error.message);
