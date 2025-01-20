@@ -31,7 +31,9 @@ export const getTruckBidsWithDetails = async (req, res) => {
             ON 
                 bl.load_id = l.loads_id
             WHERE 
-                bl."trucks_id" = $1;
+                bl."trucks_id" = $1
+            AND
+                bl."bidsLoad_status"::INTEGER != 3;
         `;
 
        
