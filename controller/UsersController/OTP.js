@@ -20,7 +20,8 @@ export const SentOtp = async (req, res) => {
     const senderId = process.env.SENDER_ID;
     const tid = process.env.TID;
     const message = `Hi ${transporters_mob}, Your login OTP is ${generatedOtp} for TMK. CVS Info Solutions`;
-
+    console.log(generatedOtp);
+    
     const response = await axios.post(
       `https://sapteleservices.com/SMS_API/sendsms.php?username=${username}&password=${password}&mobile=${transporters_mob}&sendername=${senderId}&message=${message}&routetype=1&tid=${tid}`
     );

@@ -1,7 +1,7 @@
 import pool from "../../Model/Config.js";
 
 export const getBidsByUserAndLoad = async (req, res) => {
-    const { user_id, load_id } = req.body;
+    const { user_id, load_id } = req.query;
 
     try {
         // Validate input
