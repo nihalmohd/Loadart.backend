@@ -10,27 +10,27 @@ export const getTruckBidsForUserAndPostTruck = async (req, res) => {
 
         const query = `
             SELECT 
-                bt.*, 
+                bl.*, 
                 u.*,  
                 l.*, 
                 t.* 
             FROM 
-                Loadart."bidsTruck" bt
+                Loadart."bidsLoad" bl
             JOIN 
                 Loadart."users" u
             ON 
-                bt.user_id = u.users_id
+                bl.user_id = u.users_id
 
             JOIN 
                 Loadart."loads" l
             ON 
-                bt.loads_id = l.loads_id
+                bl.load_id = l.loads_id
             JOIN 
                 Loadart."trucks" t
             ON 
-                bt.trucks_id = t.truck_id
+                bl.trucks_id = t.truck_id
             WHERE 
-                bt.user_id = $1 AND bt."trucks_id" = $2;
+                bl.user_id = $1 AND bl."trucks_id" = $2;
         `;
 
         const result = await pool.query(query, [user_id, trucks_id]);
