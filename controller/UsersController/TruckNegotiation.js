@@ -34,15 +34,22 @@ export const getTruckNegotiationByUserAndBid = async (req, res) => {
     }
 
     const selectQuery = `
-        SELECT * FROM loadart."truckNegotiations"
-        WHERE user_id = $1 AND bid_id = $2;
-    `;
-
+    SELECT 
+        n.*
+    FROM 
+        loadart.negotiations n
+    JOIN 
+        loadart.users u
+    ON 
+        n.user_id = u.user_id
+    WHERE 
+        n.user_id = $1 AND n.bid_id = $2;
+`;
     try {
         const result = await pool.query(selectQuery, [user_id, bid_id]);
 
         if (result.rows.length === 0) {
-            return res.status(404).json({ message: "No matching negotiation found." });
+            return res.status(200).json({ message: "No matching negotiation found." });
         }
 
         res.status(200).json({
