@@ -35,7 +35,7 @@ export const updateBidsTruckAndInsertSchedule = async (req, res) => {
 
         // Update bidsTruck table
         const updateQuery = `
-            UPDATE Loadart."bidsTruck"
+            UPDATE Loadart."bidsLoad"
             SET "bidsTruck_status" = 3
             WHERE "user_id" = $1 AND "trucks_id" = $2;
         `;
