@@ -33,7 +33,7 @@ export const getBidsLoadWithDetails = async (req, res) => {
             WHERE 
                 bt.loads_id = $1
             AND 
-                bt."bidsTruck_status"::INTEGER != 3;
+                bt."bidsTruck_status"::INTEGER != 4;
         `;
 
       
