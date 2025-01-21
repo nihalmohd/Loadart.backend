@@ -1,12 +1,12 @@
 import pool from "../../Model/Config.js";
 
 export const getBidsLoadWithDetails = async (req, res) => {
-    const { load_id } = req.query;
+    const { load_id,user_id } = req.query;
 
     try {
         
-        if (!load_id) {
-            return res.status(400).json({ message: "load_id is required." });
+        if (!load_id || !user_id ) {
+            return res.status(400).json({ message: "load_id is required user_id is required." });
         }
 
         
@@ -33,11 +33,11 @@ export const getBidsLoadWithDetails = async (req, res) => {
             WHERE 
                 bt.loads_id = $1
             AND 
-                bt."bidsTruck_status"::INTEGER != 4;
+                bt."bidsTruck_status"::INTEGER != 4 AND bt.user_id != $2;
         `;
-
+ 
       
-        const result = await pool.query(query, [load_id]);
+        const result = await pool.query(query, [load_id,user_id]);
 
         
         if (result.rows.length === 0) {
