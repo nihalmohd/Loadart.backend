@@ -32,7 +32,7 @@ export const updateAndInsertSchedules = async (req, res) => {
         
         const updateQuery = `
             UPDATE Loadart."bidsTruck"
-            SET "bidsLoad_status" = $1
+            SET "bidsTruck_status" = $1
             WHERE "user_id" = $2 AND "loads_id" = $3;
         `;
         const updateResult = await pool.query(updateQuery, [3, users_id, loads_id]);
