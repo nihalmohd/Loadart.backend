@@ -73,7 +73,7 @@ export const updateBidsTruckAndInsertSchedule = async (req, res) => {
             vehicle_reg, 
             pickup_loc, 
             delivery_loc, 
-            user_id,
+            users_id,
             trucks_id, 
             loads_id
         ]);
@@ -88,7 +88,7 @@ export const updateBidsTruckAndInsertSchedule = async (req, res) => {
         pickup_loc,
         delivery_loc,
         materials_id,
-        users_id,
+        user_id,
         trucks_id,
         loads_id,
     ]);
