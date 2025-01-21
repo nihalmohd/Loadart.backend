@@ -35,13 +35,14 @@ export const getTruckNegotiationByUserAndBid = async (req, res) => {
 
     const selectQuery = `
     SELECT 
-        n.*
+        n.*,
+        u.*
     FROM 
-        loadart.negotiations n
+        loadart."truckNegotiations" n
     JOIN 
         loadart.users u
     ON 
-        n.user_id = u.user_id
+        n.user_id = u.users_id
     WHERE 
         n.user_id = $1 AND n.bid_id = $2;
 `;
