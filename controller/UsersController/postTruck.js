@@ -27,7 +27,7 @@ export const insertPostTrucks = async (req, res) => {
 
         const updateQuery = `
             UPDATE "loadart"."trucks"
-            SET "trucks_status" = 3
+            SET "trucks_status" = 5
             WHERE "truck_id" = $1;
         `;
         const updateResult = await pool.query(updateQuery, [truck_id]);
@@ -39,21 +39,21 @@ export const insertPostTrucks = async (req, res) => {
             });
         }
 
-        const insertQuery = `
-            INSERT INTO "loadart"."postTrucks" 
-            ("postTrucks_dateTime", "postTrucks_from", "postTrucks_to", "postTrucks_capacity_id", "comments", "truck_id") 
-            VALUES ($1, $2, $3, $4, $5, $6)
-            RETURNING *;
-        `;
-        const insertValues = [
-            postTrucks_dateTime || null, 
-            postTrucks_from, 
-            postTrucks_to, 
-            postTrucks_capacity_id, 
-            comments || null, 
-            truck_id
-        ];
-        const insertResult = await pool.query(insertQuery, insertValues);
+        // const insertQuery = `
+        //     INSERT INTO "loadart"."postTrucks" 
+        //     ("postTrucks_dateTime", "postTrucks_from", "postTrucks_to", "postTrucks_capacity_id", "comments", "truck_id") 
+        //     VALUES ($1, $2, $3, $4, $5, $6)
+        //     RETURNING *;
+        // `;
+        // const insertValues = [
+        //     postTrucks_dateTime || null, 
+        //     postTrucks_from, 
+        //     postTrucks_to, 
+        //     postTrucks_capacity_id, 
+        //     comments || null, 
+        //     truck_id
+        // ];
+        // const insertResult = await pool.query(insertQuery, insertValues);
 
         await pool.query("COMMIT");
 

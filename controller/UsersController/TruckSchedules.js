@@ -83,7 +83,7 @@ export const updateBidsTruckAndInsertSchedule = async (req, res) => {
         VALUES ($1, $2, $3, $4, $5, $6, $7)
         RETURNING *;
     `;
-    const insertLoadResult = await pool.query(insertLoadQuery, [
+    const insertLoadResult = await pool.query(insertLoadQuery, [ 
         truckSchedules_date,
         pickup_loc,
         delivery_loc,
