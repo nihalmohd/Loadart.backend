@@ -6,10 +6,46 @@ export const getPaginatedTrucks = async (req, res) => {
     const offset = (page - 1) * limit; 
 
     const fetchTrucksQuery = `
-        SELECT *
-        FROM loadart."postTrucks"
-        LIMIT $1 OFFSET $2;
-    `;
+    SELECT 
+        t.*, 
+        tmf.*, 
+        tmd.*, 
+        tc.*, 
+        tt.*, 
+        u.*, 
+        ut.*
+    FROM 
+        Loadart."trucks" t
+    JOIN 
+        Loadart."truck_manufacturers" tmf
+    ON 
+        t.manufacturer_id = tmf.truck_manufacturers_id
+    JOIN 
+        Loadart."truck_models" tmd
+    ON 
+        t.model_id = tmd.truck_models_id
+    JOIN 
+        Loadart."truck_capacities" tc
+    ON 
+        t.capacity_id = tc.truck_capacities_id
+    JOIN 
+        Loadart."truck_types" tt
+    ON 
+        t.trucks_type_id = tt.truck_types_id
+    JOIN 
+        Loadart."users" u
+    ON 
+        t.user_id = u.users_id
+    JOIN 
+        Loadart."user_types" ut
+    ON 
+        u.user_types_id = ut.user_types_id
+    WHERE 
+        t.trucks_status = 5
+    LIMIT 
+        $1 OFFSET $2;
+`;
+;
 
     try {
         const result = await pool.query(fetchTrucksQuery, [limit, offset]);
