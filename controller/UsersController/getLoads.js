@@ -11,7 +11,8 @@ export const getAllLoads = async (req, res) => {
         m.*, 
         tc.*, 
         tt.*, 
-        u.*
+        u.*, 
+        ut.*
     FROM 
         Loadart."loads" l
     JOIN 
@@ -30,6 +31,10 @@ export const getAllLoads = async (req, res) => {
         Loadart."users" u
     ON 
         l.user_id = u.users_id
+    JOIN 
+        Loadart."user_types" ut
+    ON 
+        u.user_types_id = ut.user_types_id
     WHERE 
         l.loads_status != $1
     LIMIT 
