@@ -6,11 +6,36 @@ export const getAllLoads = async (req, res) => {
     const offset = (page - 1) * limit; 
 
     const fetchLoadsQuery = `
-    SELECT *
-    FROM Loadart."loads"
-    WHERE "loads_status" != $1
-    LIMIT $2 OFFSET $3;
+    SELECT 
+        l.*, 
+        m.*, 
+        tc.*, 
+        tt.*, 
+        u.*
+    FROM 
+        Loadart."loads" l
+    JOIN 
+        Loadart."materials" m
+    ON 
+        l.material_id = m.materials_id
+    JOIN 
+        Loadart."truck_capacities" tc
+    ON 
+        l.capacity_id = tc.truck_capacities_id
+    JOIN 
+        Loadart."truck_types" tt
+    ON 
+        l.truck_type_id = tt.truck_types_id
+    JOIN 
+        Loadart."users" u
+    ON 
+        l.user_id = u.users_id
+    WHERE 
+        l.loads_status != $1
+    LIMIT 
+        $2 OFFSET $3;
 `;
+
     try {
         const result = await pool.query(fetchLoadsQuery, [3,limit, offset]);
 
