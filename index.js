@@ -16,7 +16,8 @@ app.use(cookieParser());
 
 // Updated CORS Options
 const corsOptions = {
-    origin: [process.env.FRONTEND_URL, process.env.LOCAL_FRONTEND_URL],
+    // origin: [process.env.FRONTEND_URL, process.env.LOCAL_FRONTEND_URL],
+    origin:"*",
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true, // Enable cookies and credentials
@@ -25,14 +26,11 @@ app.use(cors(corsOptions)); // Apply CORS middleware globally
 app.use(express.json());
 
 // Database connection
-app.use((err, req, res, next) => {
-    if (err.name === 'CorsError') {
-        console.error("CORS Error: ", err.message);
-        return res.status(500).json({ error: "CORS error occurred. Please check your configuration." });
-    }
-    console.error("Unexpected Error: ", err.message);
-    res.status(500).json({ error: "An unexpected error occurred." });
+app.use((req, res, next) => {
+    console.log("Request Origin:", req.headers.origin);
+    next();
 });
+
 database();
 
 // Base route
