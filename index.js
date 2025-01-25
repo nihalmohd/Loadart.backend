@@ -25,6 +25,14 @@ app.use(cors(corsOptions)); // Apply CORS middleware globally
 app.use(express.json());
 
 // Database connection
+app.use((err, req, res, next) => {
+    if (err.name === 'CorsError') {
+        console.error("CORS Error: ", err.message);
+        return res.status(500).json({ error: "CORS error occurred. Please check your configuration." });
+    }
+    console.error("Unexpected Error: ", err.message);
+    res.status(500).json({ error: "An unexpected error occurred." });
+});
 database();
 
 // Base route
@@ -42,5 +50,8 @@ app.use('/Admin', AdminRouter);
 // Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
+    console.log(process.env.FRONTEND_URL,"this is frount end url ");
+    console.log(process.env.LOCAL_FRONTEND_URL,"this is local frount end url ");
+    
     console.log(`Server running at http://localhost:${PORT}/`);
 });
