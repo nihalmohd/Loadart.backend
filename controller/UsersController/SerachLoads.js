@@ -7,24 +7,56 @@ export const getMatchingLoads = async (req, res) => {
         pickupDate,
         material_id,
         capacity_id,
-        truck_type_id, 
+        truck_type_id,
+        no_of_trucks,
     } = req.body;
-
+    
     try {
-       
         const query = `
-            SELECT *
-            FROM loadart.loads
+            SELECT 
+                l.*, 
+                m.*, 
+                tc.*, 
+                tt.*, 
+                u.*, 
+                ut.*
+            FROM 
+                Loadart."loads" l
+            JOIN 
+                Loadart."materials" m
+            ON 
+                l.material_id = m.materials_id
+            JOIN 
+                Loadart."truck_capacities" tc
+            ON 
+                l.capacity_id = tc.truck_capacities_id
+            JOIN 
+                Loadart."truck_types" tt
+            ON 
+                l.truck_type_id = tt.truck_types_id
+            JOIN 
+                Loadart."users" u
+            ON 
+                l.user_id = u.users_id
+            JOIN 
+                Loadart."user_types" ut
+            ON 
+                u.user_types_id = ut.user_types_id
             WHERE 
-                ($1::text IS NULL OR "pickupLoc" = $1) AND
-                ($2::text IS NULL OR "deliveryLoc" = $2) AND
-                ($3::date IS NULL OR "pickupDate" = $3) AND
-                ($4::integer IS NULL OR "material_id" = $4) AND
-                ($5::integer IS NULL OR "capacity_id" = $5) AND
-                ($6::integer IS NULL OR "truck_type_id" = $6); -- Updated truck_type_id
+                ($1::text IS NULL OR l."pickupLoc" = $1) AND
+                ($2::text IS NULL OR l."deliveryLoc" = $2) AND
+                ($3::date IS NULL OR l."pickupDate" = $3) AND
+                ($4::integer IS NULL OR l."material_id" = $4) AND
+                ($5::integer IS NULL OR l."capacity_id" = $5) AND
+                ($6::integer IS NULL OR l."truck_type_id" = $6)
+            LIMIT $7 OFFSET $8;
         `;
+       
+        const page = req.query.page ? parseInt(req.query.page) : 1;
+        const limit = no_of_trucks || 12; 
+        const offset = (page - 1) * limit;
+    
 
-        
         const values = [
             pickupLoc || null,
             deliveryLoc || null,
@@ -32,9 +64,11 @@ export const getMatchingLoads = async (req, res) => {
             material_id || null,
             capacity_id || null,
             truck_type_id || null,
+            limit,
+            offset,
         ];
+    
 
-        
         const result = await pool.query(query, values);
 
         if (result.rows.length === 0) {
