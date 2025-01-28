@@ -75,7 +75,7 @@ TranspoterRouter.get("/getBidsByUserAndLoadId",getBidsByUserAndLoad);
 TranspoterRouter.get("/getBidsByUserAndTruck",getTruckBidsForUserAndPostTruck );
 TranspoterRouter.get("/getTruckNegotiationByUserAndBid",getTruckNegotiationByUserAndBid);
 TranspoterRouter.get("/getNegotiationByUserAndBid",getNegotiationByUserAndBid)
-
+TranspoterRouter.get("/getTransporterById",getTransporterById)
 
 
 
@@ -95,6 +95,7 @@ TranspoterRouter.post("/insertLoadSchedule",updateAndInsertSchedules)
 TranspoterRouter.post("/truckschedules", updateBidsTruckAndInsertSchedule);
 TranspoterRouter.post("/negotiations",insertNegotiation)
 TranspoterRouter.post("/insertTruckNegotiation",insertTruckNegotiation)
+
 
 TranspoterRouter.patch("/bidsLoadStatus", updateBidsLoadStatus);
 TranspoterRouter.patch("/bidsTruckStatus", updateBidsTruckStatus);

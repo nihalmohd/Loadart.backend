@@ -73,3 +73,28 @@ export const insertTransporterDocs = async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 };
+
+
+export const getTransporterById = async (req, res) => {
+    const { transporters_id } = req.params; 
+    try {
+        const query = `
+            SELECT * 
+            FROM Loadart."transporters"
+            WHERE "transporters_id" = $1;
+        `;
+
+        const values = [transporters_id];
+
+        const result = await pool.query(query, values);
+
+        if (result.rows.length > 0) {
+            res.status(200).json({ data: result.rows[0] }); 
+        } else {
+            res.status(404).json({ message: "Transporter not found." });
+        }
+    } catch (error) {
+        console.error("Error fetching transporter by ID:", error);
+        res.status(500).json({ message: "Failed to fetch transporter data." });
+    }
+};

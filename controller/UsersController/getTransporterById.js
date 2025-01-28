@@ -3,7 +3,6 @@ import pool from "../../Model/Config.js";
 export const getTransporterById = async (req, res) => {
     const { transporters_id } = req.query; // Retrieve transporters_id from query parameters
 
-    // Validate transporters_id
     if (!transporters_id) {
         return res.status(400).json({ message: "Transporter ID is required." });
     }
