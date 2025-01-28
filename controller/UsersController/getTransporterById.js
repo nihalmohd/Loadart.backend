@@ -8,11 +8,24 @@ export const getTransporterById = async (req, res) => {
     }
 
     const fetchDocumentQuery = `
-        SELECT *
-        FROM loadart.transporters
-        WHERE "transporters_id" = $1
-        LIMIT 1;
-    `;
+    SELECT 
+        t.*, 
+        s.*, 
+        d.*
+    FROM 
+        Loadart."transporters" t
+    LEFT JOIN 
+        Loadart."states" s
+    ON 
+        t.state_id = s.states_id
+    LEFT JOIN 
+        Loadart."districts" d
+    ON 
+        t.district_id = d.districts_id
+    WHERE 
+        t."transporters_id" = $1;
+`;
+
 
     try {
         const result = await pool.query(fetchDocumentQuery, [transporters_id]);
