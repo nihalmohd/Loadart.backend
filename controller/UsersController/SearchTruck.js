@@ -7,7 +7,7 @@ export const getMatchingPostTrucks = async (req, res) => {
         postTrucks_to,
         postTrucks_capacity_id,
         truck_type_id,
-        limit,
+        no_of_trucks,
         offset
     } = req.body;
 
@@ -65,7 +65,7 @@ export const getMatchingPostTrucks = async (req, res) => {
         `;
 
         const page = req.query.page ? parseInt(req.query.page) : 1;
-        const itemsPerPage = limit || 12; // Default limit is 12
+        const itemsPerPage = no_of_trucks || 12; // Default limit is 12
         const currentOffset = offset || (page - 1) * itemsPerPage;
 
         const values = [
@@ -75,7 +75,7 @@ export const getMatchingPostTrucks = async (req, res) => {
             postTrucks_capacity_id || null,
             truck_type_id || null,
             itemsPerPage,
-            currentOffset
+            currentOffset   
         ];
 
         // Execute the query
