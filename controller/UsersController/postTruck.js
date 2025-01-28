@@ -39,21 +39,21 @@ export const insertPostTrucks = async (req, res) => {
             });
         }
 
-        // const insertQuery = `
-        //     INSERT INTO "loadart"."postTrucks" 
-        //     ("postTrucks_dateTime", "postTrucks_from", "postTrucks_to", "postTrucks_capacity_id", "comments", "truck_id") 
-        //     VALUES ($1, $2, $3, $4, $5, $6)
-        //     RETURNING *;
-        // `;
-        // const insertValues = [
-        //     postTrucks_dateTime || null, 
-        //     postTrucks_from, 
-        //     postTrucks_to, 
-        //     postTrucks_capacity_id, 
-        //     comments || null, 
-        //     truck_id
-        // ];
-        // const insertResult = await pool.query(insertQuery, insertValues);
+        const insertQuery = `
+            INSERT INTO "loadart"."postTrucks" 
+            ("postTrucks_dateTime", "postTrucks_from", "postTrucks_to", "postTrucks_capacity_id", "comments", "truck_id") 
+            VALUES ($1, $2, $3, $4, $5, $6)
+            RETURNING *;
+        `;
+        const insertValues = [
+            postTrucks_dateTime || null, 
+            postTrucks_from, 
+            postTrucks_to, 
+            postTrucks_capacity_id, 
+            comments || null, 
+            truck_id
+        ];
+        const insertResult = await pool.query(insertQuery, insertValues);
 
         await pool.query("COMMIT");
 
@@ -69,7 +69,7 @@ export const insertPostTrucks = async (req, res) => {
             return res.status(400).json({
                 error: 'Invalid column name in the query. Please verify your database schema.',
             });
-        }
+        } 
 
         return res.status(500).json({
             error: 'Internal Server Error',

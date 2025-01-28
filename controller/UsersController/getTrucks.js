@@ -4,7 +4,6 @@ export const getPaginatedTrucks = async (req, res) => {
     const page = parseInt(req.query.page) || 1; 
     const limit = parseInt(req.query.limit) || 20; 
     const offset = (page - 1) * limit; 
-
     const fetchTrucksQuery = `
     SELECT 
         t.*, 
@@ -13,7 +12,8 @@ export const getPaginatedTrucks = async (req, res) => {
         tc.*, 
         tt.*, 
         u.*, 
-        ut.*
+        ut.*, 
+        pt.*
     FROM 
         Loadart."trucks" t
     JOIN 
@@ -40,12 +40,17 @@ export const getPaginatedTrucks = async (req, res) => {
         Loadart."user_types" ut
     ON 
         u.user_types_id = ut.user_types_id
+    JOIN 
+        Loadart."postTrucks" pt
+    ON 
+        t.truck_id = pt.truck_id
     WHERE 
-        t.trucks_status = 5
+        t.trucks_status = 5 AND 
+        pt."postTrucks_status"::text != '6'
     LIMIT 
         $1 OFFSET $2;
 `;
-;
+
 
     try {
         const result = await pool.query(fetchTrucksQuery, [limit, offset]);
