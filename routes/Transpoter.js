@@ -51,7 +51,7 @@ TranspoterRouter.get("/", (req, res) => {
 });
 TranspoterRouter.get("/Refresh",Refresh)
 TranspoterRouter.get("/Logout",Logout)
-TranspoterRouter.get("/getLoadsByUserId", getLoadsByUserId);
+TranspoterRouter.get("/getLoadsByUserId", getLoadsByUserId); 
 TranspoterRouter.get("/getAllStates", getAllStates);
 TranspoterRouter.get("/getDistrictsByStateId", getDistrictsByStateId);
 TranspoterRouter.get("/getTranporterById", getTransporterById);
@@ -74,7 +74,7 @@ TranspoterRouter.get("/truckschedules", getTruckSchedulesByUserId);
 TranspoterRouter.get("/getBidsByUserAndLoadId",getBidsByUserAndLoad);
 TranspoterRouter.get("/getBidsByUserAndTruck",getTruckBidsForUserAndPostTruck );
 TranspoterRouter.get("/getTruckNegotiationByUserAndBid",getTruckNegotiationByUserAndBid);
-TranspoterRouter.get("/getNegotiationByUserAndBid",getNegotiationByUserAndBid)
+TranspoterRouter.get("/getNegotiationByUserAndBid",getNegotiationByUserAndBid) 
 TranspoterRouter.get("/getTransporterById",getTransporterById)
 
 

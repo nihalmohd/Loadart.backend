@@ -9,19 +9,19 @@ export const insertTransporterDocs = async (req, res) => {
 
     const selectQuery = `
         SELECT * 
-        FROM loadart.transporter_docs 
+        FROM loadart."transporter_docs" 
         WHERE transpoters_id = $1 AND transporter_docs_name = $2;
     `;
 
     const insertQuery = `
-        INSERT INTO loadart.transporter_docs 
+        INSERT INTO loadart."transporter_docs" 
         (transporter_docs_name, doc_types_id, transporter_docs_images, transpoters_id)
         VALUES ($1, $2, $3, $4)
         RETURNING *;
     `;
 
     const updateQuery = `
-        UPDATE loadart.transporter_docs
+        UPDATE loadart."transporter_docs"
         SET 
             doc_types_id = $1,
             transporter_docs_images = $2
@@ -29,7 +29,7 @@ export const insertTransporterDocs = async (req, res) => {
             transpoters_id = $3 AND transporter_docs_name = $4
         RETURNING *;
     `;
-
+  
     try {
         await pool.query("BEGIN");
 

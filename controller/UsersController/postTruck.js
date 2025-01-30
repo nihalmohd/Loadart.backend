@@ -11,13 +11,13 @@ export const insertPostTrucks = async (req, res) => {
             truck_id 
         } = req.body;
 
-        if (!postTrucks_from || !postTrucks_to || !postTrucks_capacity_id || !truck_id) {
+        if (!postTrucks_from  || !postTrucks_capacity_id || !truck_id) {
             return res.status(400).json({
                 error: 'Missing required fields: postTrucks_from, postTrucks_to, postTrucks_capacity_id, truck_id',
             });
         }
 
-        // If postTrucks_dateTime is provided and only contains time, prepend today's date
+        
         if (postTrucks_dateTime && !postTrucks_dateTime.includes("-")) {
             const todayDate = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
             postTrucks_dateTime = `${todayDate}T${postTrucks_dateTime}`; // Prepend today's date
