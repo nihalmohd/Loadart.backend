@@ -9,10 +9,19 @@ export const getTrucksByUserId = async (req, res) => {
     }
 
     let fetchTrucksQuery = `
-        SELECT *
-        FROM Loadart."trucks"
-        WHERE "user_id" = $1
-    `;
+    SELECT 
+        t.*, 
+        tc.*, 
+        tt.*
+    FROM 
+        Loadart."trucks" t
+    JOIN 
+        Loadart."truck_capacities" tc ON t.capacity_id = tc.truck_capacities_id
+    JOIN 
+        Loadart."truck_types" tt ON t.trucks_type_id = tt.truck_types_id
+    WHERE 
+        t."user_id" = $1
+`;
 
     const queryParams = [user_id];
 

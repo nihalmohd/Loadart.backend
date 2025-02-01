@@ -4,18 +4,18 @@ export const insertTruck = async (req, res) => {
     const { regNumber, trucks_type_id, capacity_id, insurance, rc, model_id, manufacturer_id, user_id, location } = req.body;
 
     
-    if (!regNumber || !trucks_type_id || !capacity_id || !insurance || !rc || !model_id || !manufacturer_id || !user_id || !location) {
+    if (!regNumber || !trucks_type_id || !capacity_id || !insurance || !rc  || !user_id || !location) {
         return res.status(400).json({ message: "All fields are required." });
     }
 
     const insertTruckQuery = `
     INSERT INTO loadart.trucks 
-    ("regNumber", "trucks_type_id", "capacity_id", "insurance", "rc", "model_id", "manufacturer_id", "user_id", "location")
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+    ("regNumber", "trucks_type_id", "capacity_id", "insurance", "rc", "user_id", "location")
+    VALUES ($1, $2, $3, $4, $5, $6, $7)
     RETURNING *;
 `;
 
-    const values = [regNumber, trucks_type_id, capacity_id, insurance, rc, model_id, manufacturer_id, user_id, location];
+    const values = [regNumber, trucks_type_id, capacity_id, insurance, rc, user_id, location];
 
     try {
         const result = await pool.query(insertTruckQuery, values);
