@@ -53,8 +53,8 @@ ON
 WHERE 
     bl."trucks_id" = $1
 AND 
-    bl."bidsLoad_status"::INTEGER != 4 
-AND 
+    bl."bidsLoad_status"::INTEGER != 3 
+AND  
     bl.user_id != $2;
         `;
 

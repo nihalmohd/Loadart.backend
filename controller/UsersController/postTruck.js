@@ -11,9 +11,9 @@ export const insertPostTrucks = async (req, res) => {
             truck_id 
         } = req.body;
 
-        if (!postTrucks_from  || !postTrucks_capacity_id || !truck_id) {
+        if (!postTrucks_from || !postTrucks_capacity_id || !truck_id) {
             return res.status(400).json({
-                error: 'Missing required fields: postTrucks_from, postTrucks_to, postTrucks_capacity_id, truck_id',
+                error: 'Missing required fields: postTrucks_from, postTrucks_capacity_id, truck_id',
             });
         }
 

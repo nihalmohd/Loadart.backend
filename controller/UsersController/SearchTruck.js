@@ -84,10 +84,10 @@ export const getMatchingPostTrucks = async (req, res) => {
         if (result.rows.length > 0) {
             res.status(200).json({ data: result.rows });
         } else {
-            res.status(404).json({ message: "No matching post trucks found." });
+            res.status(200).json({ message: "No matching post trucks found." });
         }
     } catch (error) {
         console.error("Error retrieving matching postTrucks:", error);
         res.status(500).json({ message: "Failed to fetch matching post trucks." });
     }
-};
+}; 
