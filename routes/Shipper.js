@@ -7,7 +7,7 @@ export const ShipperRouter = express.Router()
 
 ShipperRouter.get("/", (req, res) => {
     res.send("Hello, Loadart Shipper side call recieved!");
-    console.log("Hello, Loadart Shipper side call recieved!");
+    console.log("Hello, Loadart Shipper side call recieved!"); 
     
 });
 

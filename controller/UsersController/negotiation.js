@@ -14,7 +14,7 @@ export const insertNegotiation = async (req, res) => {
         RETURNING *;
     `;
 
-    try {
+    try { 
 
         const result = await pool.query(insertQuery, [bid_id, user_id, amount]);
 

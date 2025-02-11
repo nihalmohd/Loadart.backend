@@ -11,18 +11,24 @@ export const getLoadSchedulesByUser = async (req, res) => {
 
         // SQL query to join load_schedules with trucks based on truck_id
         const query = `
-            SELECT 
-                schedules.*,
-                trucks.*
-            FROM 
-                Loadart."load_schedules" AS schedules
-            LEFT JOIN 
-                Loadart."trucks" AS trucks
-            ON 
-                schedules."truck_id" = trucks."truck_id"
-            WHERE 
-                schedules."users_id" = $1;
-        `;
+        SELECT 
+            schedules.*, 
+            trucks.*, 
+            materials.*
+        FROM 
+            Loadart."load_schedules" AS schedules
+        LEFT JOIN 
+            Loadart."trucks" AS trucks
+        ON 
+            schedules."truck_id" = trucks."truck_id"
+        LEFT JOIN 
+            Loadart."materials" AS materials
+        ON 
+            schedules."materials_id" = materials."materials_id"
+        WHERE 
+            schedules."users_id" = $1;
+    `;
+    
 
         // Execute query
         const result = await pool.query(query, [users_id]);

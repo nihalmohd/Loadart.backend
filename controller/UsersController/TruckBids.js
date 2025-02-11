@@ -2,7 +2,8 @@ import pool from "../../Model/Config.js";
 
 export const insertBidsTruck = async (req, res) => {
     const { bidsTruck_amount, trucks_id, user_id, loads_id } = req.body;
-
+    console.log(req.body);
+    
     try {
         if (!bidsTruck_amount || !trucks_id || !user_id || !loads_id) {
             return res.status(400).json({ message: "All fields are required." });
