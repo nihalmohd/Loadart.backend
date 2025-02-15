@@ -72,3 +72,4 @@ export const updateBidsTruckStatus = async (req, res) => {
         });
     }
 };
+   

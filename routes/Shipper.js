@@ -1,6 +1,7 @@
 import express from 'express';
 import { Register } from '../controller/UsersController/ShipperRegister.js';
 import { getDocumentsByShipperId, getShipperById, insertShipperDocs, updateShipperBasicDetails } from '../controller/UsersController/ShipperUpdateProfile.js';
+import { ShipperVerifyOTP } from '../controller/UsersController/OTP.js';
 
 
 export const ShipperRouter = express.Router()
@@ -18,6 +19,7 @@ ShipperRouter.get("/getShipperDocsByUserId",getDocumentsByShipperId)
 //post//
 ShipperRouter.post("/Register",Register)
 ShipperRouter.post("/InsertShipperDocs",insertShipperDocs)
+ShipperRouter.post("/Verify-otp",ShipperVerifyOTP)
 
 //patch//
 ShipperRouter.patch("/UpdateShipperProfile",updateShipperBasicDetails)

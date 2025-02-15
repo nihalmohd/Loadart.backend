@@ -111,7 +111,8 @@ export const insertBrokerDocs = async (req, res) => {
 export const getBrokerById = async (req, res) => {
     const { brokers_id} = req.query; 
 
-    
+     console.log(brokers_id);
+     
     if (!brokers_id) {
         return res.status(400).json({ message: "Broker ID is required." });
     }

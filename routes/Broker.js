@@ -1,5 +1,5 @@
 import express from 'express';
-import { SentOtp, VerifyOTP } from '../controller/UsersController/OTP.js';
+import { BrokerVerifyOTP, SentOtp, VerifyOTP } from '../controller/UsersController/OTP.js';
 import { Register } from '../controller/UsersController/BrokerRegister.js';
 import { getBrokerById, getDocumentsBybrokersId, insertBrokerDocs, updateBrokerBasicDetails } from '../controller/UsersController/BrokerUpdatePtofile.js';
 import { getAllLoads } from '../controller/UsersController/getLoads.js';
@@ -22,7 +22,7 @@ BrokerRouter.get("/getAllTrucks",getPaginatedTrucks)
 
 //post//
 BrokerRouter.post("/send-otp",SentOtp)
-BrokerRouter.post("/Verify-otp",VerifyOTP)
+BrokerRouter.post("/Verify-otp",BrokerVerifyOTP)
 BrokerRouter.post("/Register",Register)
 BrokerRouter.post("/insertBrokerProfileDoc",insertBrokerDocs)
 

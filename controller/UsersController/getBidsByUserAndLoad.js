@@ -11,28 +11,46 @@ export const getBidsByUserAndLoad = async (req, res) => {
 
         // SQL query to fetch matching data
         const query = `
-            SELECT 
-                bt.*, 
-                u.*, 
-                pt.*, 
-                l.*
-            FROM 
-                Loadart."bidsTruck" bt
-            JOIN 
-                Loadart."users" u
-            ON 
-                bt.user_id = u.users_id
-            JOIN 
-                Loadart."trucks" pt
-            ON 
-                bt."trucks_id" = pt."truck_id"
-            JOIN 
-                Loadart."loads" l
-            ON 
-                bt.loads_id = l.loads_id
-            WHERE 
-                bt.user_id = $1 AND bt.loads_id = $2;
-        `;
+        SELECT 
+            bt.*, 
+            u.*,  
+            t.*, 
+            l.*, 
+            tt.*, 
+            m.*,  
+            tc.*  
+        FROM 
+            Loadart."bidsTruck" bt
+        JOIN 
+            Loadart."users" u
+        ON 
+            bt.user_id = u.users_id
+        JOIN 
+            Loadart."trucks" t
+        ON 
+            bt."trucks_id" = t."truck_id"
+        JOIN 
+            Loadart."loads" l
+        ON 
+            bt.loads_id = l.loads_id
+        JOIN 
+            Loadart."truck_types" tt 
+        ON 
+            t."trucks_type_id" = tt."truck_types_id"
+        JOIN 
+            Loadart."materials" m  
+        ON 
+            l."material_id" = m."materials_id"  
+        JOIN 
+            Loadart."truck_capacities" tc  
+        ON 
+            t."capacity_id" = tc."truck_capacities_id" 
+        WHERE 
+            bt.user_id = $1 
+        AND 
+            bt.loads_id = $2;
+    `;
+    
 
         // Execute the query
         const result = await pool.query(query, [user_id, load_id]);
