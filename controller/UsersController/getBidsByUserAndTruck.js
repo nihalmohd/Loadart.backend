@@ -2,7 +2,8 @@ import pool from "../../Model/Config.js";
 
 export const getTruckBidsForUserAndPostTruck = async (req, res) => {
   const { user_id, trucks_id } = req.query;
-
+    console.log(req.query);
+    
   try {
     if (!user_id || !trucks_id) {
       return res
@@ -12,7 +13,7 @@ export const getTruckBidsForUserAndPostTruck = async (req, res) => {
 
     const query = `
             SELECT 
-                bl.*, 
+                bt.*, 
                 u.*,  
                 l.*, 
                 t.*,
@@ -20,19 +21,19 @@ export const getTruckBidsForUserAndPostTruck = async (req, res) => {
                 m.*,
                 tc.*    
             FROM 
-                Loadart."bidsLoad" bl
+                Loadart."bidsTruck" bt
             JOIN 
                 Loadart."users" u
             ON 
-                bl.user_id = u.users_id
+                bt.user_id = u.users_id
             JOIN 
                 Loadart."loads" l
             ON 
-                bl.load_id = l.loads_id
+                bt.loads_id = l.loads_id
             JOIN 
                 Loadart."trucks" t
             ON 
-                bl.trucks_id = t.truck_id
+                bt.trucks_id = t.truck_id
             JOIN 
                 Loadart."truck_types" tt 
             ON 
@@ -46,7 +47,7 @@ export const getTruckBidsForUserAndPostTruck = async (req, res) => {
             ON 
                t."capacity_id" = tc."truck_capacities_id" 
             WHERE 
-                bl.user_id = $1 AND bl."trucks_id" = $2;
+                bt.user_id = $1 AND bt."trucks_id" = $2;
         `;
 
     const result = await pool.query(query, [user_id, trucks_id]);

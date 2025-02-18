@@ -12,7 +12,7 @@ export const getBidsByUserAndLoad = async (req, res) => {
         // SQL query to fetch matching data
         const query = `
         SELECT 
-            bt.*, 
+            bl.*, 
             u.*,  
             t.*, 
             l.*, 
@@ -20,19 +20,19 @@ export const getBidsByUserAndLoad = async (req, res) => {
             m.*,  
             tc.*  
         FROM 
-            Loadart."bidsTruck" bt
+            Loadart."bidsLoad" bl
         JOIN 
             Loadart."users" u
         ON 
-            bt.user_id = u.users_id
+            bl.user_id = u.users_id
         JOIN 
             Loadart."trucks" t
         ON 
-            bt."trucks_id" = t."truck_id"
+            bl."trucks_id" = t."truck_id"
         JOIN 
             Loadart."loads" l
         ON 
-            bt.loads_id = l.loads_id
+            bl.load_id = l.loads_id
         JOIN 
             Loadart."truck_types" tt 
         ON 
@@ -46,9 +46,9 @@ export const getBidsByUserAndLoad = async (req, res) => {
         ON 
             t."capacity_id" = tc."truck_capacities_id" 
         WHERE 
-            bt.user_id = $1 
+            bl.user_id = $1 
         AND 
-            bt.loads_id = $2;
+            bl.load_id = $2;
     `;
     
 

@@ -11,7 +11,7 @@ export const insertBidsLoad = async (req, res) => {
         }
 
         const query = `
-            INSERT INTO Loadart."bidsLoad" ("bidsLoad_amount", "load_id", "user_id", "trucks_id")
+            INSERT INTO Loadart."bidsLoad" ("bidsLoad_amount", "load_id", "user_id", "trucks_id")  
             VALUES ($1, $2, $3, $4)
             RETURNING *;
         `;
