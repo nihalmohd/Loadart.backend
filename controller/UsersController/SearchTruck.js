@@ -89,3 +89,4 @@ export const getMatchingPostTrucks = async (req, res) => {
         if (client) client.release(); // Release DB connection
     }
 };
+

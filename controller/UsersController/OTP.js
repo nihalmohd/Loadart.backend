@@ -103,7 +103,7 @@ export const BrokerVerifyOTP = async (req, res) => {
   if (!brokers_mob || !otp) {
     return res
       .status(400)
-      .json({ error: "Mobile number and OTP are required" });
+      .json({ error: "Mobile number and OTP are required" }); 
   }
 
   try {
