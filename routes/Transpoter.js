@@ -89,8 +89,8 @@ TranspoterRouter.post("/insertTruck", insertTruck);
 TranspoterRouter.post("/getMatchingLoads", getMatchingLoads);
 TranspoterRouter.post("/postTruck", insertPostTrucks);
 TranspoterRouter.post("/getMatchingPostTrucks", getMatchingPostTrucks);
-TranspoterRouter.post("/insertBidsLoad", insertBidsLoad);
-TranspoterRouter.post("/insertBidsTruck", insertBidsTruck);
+TranspoterRouter.post("/insertBidsLoad",insertBidsTruck );
+TranspoterRouter.post("/insertBidsTruck",insertBidsLoad );
 TranspoterRouter.post("/insertLoadSchedule",updateAndInsertSchedules)
 TranspoterRouter.post("/truckschedules", updateBidsTruckAndInsertSchedule);
 TranspoterRouter.post("/negotiations",insertNegotiation)

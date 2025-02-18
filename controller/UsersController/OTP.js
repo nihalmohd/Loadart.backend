@@ -211,7 +211,7 @@ export const DriverVerifyOTP = async (req, res) => {
   }
 };
 export const ShipperVerifyOTP = async (req, res) => {
-  const { shippers_mob, otp } = req.body;
+  const { shippers_mob, otp } = req.body; 
 
   if (!shippers_mob || !otp) {
     return res

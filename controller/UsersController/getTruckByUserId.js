@@ -12,15 +12,18 @@ export const getTrucksByUserId = async (req, res) => {
     SELECT 
         t.*, 
         tc.*, 
-        tt.*
+        tt.*,
+        pt.*
     FROM 
         Loadart."trucks" t
     JOIN 
         Loadart."truck_capacities" tc ON t.capacity_id = tc.truck_capacities_id
     JOIN 
         Loadart."truck_types" tt ON t.trucks_type_id = tt.truck_types_id
+    JOIN
+        Loadart."postTrucks" pt ON t.truck_id = pt.truck_id    
     WHERE 
-        t."user_id" = $1
+        t."user_id" = $1  
 `;
 
     const queryParams = [user_id];

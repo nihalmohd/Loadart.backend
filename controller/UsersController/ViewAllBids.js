@@ -2,9 +2,11 @@ import pool from "../../Model/Config.js";
 
 export const getBidsLoadWithDetails = async (req, res) => {
   const { load_id, user_id } = req.query;
-
+  
+  console.log(load_id,user_id);  
   try {
     if (!load_id || !user_id) {
+        
       return res
         .status(400)
         .json({ message: "load_id is required user_id is required." });
