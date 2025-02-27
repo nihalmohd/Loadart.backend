@@ -29,4 +29,4 @@ export const getDistrictsByStateId = async (req, res) => {
         console.error("Error retrieving districts:", error.message);
         res.status(500).json({ message: "Internal server error" });
     }
-};
+}; 
