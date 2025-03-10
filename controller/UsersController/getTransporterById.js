@@ -23,8 +23,11 @@ export const getTransporterById = async (req, res) => {
     ON 
         t.district_id = d.districts_id
     WHERE 
-        t."transporters_id" = $1;
+        t."transporters_id" = $1
+    ORDER BY 
+        t."transporters_id" DESC;
 `;
+
 
 
     try {
@@ -53,10 +56,11 @@ export const getDocumentsByTransporterId = async (req, res) => {
     }
 
     const fetchDocumentsQuery = `
-        SELECT *
-        FROM loadart.transporter_docs
-        WHERE "transpoters_id" = $1;
-    `;
+    SELECT *
+    FROM loadart.transporter_docs
+    WHERE "transpoters_id" = $1
+    ORDER BY "transporter_docs_id" DESC;
+`;
 
     try {
         const result = await pool.query(fetchDocumentsQuery, [transporters_id]);

@@ -9,11 +9,11 @@ export const getDistrictsByStateId = async (req, res) => {
     }
 
     const fetchDistrictsQuery = `
-        SELECT *
-        FROM loadart.districts
-        WHERE "states_id" = $1;
-    `;
-
+    SELECT *
+    FROM loadart.districts
+    WHERE "states_id" = $1
+    ORDER BY "districts_id" DESC;
+`;
     try {
         const result = await pool.query(fetchDistrictsQuery, [states_id]);
 

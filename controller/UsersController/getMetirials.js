@@ -2,10 +2,10 @@ import pool from "../../Model/Config.js";
 
 export const getAllMaterials = async (req, res) => {
     const fetchMaterialsQuery = `
-        SELECT *
-        FROM loadart.materials;
-    `;
-
+    SELECT *
+    FROM loadart.materials
+    ORDER BY "materials_id" DESC;
+`;
     try {
         const result = await pool.query(fetchMaterialsQuery);
 

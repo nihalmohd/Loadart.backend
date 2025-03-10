@@ -41,8 +41,10 @@ export const myBids = async (req, res) => {
     ON 
       pt."trucks_type_id" = tt."truck_types_id"
     WHERE 
-      bl.user_id = $1;
-  `;
+      bl.user_id = $1
+    ORDER BY 
+      bl."bidsLoad_id" DESC;  -- Sorting by bidsLoad_id in descending order
+`;
 
     const result = await pool.query(query, [user_id]);
 

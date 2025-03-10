@@ -28,8 +28,10 @@ export const getLoadSchedulesByUser = async (req, res) => {
             schedules."materials_id" = materials."materials_id"
         WHERE 
             schedules."users_id" = $1
-        `;
-
+        ORDER BY 
+            schedules."schedules_id" DESC;  -- Sorting by schedules_id in descending order
+    `;
+    
         const queryParams = [users_id]; 
 
         // Apply date filter conditions

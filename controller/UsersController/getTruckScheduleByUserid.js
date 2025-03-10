@@ -10,27 +10,31 @@ export const getTruckSchedulesByUserId = async (req, res) => {
 
         // Base query with LEFT JOIN (to avoid missing data issues)
         let query = `
-      SELECT 
-    schedules.*, 
-    trucks.*, 
-    loads.*, 
-    materials.*
-FROM 
-    Loadart."truck_schedules" AS schedules
-LEFT JOIN 
-    Loadart."trucks" AS trucks
-ON 
-    schedules."trucks_id" = trucks."truck_id"
-LEFT JOIN 
-    Loadart."loads" AS loads
-ON 
-    schedules."loads_id" = loads."loads_id"::BIGINT  -- Ensure correct type
-LEFT JOIN 
-    Loadart."materials" AS materials
-ON 
-    loads."material_id"::TEXT = materials."materials_id"::TEXT  -- Convert both to TEXT
-WHERE 
-    schedules."user_id" = $1`;
+        SELECT 
+            schedules.*, 
+            trucks.*, 
+            loads.*, 
+            materials.*
+        FROM 
+            Loadart."truck_schedules" AS schedules
+        LEFT JOIN 
+            Loadart."trucks" AS trucks
+        ON 
+            schedules."trucks_id" = trucks."truck_id"
+        LEFT JOIN 
+            Loadart."loads" AS loads
+        ON 
+            schedules."loads_id" = loads."loads_id"::BIGINT  -- Ensure correct type
+        LEFT JOIN 
+            Loadart."materials" AS materials
+        ON 
+            loads."material_id"::TEXT = materials."materials_id"::TEXT  -- Convert both to TEXT
+        WHERE 
+            schedules."user_id" = $1
+        ORDER BY 
+            schedules."truckSchedules_id" DESC;  -- Sorting by truckSchedules_id in descending order
+    `;
+    
 
         const queryParams = [user_id];
 

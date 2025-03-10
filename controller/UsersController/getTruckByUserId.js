@@ -8,9 +8,8 @@ export const getTrucksByUserId = async (req, res) => {
         return res.status(400).json({ message: "user_id is required in query parameters." });
     }
 
-    let fetchTrucksQuery = `
+let fetchTrucksQuery = `
     SELECT 
-        
         t.truck_id,  -- Ensure truck_id always comes from trucks table
         t.trucks_type_id,
         t.capacity_id,
@@ -37,7 +36,10 @@ export const getTrucksByUserId = async (req, res) => {
     WHERE 
         t."user_id" = $1
         AND t."truck_id" IS NOT NULL  -- Ensure truck_id is always valid
-    `;
+    ORDER BY 
+        t."truck_id" DESC;  -- Fetch data in descending order based on truck_id
+`;
+
 
     const queryParams = [user_id];
 

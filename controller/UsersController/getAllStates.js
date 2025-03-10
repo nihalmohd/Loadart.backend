@@ -2,8 +2,8 @@ import pool from "../../Model/Config.js";
 
 export const getAllStates = async (req, res) => {
     const fetchStatesQuery = `
-        SELECT *
-        FROM loadart.states;
+      SELECT * FROM loadart.states
+      ORDER BY states_id DESC;
     `;
 
     try {

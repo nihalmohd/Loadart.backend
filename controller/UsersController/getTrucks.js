@@ -47,9 +47,12 @@ export const getPaginatedTrucks = async (req, res) => {
     WHERE 
         t.trucks_status = 5 AND 
         pt."postTrucks_status"::text != '6'
+    ORDER BY 
+        t.truck_id DESC  -- Sorting trucks in descending order
     LIMIT 
         $1 OFFSET $2;
 `;
+
 
 
     try {

@@ -2,9 +2,10 @@ import pool from "../../Model/Config.js";
 
 export const getAllTruckModels = async (req, res) => {
     const fetchTruckModelsQuery = `
-        SELECT *
-        FROM loadart.truck_models; 
-    `;
+    SELECT *
+    FROM loadart.truck_models
+    ORDER BY "truck_models_id" DESC;
+`;
 
     try {
         const result = await pool.query(fetchTruckModelsQuery);

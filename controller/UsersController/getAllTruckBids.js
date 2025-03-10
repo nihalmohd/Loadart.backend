@@ -11,52 +11,55 @@ export const getTruckBidsWithDetails = async (req, res) => {
 
         
         const query = `
-           SELECT 
-    bl.*, 
-    u.*, 
-    t.*, 
-    l.*, 
-    tt.*, 
-    m.*,  
-    tc.*,  
-    pt.*  
-FROM 
-    Loadart."bidsLoad" bl
-JOIN 
-    Loadart."users" u
-ON 
-    bl.user_id = u.users_id
-JOIN 
-    Loadart."trucks" t
-ON 
-    bl."trucks_id" = t."truck_id"
-JOIN 
-    Loadart."loads" l
-ON 
-    bl.load_id = l.loads_id
-JOIN 
-    Loadart."truck_types" tt 
-ON 
-    t."trucks_type_id" = tt."truck_types_id"
-JOIN 
-    Loadart."materials" m  
-ON 
-    l."material_id" = m."materials_id"  
-JOIN 
-    Loadart."truck_capacities" tc  
-ON 
-    t."capacity_id" = tc."truck_capacities_id"  
-JOIN 
-    Loadart."postTrucks" pt  
-ON 
-    t."truck_id" = pt."truck_id"  
-WHERE 
-    bl."trucks_id" = $1
-AND 
-    bl."bidsLoad_status"::INTEGER != 4 
-AND 
-    bl.user_id != $2;
-        `;
+        SELECT 
+            bl.*, 
+            u.*, 
+            t.*, 
+            l.*, 
+            tt.*, 
+            m.*,  
+            tc.*,  
+            pt.*  
+        FROM 
+            Loadart."bidsLoad" bl
+        JOIN 
+            Loadart."users" u
+        ON 
+            bl.user_id = u.users_id
+        JOIN 
+            Loadart."trucks" t
+        ON 
+            bl."trucks_id" = t."truck_id"
+        JOIN 
+            Loadart."loads" l
+        ON 
+            bl.load_id = l.loads_id
+        JOIN 
+            Loadart."truck_types" tt 
+        ON 
+            t."trucks_type_id" = tt."truck_types_id"
+        JOIN 
+            Loadart."materials" m  
+        ON 
+            l."material_id" = m."materials_id"  
+        JOIN 
+            Loadart."truck_capacities" tc  
+        ON 
+            t."capacity_id" = tc."truck_capacities_id"  
+        JOIN 
+            Loadart."postTrucks" pt  
+        ON 
+            t."truck_id" = pt."truck_id"  
+        WHERE 
+            bl."trucks_id" = $1
+        AND 
+            bl."bidsLoad_status"::INTEGER != 4 
+        AND 
+            bl.user_id != $2
+        ORDER BY 
+            bl."bidsLoad_id" DESC;  -- Sorting by bidsLoad_id in descending order
+    `;
+    
 
        
         const result = await pool.query(query, [trucks_id,user_id]);

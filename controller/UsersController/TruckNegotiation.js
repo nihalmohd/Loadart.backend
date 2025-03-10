@@ -32,7 +32,6 @@ export const getTruckNegotiationByUserAndBid = async (req, res) => {
     if (!user_id || !bid_id) {
         return res.status(400).json({ message: "Both user_id and bid_id are required as query parameters." });
     }
-
     const selectQuery = `
     SELECT 
         n.*,
@@ -44,8 +43,13 @@ export const getTruckNegotiationByUserAndBid = async (req, res) => {
     ON 
         n.user_id = u.users_id
     WHERE 
-        n.user_id = $1 AND n.bid_id = $2;
+        n.user_id = $1 
+    AND 
+        n.bid_id = $2
+    ORDER BY 
+        n."truckNegotiations_id" DESC;  -- Sorting by truckNegotiations_id in descending order
 `;
+
     try {
         const result = await pool.query(selectQuery, [user_id, bid_id]);
 

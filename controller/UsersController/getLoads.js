@@ -37,9 +37,12 @@ export const getAllLoads = async (req, res) => {
         u.user_types_id = ut.user_types_id
     WHERE 
         l.loads_status != $1
+    ORDER BY 
+        l.loads_id DESC  -- Sorting loads in descending order
     LIMIT 
         $2 OFFSET $3;
 `;
+
 
     try {
         const result = await pool.query(fetchLoadsQuery, [3,limit, offset]);

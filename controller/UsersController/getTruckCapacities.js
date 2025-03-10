@@ -2,9 +2,11 @@ import pool from "../../Model/Config.js";
 
 export const getAllTruckCapacities = async (req, res) => {
     const fetchTruckCapacitiesQuery = `
-        SELECT *
-        FROM loadart.truck_capacities;  
-    `;
+    SELECT *
+    FROM loadart.truck_capacities
+    ORDER BY "truck_capacities_id" DESC;
+`;
+
 
     try {
         const result = await pool.query(fetchTruckCapacitiesQuery);

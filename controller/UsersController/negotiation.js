@@ -48,7 +48,11 @@ export const getNegotiationByUserAndBid = async (req, res) => {
     ON 
         n.user_id = u.users_id
     WHERE 
-        n.user_id = $1 AND n.bid_id = $2;
+        n.user_id = $1 
+    AND 
+        n.bid_id = $2
+    ORDER BY 
+        n."negotiations_id" DESC;  -- Sorting by negotiations_id in descending order
 `;
 
     try {

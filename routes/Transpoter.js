@@ -49,7 +49,7 @@ TranspoterRouter.get("/", (req, res) => {
     console.log("Hello, Loadart Transpoter side call recieved!");
     
 });
-TranspoterRouter.get("/Refresh",Refresh)
+TranspoterRouter.get("/Refresh",Refresh) 
 TranspoterRouter.get("/Logout",Logout)
 TranspoterRouter.get("/getLoadsByUserId", getLoadsByUserId); 
 TranspoterRouter.get("/getAllStates", getAllStates);

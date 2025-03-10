@@ -12,36 +12,31 @@ export const getLoadsByUserId = async (req, res) => {
     const offsetValue = (pageNumber - 1) * limitValue;  
 
     const fetchLoadsQuery = `
-        SELECT 
-            l.*, 
-            m.*, 
-            tc.*, 
-            tt.*, 
-            u.*
-        FROM 
-            Loadart."loads" l
-        JOIN 
-            Loadart."materials" m
-        ON 
-            l.material_id = m.materials_id
-        JOIN 
-            Loadart."truck_capacities" tc
-        ON 
-            l.capacity_id = tc.truck_capacities_id
-        JOIN 
-            Loadart."truck_types" tt
-        ON 
-            l.truck_type_id = tt.truck_types_id
-        JOIN 
-            Loadart."users" u
-        ON 
-            l.user_id = u.users_id
-        WHERE 
-            l.user_id = $1 
-            AND l.loads_status != 3
-        LIMIT 
-            $2 OFFSET $3;
-    `;
+    SELECT 
+        l.*, 
+        m.*, 
+        tc.*, 
+        tt.*, 
+        u.*
+    FROM 
+        Loadart."loads" l
+    JOIN 
+        Loadart."materials" m ON l.material_id = m.materials_id
+    JOIN 
+        Loadart."truck_capacities" tc ON l.capacity_id = tc.truck_capacities_id
+    JOIN 
+        Loadart."truck_types" tt ON l.truck_type_id = tt.truck_types_id
+    JOIN 
+        Loadart."users" u ON l.user_id = u.users_id
+    WHERE 
+        l.user_id = $1 
+        AND l.loads_status != 3
+    ORDER BY 
+        l.loads_id DESC  
+    LIMIT 
+        $2 OFFSET $3;
+`;
+
 
     try {
         const result = await pool.query(fetchLoadsQuery, [user_id, limitValue, offsetValue]);

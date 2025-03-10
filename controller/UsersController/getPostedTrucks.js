@@ -7,17 +7,21 @@ export const getPostTrucks = async (req, res) => {
 
     try {
         const query = `
-            SELECT 
-                pt.*, 
-                t.*
-            FROM 
-                loadart."postTrucks" pt
-            JOIN 
-                loadart."trucks" t
-            ON 
-                pt.truck_id = t.truck_id
-            LIMIT $1 OFFSET $2;
-        `;
+        SELECT 
+            pt.*, 
+            t.*
+        FROM 
+            loadart."postTrucks" pt
+        JOIN 
+            loadart."trucks" t
+        ON 
+            pt.truck_id = t.truck_id
+        ORDER BY 
+            pt."postTrucks_id" DESC  -- Sorting postTrucks in descending order
+        LIMIT 
+            $1 OFFSET $2;
+    `;
+    
 
         const result = await pool.query(query, [limit, offset]);
 

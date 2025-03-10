@@ -9,7 +9,6 @@ export const getBidsByUserAndLoad = async (req, res) => {
             return res.status(400).json({ message: "Both user_id and load_id are required." });
         }
 
-        // SQL query to fetch matching data
         const query = `
         SELECT 
             bl.*, 
@@ -48,7 +47,9 @@ export const getBidsByUserAndLoad = async (req, res) => {
         WHERE 
             bl.user_id = $1 
         AND 
-            bl.load_id = $2;
+            bl.load_id = $2
+        ORDER BY 
+            bl."bidsLoad_id" DESC;  -- Sorting by bidsLoad_id in descending order
     `;
     
 

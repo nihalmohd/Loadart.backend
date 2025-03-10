@@ -9,28 +9,31 @@ export const getTruckBidsForUser = async (req, res) => {
         }
 
         const query = `
-            SELECT 
-                bt.*, 
-                u.*, 
-                l.*, 
-                t.* 
-            FROM 
-                Loadart."bidsTruck" bt
-            JOIN 
-                Loadart."users" u
-            ON 
-                bt.user_id = u.users_id
-            JOIN 
-                Loadart."loads" l
-            ON 
-                bt.loads_id = l.loads_id
-            JOIN 
-                Loadart."trucks" t
-            ON 
-                bt.trucks_id = t.truck_id
-            WHERE 
-                bt.user_id = $1;
-        `;
+        SELECT 
+            bt.*, 
+            u.*, 
+            l.*, 
+            t.* 
+        FROM 
+            Loadart."bidsTruck" bt
+        JOIN 
+            Loadart."users" u
+        ON 
+            bt.user_id = u.users_id
+        JOIN 
+            Loadart."loads" l
+        ON 
+            bt.loads_id = l.loads_id
+        JOIN 
+            Loadart."trucks" t
+        ON 
+            bt.trucks_id = t.truck_id
+        WHERE 
+            bt.user_id = $1
+        ORDER BY 
+            bt."bidsTruck_id" DESC;  -- Sorting by bidsTruck_id in descending order
+    `;
+    
 
         const result = await pool.query(query, [user_id]);
 
