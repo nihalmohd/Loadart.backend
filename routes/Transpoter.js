@@ -101,5 +101,3 @@ TranspoterRouter.patch("/bidsLoadStatus", updateBidsLoadStatus);
 TranspoterRouter.patch("/bidsTruckStatus", updateBidsTruckStatus);
 TranspoterRouter.patch("/updateLoadSchedule", updateLoadSchedule);
 TranspoterRouter.patch("/updateTruckSchedule", updateTruckSchedule); 
-
-

@@ -8,47 +8,43 @@ export const getTrucksByUserId = async (req, res) => {
         return res.status(400).json({ message: "user_id is required in query parameters." });
     }
 
-let fetchTrucksQuery = `
-    SELECT 
-        t.truck_id,  -- Ensure truck_id always comes from trucks table
-        t.trucks_type_id,
-        t.capacity_id,
-        t."regNumber",
-        t.trucks_status,
-        t.location,
-        t.user_id,
-        tc.truck_capacities_id,
-        tc.truck_capacities_name,
-        tt.truck_types_id,
-        tt.truck_types_name,
-        pt."postTrucks_id",   -- These may be NULL
-        pt."postTrucks_from",
-        pt."postTrucks_to",
-        pt."postTrucks_status"
-    FROM 
-        Loadart."trucks" t
-    JOIN 
-        Loadart."truck_capacities" tc ON t.capacity_id = tc.truck_capacities_id
-    JOIN 
-        Loadart."truck_types" tt ON t.trucks_type_id = tt.truck_types_id
-    LEFT JOIN 
-        Loadart."postTrucks" pt ON t.truck_id = pt.truck_id
-    WHERE 
-        t."user_id" = $1
-        AND t."truck_id" IS NOT NULL  -- Ensure truck_id is always valid
-    ORDER BY 
-        t."truck_id" DESC;  -- Fetch data in descending order based on truck_id
-`;
-
+    let fetchTrucksQuery = `
+        SELECT 
+            t.truck_id,
+            t.trucks_type_id,
+            t.capacity_id,
+            t."regNumber",
+            t.trucks_status,
+            t.location,
+            t.user_id,
+            tc.truck_capacities_id,
+            tc.truck_capacities_name,
+            tt.truck_types_id,
+            tt.truck_types_name,
+            pt."postTrucks_id",
+            pt."postTrucks_from",
+            pt."postTrucks_to",
+            pt."postTrucks_status"
+        FROM 
+            Loadart."trucks" t
+        JOIN 
+            Loadart."truck_capacities" tc ON t.capacity_id = tc.truck_capacities_id
+        JOIN 
+            Loadart."truck_types" tt ON t.trucks_type_id = tt.truck_types_id
+        LEFT JOIN 
+            Loadart."postTrucks" pt ON t.truck_id = pt.truck_id
+        WHERE 
+            t."user_id" = $1
+    `;
 
     const queryParams = [user_id];
 
     if (trucks_status) {
-        fetchTrucksQuery += ` AND t."trucks_status" = $2`;
+        fetchTrucksQuery += ` AND t."trucks_status" = $${queryParams.length + 1}`;
         queryParams.push(trucks_status);
     }
 
-    fetchTrucksQuery += ` LIMIT $${queryParams.length + 1};`;
+    fetchTrucksQuery += ` ORDER BY t."truck_id" DESC LIMIT $${queryParams.length + 1}`;
     queryParams.push(limit);
 
     try {
@@ -67,3 +63,4 @@ let fetchTrucksQuery = `
         res.status(500).json({ message: "Internal server error" });
     }
 };
+    
