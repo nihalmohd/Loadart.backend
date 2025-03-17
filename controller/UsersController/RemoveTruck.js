@@ -9,7 +9,7 @@ export const deleteTruck = async (req, res) => {
         }
 
         const deleteQuery = `
-            DELETE FROM trucks
+            DELETE FROM loadart.trucks
             WHERE truck_id = $1
             RETURNING *;
         `;
