@@ -39,6 +39,10 @@ import { getBidsByUserAndLoad } from '../controller/UsersController/getBidsByUse
 import { getTruckBidsForUserAndPostTruck } from '../controller/UsersController/getBidsByUserAndTruck.js';
 import { getNegotiationByUserAndBid, insertNegotiation } from '../controller/UsersController/negotiation.js';
 import { getTruckNegotiationByUserAndBid, insertTruckNegotiation } from '../controller/UsersController/TruckNegotiation.js';
+import { updateLoad } from '../controller/UsersController/UpdateLoad.js';
+import { updateTruck } from '../controller/UsersController/updateTruck.js';
+import { deleteLoad } from '../controller/UsersController/RemoverLoad.js';
+import { deleteTruck } from '../controller/UsersController/RemoveTruck.js';
 
 
 
@@ -101,3 +105,9 @@ TranspoterRouter.patch("/bidsLoadStatus", updateBidsLoadStatus);
 TranspoterRouter.patch("/bidsTruckStatus", updateBidsTruckStatus);
 TranspoterRouter.patch("/updateLoadSchedule", updateLoadSchedule);
 TranspoterRouter.patch("/updateTruckSchedule", updateTruckSchedule); 
+TranspoterRouter.patch("/updateLoad",updateLoad)
+TranspoterRouter.patch("/updateTruck",updateTruck)
+
+
+TranspoterRouter.delete("/deletLoads",deleteLoad)
+TranspoterRouter.delete("/deletTrucks",deleteTruck)

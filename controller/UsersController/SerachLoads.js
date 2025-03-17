@@ -9,8 +9,10 @@ export const getMatchingLoads = async (req, res) => {
         capacity_id,
         truck_type_id,
         no_of_trucks,
+        limit,
+        offset
     } = req.body;
-    
+
     try {
         const query = `
         SELECT 
@@ -53,12 +55,10 @@ export const getMatchingLoads = async (req, res) => {
             l."loads_id" DESC  -- Sorting loads_id in descending order
         LIMIT $7 OFFSET $8;
     `;
-    
-       
-        const page = req.query.page ? parseInt(req.query.page) : 1;
-        const limit = no_of_trucks || 12; 
-        const offset = (page - 1) * limit;
-    
+
+        // Pagination values from body (default values if not provided)
+        const itemsPerPage = limit || 12;  
+        const currentOffset = offset || 0;  
 
         const values = [
             pickupLoc || null,
@@ -67,10 +67,9 @@ export const getMatchingLoads = async (req, res) => {
             material_id || null,
             capacity_id || null,
             truck_type_id || null,
-            limit,
-            offset,
+            itemsPerPage,  // Limit
+            currentOffset  // Offset
         ];
-    
 
         const result = await pool.query(query, values);
 
@@ -78,13 +77,11 @@ export const getMatchingLoads = async (req, res) => {
             return res.status(200).json({ message: "No matching loads found." });
         }
 
-        
         res.status(200).json({
             message: "Matching loads retrieved successfully.",
             data: result.rows,
         });
     } catch (error) {
-        
         console.error("Error retrieving matching loads:", error.message);
         res.status(500).json({ message: "Internal server error" });
     }
