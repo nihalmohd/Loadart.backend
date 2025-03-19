@@ -3,31 +3,104 @@ import pool from "../../Model/Config.js";
 export const insertNegotiation = async (req, res) => {
     const { bid_id, user_id, amount } = req.body;
 
-
-    if (!bid_id || !user_id || !amount) {
+    if (!bid_id || !user_id || !amount ) {
         return res.status(400).json({ message: "All fields (bid_id, user_id, amount) are required." });
     }
 
     const insertQuery = `
-        INSERT INTO loadart.negotiations (bid_id, user_id, amount)
-        VALUES ($1, $2, $3)
+        INSERT INTO loadart.negotiations (bid_id, user_id, amount, status)
+        VALUES ($1, $2, $3, 7)
         RETURNING *;
     `;
 
-    try { 
+    const updateBidsTruckQuery = `
+        UPDATE loadart.bidsTruck
+        SET bidsTruck_status = 7
+        WHERE bidsTruck_id = $1
+        RETURNING *;
+    `;
 
-        const result = await pool.query(insertQuery, [bid_id, user_id, amount]);
+    try {
+        const client = await pool.connect();
 
+        try {
+            await client.query("BEGIN");
 
-        res.status(201).json({
-            message: "Negotiation inserted successfully.",
-            negotiation: result.rows[0],
-        });
+            const insertResult = await client.query(insertQuery, [bid_id, user_id, amount]);
+            const updateResult = await client.query(updateBidsTruckQuery, [bid_id]);
+
+            await client.query("COMMIT");
+
+            res.status(201).json({
+                message: "Negotiation inserted and bidsTruck status updated successfully.",
+                negotiation: insertResult.rows[0],
+                updatedBidsTruck: updateResult.rows[0],
+            });
+        } catch (error) {
+            await client.query("ROLLBACK");
+            console.error("Transaction error:", error.message);
+            res.status(500).json({ message: "Internal server error" });
+        } finally {
+            client.release();
+        }
     } catch (error) {
-        console.error("Error inserting negotiation:", error.message);
+        console.error("Database connection error:", error.message);
         res.status(500).json({ message: "Internal server error" });
     }
 };
+
+export const insertMyLoadBidsNegotiation = async (req, res) => {
+    const { bid_id, user_id, amount, bidsTruck_id } = req.body;
+
+    if (!bid_id || !user_id || !amount || !bidsTruck_id) {
+        return res.status(400).json({ message: "All fields (bid_id, user_id, amount, bidsTruck_id) are required." });
+    }
+
+    const insertQuery = `
+        INSERT INTO loadart.negotiations (bid_id, user_id, amount, status)
+        VALUES ($1, $2, $3, 6)
+        RETURNING *;
+    `;
+
+    const updateBidsLoadQuery = `
+        UPDATE loadart.bidsLoad
+        SET bidsLoad_status = 6
+        WHERE bidsTruck_id = $1
+        RETURNING *;
+    `;
+
+    try {
+        const client = await pool.connect();
+
+        try {
+            await client.query("BEGIN");
+
+            const insertResult = await client.query(insertQuery, [bid_id, user_id, amount]);
+            const updateResult = await client.query(updateBidsLoadQuery, [bidsTruck_id]);
+
+            await client.query("COMMIT");
+
+            if(insertResult&&updateResult){
+                res.status(201).json({
+                    message: "Negotiation inserted and BidsLoad status updated successfully.",
+                    negotiation: insertResult.rows[0],
+                    updatedBidsTruck: updateResult.rows[0],
+                });
+            }
+
+        } catch (error) {
+            await client.query("ROLLBACK");
+            console.error("Transaction error:", error.message);
+            res.status(500).json({ message: "Internal server error" });
+        } finally {
+            client.release();
+        }
+    } catch (error) {
+        console.error("Database connection error:", error.message);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
+
 
 
 export const getNegotiationByUserAndBid = async (req, res) => {
