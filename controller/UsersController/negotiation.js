@@ -50,9 +50,9 @@ export const insertNegotiation = async (req, res) => {
 };
 
 export const insertMyLoadBidsNegotiation = async (req, res) => {
-    const { bid_id, user_id, amount, bidsTruck_id } = req.body;
+    const { bid_id, user_id, amount } = req.body;
 
-    if (!bid_id || !user_id || !amount || !bidsTruck_id) {
+    if (!bid_id || !user_id || !amount ) {
         return res.status(400).json({ message: "All fields (bid_id, user_id, amount, bidsTruck_id) are required." });
     }
 
@@ -76,7 +76,7 @@ export const insertMyLoadBidsNegotiation = async (req, res) => {
             await client.query("BEGIN");
 
             const insertResult = await client.query(insertQuery, [bid_id, user_id, amount]);
-            const updateResult = await client.query(updateBidsLoadQuery, [bidsTruck_id]);
+            const updateResult = await client.query(updateBidsLoadQuery, [bid_id]);
 
             await client.query("COMMIT");
 

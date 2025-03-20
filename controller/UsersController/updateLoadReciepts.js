@@ -1,46 +1,69 @@
 import pool from "../../Model/Config.js";
 
-export const updateLoadSchedule = async (req, res) => {
-    const { schedules_id, lorry_receipt, proof_of_delivery } = req.body;
+// Function to update lorry_receipt and set status to 8
+export const updateLorryReceipt = async (req, res) => {
+    const { schedules_id, lorry_receipt } = req.body;
 
-    // Validate required fields
-    if (!schedules_id) {
-        return res.status(400).json({ message: "schedules_id is required." });
+    if (!schedules_id || !lorry_receipt) {
+        return res.status(400).json({ message: "schedules_id and lorry_receipt are required." });
     }
 
-    // Construct the update query
-    let query = `
+    const query = `
         UPDATE Loadart."load_schedules" 
         SET 
-            "lorry_receipt" = $1, 
-            "proof_of_delivery" = $2
-        WHERE 
-            "schedules_id" = $3
+            "lorry_receipt" = $1,
+            "schedules_status" = '8'
+        WHERE "schedules_id" = $2
         RETURNING *;
     `;
-    
-    // Prepare the values, allowing for NULL if values are not provided
-    const values = [
-        lorry_receipt || null,
-        proof_of_delivery || null,
-        schedules_id,
-    ];
 
     try {
-        // Execute the query
-        const result = await pool.query(query, values);
+        const result = await pool.query(query, [lorry_receipt, schedules_id]);
 
-        // Check if any row was updated
         if (result.rowCount === 0) {
             return res.status(404).json({ message: "No record found with the given schedules_id." });
         }
 
         res.status(200).json({
-            message: "Load schedule updated successfully.",
+            message: "Lorry receipt updated successfully, status set to 8.",
             data: result.rows[0],
         });
     } catch (error) {
-        console.error("Error updating load schedule:", error.message);
+        console.error("Error updating lorry receipt:", error.message);
+        res.status(500).json({ message: "Internal server error", error: error.message });
+    }
+};
+
+// Function to update proof_of_delivery and set status to 9
+export const updateProofOfDelivery = async (req, res) => {
+    const { schedules_id, proof_of_delivery } = req.body;
+
+    if (!schedules_id || !proof_of_delivery) {
+        return res.status(400).json({ message: "schedules_id and proof_of_delivery are required." });
+    }
+
+    const query = `
+        UPDATE Loadart."load_schedules" 
+        SET 
+            "proof_of_delivery" = $1,
+            "schedules_status" = '9'
+        WHERE "schedules_id" = $2
+        RETURNING *;
+    `;
+
+    try {
+        const result = await pool.query(query, [proof_of_delivery, schedules_id]);
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ message: "No record found with the given schedules_id." });
+        }
+
+        res.status(200).json({
+            message: "Proof of delivery updated successfully, status set to 9.",
+            data: result.rows[0],
+        });
+    } catch (error) {
+        console.error("Error updating proof of delivery:", error.message);
         res.status(500).json({ message: "Internal server error", error: error.message });
     }
 };

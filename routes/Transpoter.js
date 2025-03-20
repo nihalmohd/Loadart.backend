@@ -34,7 +34,7 @@ import { getLoadSchedulesByUser } from '../controller/UsersController/getLoadSch
 import { updateBidsTruckAndInsertSchedule } from '../controller/UsersController/TruckSchedules.js';
 import { getTruckSchedulesByUserId } from '../controller/UsersController/getTruckScheduleByUserid.js';
 import { updateTruckSchedule } from '../controller/UsersController/updateTruckSchedules.js';
-import { updateLoadSchedule } from '../controller/UsersController/updateLoadReciepts.js';
+import { updateLoadSchedule, updateLorryReceipt, updateProofOfDelivery } from '../controller/UsersController/updateLoadReciepts.js';
 import { getBidsByUserAndLoad } from '../controller/UsersController/getBidsByUserAndLoad.js';
 import { getTruckBidsForUserAndPostTruck } from '../controller/UsersController/getBidsByUserAndTruck.js';
 import { getNegotiationByUserAndBid, insertMyLoadBidsNegotiation, insertNegotiation } from '../controller/UsersController/negotiation.js';
@@ -105,7 +105,8 @@ TranspoterRouter.post("/insertMyTruckNegotiation",insertMyTruckNegotiation)
 
 TranspoterRouter.patch("/bidsLoadStatus", updateBidsLoadStatus);
 TranspoterRouter.patch("/bidsTruckStatus", updateBidsTruckStatus);
-TranspoterRouter.patch("/updateLoadSchedule", updateLoadSchedule);
+TranspoterRouter.patch("/updateLorryReceiptLoadSchedule", updateLorryReceipt);
+TranspoterRouter.patch("/updateProofOfDevliveryLoadSchedule", updateProofOfDelivery);
 TranspoterRouter.patch("/updateTruckSchedule", updateTruckSchedule); 
 TranspoterRouter.patch("/updateLoad",updateLoad)
 TranspoterRouter.patch("/updateTruck",updateTruck)
