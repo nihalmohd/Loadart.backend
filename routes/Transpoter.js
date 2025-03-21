@@ -34,7 +34,7 @@ import { getLoadSchedulesByUser } from '../controller/UsersController/getLoadSch
 import { updateBidsTruckAndInsertSchedule } from '../controller/UsersController/TruckSchedules.js';
 import { getTruckSchedulesByUserId } from '../controller/UsersController/getTruckScheduleByUserid.js';
 import { updateTruckSchedule } from '../controller/UsersController/updateTruckSchedules.js';
-import { updateLoadSchedule, updateLorryReceipt, updateProofOfDelivery } from '../controller/UsersController/updateLoadReciepts.js';
+import {  updateLorryReceipt, updateProofOfDelivery } from '../controller/UsersController/updateLoadReciepts.js';
 import { getBidsByUserAndLoad } from '../controller/UsersController/getBidsByUserAndLoad.js';
 import { getTruckBidsForUserAndPostTruck } from '../controller/UsersController/getBidsByUserAndTruck.js';
 import { getNegotiationByUserAndBid, insertMyLoadBidsNegotiation, insertNegotiation } from '../controller/UsersController/negotiation.js';
