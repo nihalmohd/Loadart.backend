@@ -65,8 +65,8 @@ export const insertMyTruckNegotiation = async (req, res) => {
 
     const updateBidsTruckQuery = `
     UPDATE loadart."bidsTruck"
-    SET bidsTruck_status = 6
-    WHERE bidsTruck_id = $1
+    SET "bidsTruck_status" = 6
+    WHERE "bidsTruck_id" = $1
     RETURNING *;
 `;
     try {
@@ -76,7 +76,7 @@ export const insertMyTruckNegotiation = async (req, res) => {
             await client.query("BEGIN");
 
             const insertResult = await client.query(insertQuery, [bid_id, user_id, amount]);
-            const updateResult = await client.query(updateBidsLoadQuery, [bid_id]);
+            const updateResult = await client.query(updateBidsTruckQuery, [bid_id]);
 
             await client.query("COMMIT");
 

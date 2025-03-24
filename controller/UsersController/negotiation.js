@@ -51,9 +51,10 @@ export const insertNegotiation = async (req, res) => {
 
 export const insertMyLoadBidsNegotiation = async (req, res) => {
     const { bid_id, user_id, amount } = req.body;
-
+     
+     
     if (!bid_id || !user_id || !amount ) {
-        return res.status(400).json({ message: "All fields (bid_id, user_id, amount, bidsTruck_id) are required." });
+        return res.status(400).json({ message: "All fields (bid_id, user_id, amount) are required." });
     }
 
     const insertQuery = `
@@ -63,9 +64,9 @@ export const insertMyLoadBidsNegotiation = async (req, res) => {
     `;
 
     const updateBidsLoadQuery = `
-        UPDATE loadart.bidsLoad
-        SET bidsLoad_status = 6
-        WHERE bidsTruck_id = $1
+        UPDATE loadart."bidsLoad"
+        SET "bidsLoad_status" = 6
+        WHERE "bidsLoad_id" = $1
         RETURNING *;
     `;
 
