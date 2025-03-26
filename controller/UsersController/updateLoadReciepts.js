@@ -32,7 +32,7 @@ export const updateLorryReceipt = async (req, res) => {
         const truckSchedulesQuery = `
             UPDATE Loadart."truck_schedules" 
             SET 
-                "lorry_receipt" = $1,
+                "lorry-receipt" = $1,
                 "truckSchedules_status" = '8'
             WHERE "trucks_id" = $2 AND "truckSchedules_status" = '1'
             RETURNING *;
