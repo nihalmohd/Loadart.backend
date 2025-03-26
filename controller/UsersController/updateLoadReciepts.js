@@ -63,7 +63,7 @@ export const updateLorryReceipt = async (req, res) => {
 };
 
 
-// Function to update proof_of_delivery and set status to 9
+
 export const updateProofOfDelivery = async (req, res) => {
     const { schedules_id, proof_of_delivery, trucks_id } = req.body;
 
@@ -81,7 +81,7 @@ export const updateProofOfDelivery = async (req, res) => {
             SET 
                 "proof_of_delivery" = $1,
                 "schedules_status" = 9
-            WHERE "schedules_id" = $2 AND "schedules_status" = 8
+            WHERE "schedules_id" = $2 AND "schedules_status"::INTEGER = 8
             RETURNING *;
         `;
         const loadResult = await client.query(loadSchedulesQuery, [proof_of_delivery, schedules_id]);
@@ -96,18 +96,23 @@ export const updateProofOfDelivery = async (req, res) => {
             UPDATE Loadart."truck_schedules" 
             SET 
                 "proof_of_delivery" = $1,
-                "truckSchedules_status" = '9'
-            WHERE "trucks_id" = $2 AND "truckSchedules_status" = '8'
+                "truckSchedules_status" = 9
+            WHERE "trucks_id" = $2 AND "truckSchedules_status"::INTEGER = 8
             RETURNING *;
         `;
         const truckResult = await client.query(truckSchedulesQuery, [proof_of_delivery, trucks_id]);
+
+        if (truckResult.rowCount === 0) {
+            await client.query("ROLLBACK");
+            return res.status(404).json({ message: "No matching truck schedule found or status is not 8." });
+        }
 
         await client.query("COMMIT");
 
         res.status(200).json({
             message: "Proof of delivery updated successfully, status set to 9.",
             load_schedules: loadResult.rows[0],
-            truck_schedules: truckResult.rows.length > 0 ? truckResult.rows[0] : "No matching truck schedule found.",
+            truck_schedules: truckResult.rows[0],
         });
 
     } catch (error) {
