@@ -17,7 +17,7 @@ export const updateLorryReceipt = async (req, res) => {
             UPDATE Loadart."load_schedules" 
             SET 
                 "lorry_receipt" = $1,
-                "schedules_status" = '8'
+                "schedules_status" = 8
             WHERE "schedules_id" = $2
             RETURNING *;
         `;
@@ -28,14 +28,22 @@ export const updateLorryReceipt = async (req, res) => {
             return res.status(404).json({ message: "No record found with the given schedules_id." });
         }
 
-        // Update in truck_schedules if truckSchedules_status_ is 1
+        // Update in truck_schedules if truckSchedules_status is '1', also set truckSchedules_status to 8
         const truckSchedulesQuery = `
             UPDATE Loadart."truck_schedules" 
-            SET "lorry-receipt" = $1
-            WHERE "trucks_id" = $2 AND "truckSchedules_status_" = 1
+            SET 
+                "lorry_receipt" = $1,
+                "truckSchedules_status" = '8'
+            WHERE "trucks_id" = $2 AND "truckSchedules_status" = '1'
             RETURNING *;
         `;
         const truckResult = await client.query(truckSchedulesQuery, [lorry_receipt, trucks_id]);
+
+        if (truckResult.rowCount === 0) {
+            await client.query("ROLLBACK");
+            return res.status(404).json({ message: "No record found with the given trucks_id." });
+        }
+
 
         await client.query("COMMIT");
 
@@ -72,8 +80,8 @@ export const updateProofOfDelivery = async (req, res) => {
             UPDATE Loadart."load_schedules" 
             SET 
                 "proof_of_delivery" = $1,
-                "schedules_status" = '9'
-            WHERE "schedules_id" = $2 AND "schedules_status" = '8'
+                "schedules_status" = 9
+            WHERE "schedules_id" = $2 AND "schedules_status" = 8
             RETURNING *;
         `;
         const loadResult = await client.query(loadSchedulesQuery, [proof_of_delivery, schedules_id]);
@@ -83,11 +91,13 @@ export const updateProofOfDelivery = async (req, res) => {
             return res.status(404).json({ message: "No record found with the given schedules_id or status is not 8." });
         }
 
-        // Update truck_schedules only if truckSchedules_status_ = 8
+        // Update truck_schedules only if truckSchedules_status = 8, also set it to 9
         const truckSchedulesQuery = `
             UPDATE Loadart."truck_schedules" 
-            SET "proof_of_delivery" = $1
-            WHERE "trucks_id" = $2 AND "truckSchedules_status_" = 8
+            SET 
+                "proof_of_delivery" = $1,
+                "truckSchedules_status" = '9'
+            WHERE "trucks_id" = $2 AND "truckSchedules_status" = '8'
             RETURNING *;
         `;
         const truckResult = await client.query(truckSchedulesQuery, [proof_of_delivery, trucks_id]);
