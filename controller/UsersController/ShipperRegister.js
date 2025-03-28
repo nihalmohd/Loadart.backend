@@ -106,7 +106,7 @@ export const Register = async (req, res) => {
         res.status(200).json({ 
             message: 'Registration successful', 
             shipperData: shipperResult.rows[0], 
-            userData: userResult.rows[0], 
+            User: userResult.rows[0], 
             accessToken, 
             refreshToken 
         });

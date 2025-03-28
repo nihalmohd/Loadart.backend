@@ -75,7 +75,7 @@ export const Register = async (req, res) => {
                 return res.status(200).json({
                     message: 'Transporter and User updated successfully',
                     transporterData: updatedTransporter.rows[0],
-                    userData: updatedUser.rows[0],
+                    User: updatedUser.rows[0],
                     accessToken, refreshToken
                 });
             } else {
