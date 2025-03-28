@@ -60,7 +60,7 @@ export const Register = async (req, res) => {
 
                 return res.status(200).json({
                     message: 'Shipper and User updated successfully',
-                    shipperData: updatedShipper.rows[0],
+                    data: updatedShipper.rows[0],
                     userData: updatedUser.rows[0],
                     accessToken,
                     refreshToken
@@ -105,7 +105,7 @@ export const Register = async (req, res) => {
 
         res.status(200).json({ 
             message: 'Registration successful', 
-            shipperData: shipperResult.rows[0], 
+            data: shipperResult.rows[0], 
             User: userResult.rows[0], 
             accessToken, 
             refreshToken 

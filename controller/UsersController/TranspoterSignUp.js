@@ -74,7 +74,7 @@ export const Register = async (req, res) => {
 
                 return res.status(200).json({
                     message: 'Transporter and User updated successfully',
-                    transporterData: updatedTransporter.rows[0],
+                    data: updatedTransporter.rows[0],
                     User: updatedUser.rows[0],
                     accessToken, refreshToken
                 });
@@ -126,7 +126,7 @@ export const Register = async (req, res) => {
 
         res.status(200).json({ 
             message: 'Registration successful', 
-            transporterData: transporterResult.rows[0], 
+            data: transporterResult.rows[0], 
             userData: userResult.rows[0], 
             accessToken, refreshToken 
         });
