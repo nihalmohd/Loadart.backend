@@ -10,7 +10,8 @@ export const getMatchingLoads = async (req, res) => {
         truck_type_id,
         no_of_trucks,
         limit,
-        offset
+        offset,
+        user_id // This is always present
     } = req.body;
 
     try {
@@ -35,8 +36,6 @@ export const getMatchingLoads = async (req, res) => {
                 formattedPickupDate = dateObject.toISOString().split("T")[0]; // Extract YYYY-MM-DD
             }
         }
-
-        // console.log("Formatted pickupDate:", formattedPickupDate);
 
         // Extract district + state for both pickup and delivery locations
         pickupDistrict = extractDistrict(pickupLoc);
@@ -78,10 +77,11 @@ export const getMatchingLoads = async (req, res) => {
             ($3::date IS NULL OR l."pickupDate" >= $3::date) AND
             ($4::integer IS NULL OR l."material_id" = $4) AND
             ($5::integer IS NULL OR l."capacity_id" <= $5) AND
-            ($6::integer IS NULL OR l."truck_type_id" = $6)
+            ($6::integer IS NULL OR l."truck_type_id" = $6) AND
+            l."user_id" != $7  
         ORDER BY 
             l."loads_id" DESC  
-        LIMIT $7 OFFSET $8;
+        LIMIT $8 OFFSET $9;
     `;
 
         const itemsPerPage = limit || 12;  
@@ -94,6 +94,7 @@ export const getMatchingLoads = async (req, res) => {
             material_id || null,
             capacity_id || null,  
             truck_type_id || null,
+            user_id,  // Ensure this is always present
             itemsPerPage,  
             currentOffset  
         ];
