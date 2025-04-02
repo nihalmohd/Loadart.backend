@@ -7,6 +7,7 @@ export const getMatchingPostTrucks = async (req, res) => {
         postTrucks_to,
         postTrucks_capacity_id,
         truck_type_id,
+        user_id,  // This is always present
         limit,
         offset
     } = req.body;
@@ -18,45 +19,46 @@ export const getMatchingPostTrucks = async (req, res) => {
     const currentOffset = offset || 0;
 
     let query = `
-   SELECT 
-    t.*, 
-    tmf.*, 
-    tmd.*, 
-    tc.*, 
-    tt.*, 
-    u.*, 
-    ut.*, 
-    pt.*
-FROM 
-    Loadart."trucks" t
-LEFT JOIN 
-    Loadart."truck_manufacturers" tmf 
-    ON t.manufacturer_id = tmf.truck_manufacturers_id
-LEFT JOIN 
-    Loadart."truck_models" tmd 
-    ON t.model_id = tmd.truck_models_id
-LEFT JOIN 
-    Loadart."truck_capacities" tc 
-    ON t.capacity_id = tc.truck_capacities_id
-LEFT JOIN 
-    Loadart."truck_types" tt 
-    ON t.trucks_type_id = tt.truck_types_id
-LEFT JOIN 
-    Loadart."users" u 
-    ON t.user_id = u.users_id
-LEFT JOIN 
-    Loadart."user_types" ut 
-    ON u.user_types_id = ut.user_types_id
-LEFT JOIN 
-    Loadart."postTrucks" pt 
-    ON t.truck_id = pt.truck_id
-WHERE 
-    t.trucks_status = 5 
-    AND (pt."postTrucks_status" IS NULL OR pt."postTrucks_status"::INTEGER NOT IN (6, 7))
-`;
+    SELECT 
+        t.*, 
+        tmf.*, 
+        tmd.*, 
+        tc.*, 
+        tt.*, 
+        u.*, 
+        ut.*, 
+        pt.*
+    FROM 
+        Loadart."trucks" t
+    LEFT JOIN 
+        Loadart."truck_manufacturers" tmf 
+        ON t.manufacturer_id = tmf.truck_manufacturers_id
+    LEFT JOIN 
+        Loadart."truck_models" tmd 
+        ON t.model_id = tmd.truck_models_id
+    LEFT JOIN 
+        Loadart."truck_capacities" tc 
+        ON t.capacity_id = tc.truck_capacities_id
+    LEFT JOIN 
+        Loadart."truck_types" tt 
+        ON t.trucks_type_id = tt.truck_types_id
+    LEFT JOIN 
+        Loadart."users" u 
+        ON t.user_id = u.users_id
+    LEFT JOIN 
+        Loadart."user_types" ut 
+        ON u.user_types_id = ut.user_types_id
+    LEFT JOIN 
+        Loadart."postTrucks" pt 
+        ON t.truck_id = pt.truck_id
+    WHERE 
+        t.trucks_status = 5 
+        AND (pt."postTrucks_status" IS NULL OR pt."postTrucks_status"::INTEGER NOT IN (6, 7))
+        AND (pt.truck_id = t.truck_id AND t.user_id != $1)  -- Ensuring the truck owner is different
+    `;
 
-    const values = [];
-    let paramIndex = 1;
+    const values = [user_id];  // Ensure user_id is included first
+    let paramIndex = 2;  // Since $1 is used for user_id
 
     // Filter by date if provided
     if (postTrucks_dateTime) {
