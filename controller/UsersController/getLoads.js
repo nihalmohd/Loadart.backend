@@ -4,6 +4,7 @@ export const getAllLoads = async (req, res) => {
     const page = parseInt(req.query.page) || 1; 
     const limit = parseInt(req.query.limit) || 20; 
     const offset = (page - 1) * limit; 
+    const userId = req.query.user_id; // Get user_id from request query
 
     const fetchLoadsQuery = `
     SELECT 
@@ -37,15 +38,18 @@ export const getAllLoads = async (req, res) => {
         u.user_types_id = ut.user_types_id
     WHERE 
         l.loads_status != $1
+        ${userId ? `AND l.user_id != $4` : ''} -- Exclude the given user_id if provided
     ORDER BY 
-        l.loads_id DESC  -- Sorting loads in descending order
+        l.loads_id DESC  
     LIMIT 
         $2 OFFSET $3;
-`;
-
+    `;
 
     try {
-        const result = await pool.query(fetchLoadsQuery, [3,limit, offset]);
+        const queryParams = [3, limit, offset];
+        if (userId) queryParams.push(userId); // Add user_id to query params if provided
+
+        const result = await pool.query(fetchLoadsQuery, queryParams);
 
         if (result.rows.length === 0) {
             return res.status(200).json({ message: "No loads found for the specified page." });
