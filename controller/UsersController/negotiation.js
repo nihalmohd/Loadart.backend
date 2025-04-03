@@ -105,10 +105,10 @@ export const insertMyLoadBidsNegotiation = async (req, res) => {
 
 
 export const getNegotiationByUserAndBid = async (req, res) => {
-    const { user_id, bid_id } = req.query;
+    const { bid_id } = req.query;
 
-    if (!user_id || !bid_id) {
-        return res.status(400).json({ message: "Both user_id and bid_id are required as query parameters." });
+    if (!bid_id) {
+        return res.status(400).json({ message: "bid_id is required as query parameters." });
     }
 
     const selectQuery = `
@@ -122,15 +122,13 @@ export const getNegotiationByUserAndBid = async (req, res) => {
     ON 
         n.user_id = u.users_id
     WHERE 
-        n.user_id = $1 
-    AND 
-        n.bid_id = $2
+        n.bid_id = $1
     ORDER BY 
         n."negotiations_id" DESC;  -- Sorting by negotiations_id in descending order
 `;
 
     try {
-        const result = await pool.query(selectQuery, [user_id, bid_id]);
+        const result = await pool.query(selectQuery, [bid_id]);
 
         if (result.rows.length === 0) {
             return res.status(200).json({ message: "No matching negotiation found." });
