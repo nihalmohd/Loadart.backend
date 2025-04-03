@@ -33,7 +33,7 @@ export const insertBidsTruck = async (req, res) => {
         // Second Query: Insert into truckNegotiations table
         const negotiationQuery = `
             INSERT INTO Loadart."truckNegotiations" ("bid_id", "user_id", "amount", "status")
-            VALUES ($1, $2, $3, 7)
+            VALUES ($1, $2, $3, 6)
             RETURNING *;
         `;
 
