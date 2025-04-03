@@ -9,26 +9,47 @@ export const insertBidsTruck = async (req, res) => {
             return res.status(400).json({ message: "All fields are required." });
         }
 
-        const query = `
+        // First Query: Insert into bidsTruck table
+        const bidQuery = `
             INSERT INTO Loadart."bidsTruck" 
             ("bidsTruck_amount", "trucks_id", "user_id", "loads_id")
             VALUES ($1, $2, $3, $4)
             RETURNING *;
         `;
 
-        const result = await pool.query(query, [
+        const bidResult = await pool.query(bidQuery, [
             bidsTruck_amount,
             trucks_id,
             user_id,
             loads_id,
         ]);
 
+        if (bidResult.rows.length === 0) {
+            return res.status(500).json({ message: "Failed to insert bid." });
+        }
+
+        const bid_id = bidResult.rows[0].bidsTruck_id;
+
+        // Second Query: Insert into truckNegotiations table
+        const negotiationQuery = `
+            INSERT INTO Loadart."truckNegotiations" ("bid_id", "user_id", "amount", "status")
+            VALUES ($1, $2, $3, 7)
+            RETURNING *;
+        `;
+
+        const negotiationResult = await pool.query(negotiationQuery, [
+            bid_id,
+            user_id,
+            bidsTruck_amount,
+        ]);
+
         res.status(201).json({
-            message: "Bid inserted successfully into bidsTruck table.",
-            data: result.rows[0],
+            message: "Bid inserted successfully into bidsTruck and truckNegotiations tables.",
+            bidData: bidResult.rows[0],
+            negotiationData: negotiationResult.rows[0],
         });
     } catch (error) {
-        console.error("Error inserting data into bidsTruck table:", error.message);
+        console.error("Error inserting data:", error.message);
         res.status(500).json({ message: "Internal server error" });
     }
 };
