@@ -3,7 +3,7 @@ import pool from "../../Model/Config.js";
 export const insertNegotiation = async (req, res) => {
     const { bid_id, user_id, amount } = req.body;
 
-    if (!bid_id || !user_id || !amount ) {
+    if (!bid_id || !user_id || !amount) {
         return res.status(400).json({ message: "All fields (bid_id, user_id, amount) are required." });
     }
 
@@ -13,10 +13,10 @@ export const insertNegotiation = async (req, res) => {
         RETURNING *;
     `;
 
-    const updateBidsTruckQuery = `
-        UPDATE loadart.bidsTruck
-        SET bidsTruck_status = 7
-        WHERE bidsTruck_id = $1
+    const updateBidsLoadQuery = `
+        UPDATE loadart."bidsLoad"
+        SET "bidsLoad_status" = 7, "bidsLoad_amount" = $2
+        WHERE "bidsLoad_id" = $1
         RETURNING *;
     `;
 
@@ -26,15 +26,18 @@ export const insertNegotiation = async (req, res) => {
         try {
             await client.query("BEGIN");
 
+            // Insert negotiation record
             const insertResult = await client.query(insertQuery, [bid_id, user_id, amount]);
-            const updateResult = await client.query(updateBidsTruckQuery, [bid_id]);
+
+            // Update bidsLoad
+            const updateBidsLoadResult = await client.query(updateBidsLoadQuery, [bid_id, amount]);
 
             await client.query("COMMIT");
 
             res.status(201).json({
-                message: "Negotiation inserted and bidsTruck status updated successfully.",
+                message: "Negotiation inserted and bidsLoad status updated successfully.",
                 negotiation: insertResult.rows[0],
-                updatedBidsTruck: updateResult.rows[0],
+                updatedBidsLoad: updateBidsLoadResult.rows[0],
             });
         } catch (error) {
             await client.query("ROLLBACK");
