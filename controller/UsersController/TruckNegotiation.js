@@ -67,11 +67,12 @@ export const insertMyTruckNegotiation = async (req, res) => {
     `;
 
     const updateBidsTruckQuery = `
-    UPDATE loadart."bidsTruck"
-    SET "bidsTruck_status" = 6
-    WHERE "bidsTruck_id" = $1
-    RETURNING *;
-`;
+        UPDATE loadart."bidsTruck"
+        SET "bidsTruck_status" = 6, "bidsTruck_amount" = $2
+        WHERE "bidsTruck_id" = $1
+        RETURNING *;
+    `;
+
     try {
         const client = await pool.connect();
 
@@ -79,14 +80,14 @@ export const insertMyTruckNegotiation = async (req, res) => {
             await client.query("BEGIN");
 
             const insertResult = await client.query(insertQuery, [bid_id, user_id, amount]);
-            const updateResult = await client.query(updateBidsTruckQuery, [bid_id]);
+            const updateResult = await client.query(updateBidsTruckQuery, [bid_id, amount]);
 
             await client.query("COMMIT");
 
             res.status(201).json({
-                message: "Negotiation inserted and bidsLoad status updated successfully.",
+                message: "Negotiation inserted and bidsTruck status updated successfully.",
                 negotiation: insertResult.rows[0],
-                updatedBidsLoad: updateResult.rows[0],
+                updatedBidsTruck: updateResult.rows[0],
             });
         } catch (error) {
             await client.query("ROLLBACK");
@@ -100,6 +101,7 @@ export const insertMyTruckNegotiation = async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 };
+
 
 export const getTruckNegotiationByUserAndBid = async (req, res) => {
     const { bid_id } = req.query;

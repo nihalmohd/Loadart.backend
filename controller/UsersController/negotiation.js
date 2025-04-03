@@ -55,8 +55,7 @@ export const insertNegotiation = async (req, res) => {
 export const insertMyLoadBidsNegotiation = async (req, res) => {
     const { bid_id, user_id, amount } = req.body;
      
-     
-    if (!bid_id || !user_id || !amount ) {
+    if (!bid_id || !user_id || !amount) {
         return res.status(400).json({ message: "All fields (bid_id, user_id, amount) are required." });
     }
 
@@ -68,7 +67,7 @@ export const insertMyLoadBidsNegotiation = async (req, res) => {
 
     const updateBidsLoadQuery = `
         UPDATE loadart."bidsLoad"
-        SET "bidsLoad_status" = 6
+        SET "bidsLoad_status" = 6, "bidsLoad_amount" = $2
         WHERE "bidsLoad_id" = $1
         RETURNING *;
     `;
@@ -80,15 +79,15 @@ export const insertMyLoadBidsNegotiation = async (req, res) => {
             await client.query("BEGIN");
 
             const insertResult = await client.query(insertQuery, [bid_id, user_id, amount]);
-            const updateResult = await client.query(updateBidsLoadQuery, [bid_id]);
+            const updateResult = await client.query(updateBidsLoadQuery, [bid_id, amount]);
 
             await client.query("COMMIT");
 
-            if(insertResult&&updateResult){
+            if (insertResult && updateResult) {
                 res.status(201).json({
                     message: "Negotiation inserted and BidsLoad status updated successfully.",
                     negotiation: insertResult.rows[0],
-                    updatedBidsTruck: updateResult.rows[0],
+                    updatedBidsLoad: updateResult.rows[0],
                 });
             }
 
@@ -104,8 +103,6 @@ export const insertMyLoadBidsNegotiation = async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 };
-
-
 
 export const getNegotiationByUserAndBid = async (req, res) => {
     const { bid_id } = req.query;
