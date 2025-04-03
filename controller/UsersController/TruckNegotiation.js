@@ -13,10 +13,10 @@ export const insertTruckNegotiation = async (req, res) => {
         RETURNING *;
     `;
 
-    const updateBidsLoadQuery = `
-        UPDATE loadart."bidsLoad"
-        SET "bidsLoad_status" = '7', "bidsLoad_amount" = $2
-        WHERE "bidsLoad_id" = $1
+    const updateBidsTruckQuery = `
+        UPDATE loadart."bidsTruck"
+        SET "bidsTruck_status" = 7, "bidsTruck_amount" = $2
+        WHERE "bidsTruck_id" = $1
         RETURNING *;
     `;
 
@@ -26,15 +26,18 @@ export const insertTruckNegotiation = async (req, res) => {
         try {
             await client.query("BEGIN");
 
+            // Insert negotiation record
             const insertResult = await client.query(insertQuery, [bid_id, user_id, amount]);
-            const updateResult = await client.query(updateBidsLoadQuery, [bid_id, amount]);
+
+            // Update bidsTruck
+            const updateBidsTruckResult = await client.query(updateBidsTruckQuery, [bid_id, amount]);
 
             await client.query("COMMIT");
 
             res.status(201).json({
-                message: "Negotiation inserted and bidsLoad status & amount updated successfully.",
+                message: "Negotiation inserted and bidsTruck status & amount updated successfully.",
                 negotiation: insertResult.rows[0],
-                updatedBidsLoad: updateResult.rows[0],
+                updatedBidsTruck: updateBidsTruckResult.rows[0],
             });
         } catch (error) {
             await client.query("ROLLBACK");
