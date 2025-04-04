@@ -13,6 +13,7 @@ export const getTruckBidsWithDetails = async (req, res) => {
             bl.*, 
             u.*, 
             t.*, 
+            t.user_id AS user_id,
             l.*, 
             tt.*, 
             m.*,  
