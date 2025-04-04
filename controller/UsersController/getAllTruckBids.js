@@ -18,13 +18,13 @@ export const getTruckBidsWithDetails = async (req, res) => {
             t."regNumber",  
             t.user_id AS user_id,
             l.loads_id, 
+            l."pickupLoc",
+            l."deliveryLoc",
             l."pickupDate", 
             tt.truck_types_name, 
             m.materials_id,
             m.materials_name, 
-            tc.truck_capacities_name,
-            pt."postTrucks_from",
-            pt."postTrucks_to"
+            tc.truck_capacities_name
         FROM 
             Loadart."bidsLoad" bl
         LEFT JOIN 
