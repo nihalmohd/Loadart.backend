@@ -7,18 +7,22 @@ export const getTruckBidsWithDetails = async (req, res) => {
         if (!trucks_id || !user_id) {
             return res.status(400).json({ message: "trucks_id and user_id are required." });
         }
-
+ 
         const query = `
         SELECT 
-            bl.*, 
-            u.*, 
-            t.*, 
-            t.user_id AS t_user_id,
-            l.*, 
-            tt.*, 
-            m.*,  
-            tc.*,  
-            pt.*  
+            bl."bidsLoad_id", 
+            bl."bidsLoad_amount", 
+            u.users_name, 
+            u.users_id, 
+            t.truck_id,  
+            t.user_id AS user_id,
+            l.loads_id, 
+            l."pickupDate", 
+            tt.truck_types_name, 
+            m.materials_name,  
+            tc.truck_capacities_name,
+            pt."postTrucks_from",
+            pt."postTrucks_to"
         FROM 
             Loadart."bidsLoad" bl
         LEFT JOIN 
