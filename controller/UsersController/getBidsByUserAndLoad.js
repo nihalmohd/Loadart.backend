@@ -11,13 +11,22 @@ export const getBidsByUserAndLoad = async (req, res) => {
 
         const query = `
         SELECT 
-            bl.*, 
-            u.*,  
-            t.*, 
-            l.*, 
-            tt.*, 
-            m.*,  
-            tc.*  
+             bl."bidsLoad_id", 
+            bl."bidsLoad_amount", 
+            bl."bidsLoad_status", 
+            u.users_name, 
+            u.users_id, 
+            t.truck_id,  
+            t."regNumber",  
+            t.user_id AS user_id,
+            l.loads_id, 
+            l."pickupLoc",
+            l."deliveryLoc",
+            l."pickupDate", 
+            tt.truck_types_name, 
+            m.materials_id,
+            m.materials_name, 
+            tc.truck_capacities_name
         FROM 
             Loadart."bidsLoad" bl
         JOIN 
