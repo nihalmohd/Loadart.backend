@@ -2,7 +2,7 @@ import pool from "../../Model/Config.js";
 
 export const getTruckBidsForUserAndPostTruck = async (req, res) => {
   const { user_id, trucks_id } = req.query;
-    console.log(req.query);
+    // console.log(req.query);
     
   try {
     if (!user_id || !trucks_id) {
