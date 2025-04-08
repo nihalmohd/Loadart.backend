@@ -16,6 +16,7 @@ export const getBidsLoadWithDetails = async (req, res) => {
     SELECT 
         bt."bidsTruck_id", 
         bt."bidsTruck_amount", 
+        bt."bidsTruck_status",
         u.users_id,  
         u.users_name,  
         t.truck_id, 
