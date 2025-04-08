@@ -13,12 +13,13 @@ export const getTruckBidsForUserAndPostTruck = async (req, res) => {
 
     const query = `
     SELECT 
-       bt."bidsTruck_id", 
+             bt."bidsTruck_id", 
         bt."bidsTruck_amount", 
         bt."bidsTruck_status",
         u.users_id,  
         u.users_name,  
-        t.truck_id, 
+        t.truck_id,
+        t."regNumber", 
         l.loads_id, 
         l."pickupLoc", 
         l."deliveryLoc", 
@@ -27,7 +28,7 @@ export const getTruckBidsForUserAndPostTruck = async (req, res) => {
         tt.truck_types_name, 
         m.materials_id,  
         m."materials_name",  
-        tc.truck_capacities_name 
+        tc.truck_capacities_name  
     FROM 
         Loadart."bidsTruck" bt
     JOIN 
