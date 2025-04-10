@@ -9,7 +9,7 @@ export const createUserSubscription = async (req, res) => {
     // 1. Get duration string like "15 days" or "1 months"
     const planQuery = `
       SELECT "duration"
-      FROM "SubscriptionPlan"
+      FROM loadart."SubscriptionPlan"
       WHERE "SubscriptionPlanId" = $1
     `;
     const planResult = await client.query(planQuery, [planId]);
@@ -33,7 +33,7 @@ export const createUserSubscription = async (req, res) => {
 
     // 2. Check for existing active subscription
     const existingSubQuery = `
-      SELECT "endDate" FROM "UserSubscription"
+      SELECT "endDate" FROM loadart."UserSubscription"
       WHERE "userId" = $1 AND "endDate" > NOW()
       ORDER BY "endDate" DESC
       LIMIT 1
@@ -57,7 +57,7 @@ export const createUserSubscription = async (req, res) => {
 
     // 4. Insert into UserSubscription
     const insertQuery = `
-      INSERT INTO "UserSubscription" (
+      INSERT INTO loadart."UserSubscription" (
         "userId",
         "planId",
         "startDate",
