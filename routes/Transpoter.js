@@ -81,7 +81,7 @@ TranspoterRouter.get("/getBidsByUserAndTruck",getTruckBidsForUserAndPostTruck );
 TranspoterRouter.get("/getTruckNegotiationByUserAndBid",getTruckNegotiationByUserAndBid);
 TranspoterRouter.get("/getNegotiationByUserAndBid",getNegotiationByUserAndBid) 
 TranspoterRouter.get("/getTransporterById",getTransporterById)
-TranspoterRouter.get("/getSubscrilptionByUserTypeId",getPlansByUserType)
+TranspoterRouter.get("/getSubscriptionByUserTypeId",getPlansByUserType)
 
 
 
