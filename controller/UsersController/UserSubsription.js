@@ -1,3 +1,4 @@
+import cron from "node-cron";
 import pool from "../../Model/Config.js";
 
 export const createUserSubscription = async (req, res) => {
@@ -83,3 +84,25 @@ export const createUserSubscription = async (req, res) => {
     res.status(500).json({ message: "Internal server error", error: error.message });
   }
 };
+
+cron.schedule("0 0 * * *", async () => {
+  console.log("Cron job started at:", new Date().toLocaleTimeString());
+
+  try {
+    const client = await pool.connect();
+
+    const updateQuery = `
+      UPDATE loadart."UserSubscription"
+      SET "status" = 2
+      WHERE "endDate" < NOW() AND "status" != 2
+    `;
+
+    const result = await client.query(updateQuery);
+
+    console.log(`✅ Updated ${result.rowCount} expired subscription(s) to status 2.`);
+
+    client.release();
+  } catch (error) {
+    console.error("❌ Error running cron job:", error.message);
+  }
+});
