@@ -113,36 +113,54 @@ export const insertDriverDocs = async (req, res) => {
 };
 
 export const getDriverById = async (req, res) => {
-    const { drivers_id} = req.query; 
+    const { drivers_id, user_id } = req.query;
 
-    
-    if (!drivers_id) {
-        return res.status(400).json({ message: "Driver ID is required." });
+    if (!drivers_id || !user_id) {
+        return res.status(400).json({ message: "Both driver ID and user ID are required." });
     }
 
-    const fetchDocumentQuery = `
+    const fetchDriverQuery = `
         SELECT *
         FROM loadart.drivers
         WHERE "drivers_id" = $1
         LIMIT 1;
     `;
 
-    try {
-        const result = await pool.query(fetchDocumentQuery, [drivers_id]);
+    const fetchUserSubscriptionQuery = `
+        SELECT 
+            us.*, 
+            sp."name", 
+            sp."price", 
+            sp."currency", 
+            sp."features", 
+            sp."description", 
+            sp."offerPrice", 
+            sp."status" as plan_status
+        FROM loadart."UserSubscription" us
+        INNER JOIN loadart."SubscriptionPlan" sp
+        ON us."planId" = sp."SubscriptionPlanId"
+        WHERE us."userId" = $1;
+    `;
 
-        if (result.rows.length === 0) {
+    try {
+        const driverResult = await pool.query(fetchDriverQuery, [drivers_id]);
+        const subscriptionResult = await pool.query(fetchUserSubscriptionQuery, [user_id]);
+
+        if (driverResult.rows.length === 0) {
             return res.status(200).json({ message: "No Driver found for the given Driver ID." });
         }
 
         res.status(200).json({
-            message: "Driver retrieved successfully.",
-            data: result.rows[0],
+            message: "Driver and Subscription details retrieved successfully.",
+            data: driverResult.rows[0],
+            subscription: subscriptionResult.rows.length > 0 ? subscriptionResult.rows : [],
         });
     } catch (error) {
-        console.error("Error retrieving Driver:", error.message);
+        console.error("Error retrieving data:", error.message);
         res.status(500).json({ message: "Internal server error" });
     }
 };
+
 
 export const getDocumentsByDriverId = async (req, res) => {
     const { drivers_id } = req.query; 
