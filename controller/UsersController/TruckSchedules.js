@@ -44,7 +44,7 @@ export const updateBidsTruckAndInsertSchedule = async (req, res) => {
 
         if (updateResult.rowCount === 0) {
             await pool.query("ROLLBACK");
-            return res.status(404).json({ message: "No matching rows found to update in bidsLoad table." });
+            return res.status(404).json({ message: "No matching rows found to update in bidsLoad table" });
         }
 
         const updateQuery2 = `
@@ -56,7 +56,7 @@ export const updateBidsTruckAndInsertSchedule = async (req, res) => {
 
         if (updateResult2.rowCount === 0) {
             await pool.query("ROLLBACK");
-            return res.status(404).json({ message: "No matching rows found to update in loads table." });
+            return res.status(404).json({ message: "No matching rows found to update in loads table" });
         }
         
         
