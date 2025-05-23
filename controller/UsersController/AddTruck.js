@@ -4,7 +4,11 @@ export const insertTruck = async (req, res) => {
     const { regNumber, trucks_type_id, capacity_id, insurance, rc, model_id, manufacturer_id, user_id, location } = req.body;
 
     
+<<<<<<< HEAD
     if (!regNumber || !trucks_type_id || !capacity_id || !insurance || !rc  || !user_id ) {
+=======
+    if (!regNumber || !capacity_id || !insurance || !rc  || !user_id ) {
+>>>>>>> 6bcf85cfb5fff1f4fbb95ce40204844516d01084
         return res.status(400).json({ message: "All fields are required." });
     }
 
