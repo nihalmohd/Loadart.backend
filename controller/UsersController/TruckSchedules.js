@@ -10,7 +10,8 @@ export const updateBidsTruckAndInsertSchedule = async (req, res) => {
         trucks_id, 
         loads_id ,
         users_id,
-        materials_id
+        materials_id,
+        bidsLoad_id
 
     } = req.body;
 
@@ -25,7 +26,7 @@ export const updateBidsTruckAndInsertSchedule = async (req, res) => {
             !trucks_id || 
             !loads_id ||
             !users_id||
-            !materials_id
+            !materials_id || !bidsLoad_id
         ) {
             return res.status(400).json({ message: "All fields are required." });
         }
@@ -37,28 +38,40 @@ export const updateBidsTruckAndInsertSchedule = async (req, res) => {
         const updateQuery = `
             UPDATE Loadart."bidsLoad"
             SET "bidsLoad_status" = 3
-            WHERE "user_id" = $1 AND "trucks_id" = $2;
+            WHERE "bidsLoad_id"=$1;
         `;
-        const updateResult = await pool.query(updateQuery, [users_id, trucks_id]);
+        const updateResult = await pool.query(updateQuery, [bidsLoad_id]);
 
         if (updateResult.rowCount === 0) {
             await pool.query("ROLLBACK");
             return res.status(404).json({ message: "No matching rows found to update in bidsLoad table." });
         }
-        
-        
-        const updateTruckQuery = `
-            UPDATE Loadart."bidsTruck"
-            SET "bidsTruck_status" = $1
-            WHERE "user_id" = $2 AND "loads_id" = $3;
+
+        const updateQuery2 = `
+            UPDATE Loadart."loads"
+            SET "loads_status" = 3
+            WHERE "loads_id"=$1;
         `;
-        const updateTruckResult = await pool.query(updateTruckQuery, [3, user_id, loads_id]);
-        
-        if (updateTruckResult.rowCount === 0) {
-            return res
-                .status(404)
-                .json({ message: "No matching row found in bidsTruck table for update." });
+        const updateResult2 = await pool.query(updateQuery2, [loads_id]);
+
+        if (updateResult2.rowCount === 0) {
+            await pool.query("ROLLBACK");
+            return res.status(404).json({ message: "No matching rows found to update in loads table." });
         }
+        
+        
+        // const updateTruckQuery = `
+        //     UPDATE Loadart."bidsTruck"
+        //     SET "bidsTruck_status" = $1
+        //     WHERE "user_id" = $2 AND "loads_id" = $3;
+        // `;
+        // const updateTruckResult = await pool.query(updateTruckQuery, [3, user_id, loads_id]);
+        
+        // if (updateTruckResult.rowCount === 0) {
+        //     return res
+        //         .status(404)
+        //         .json({ message: "No matching row found in bidsTruck table for update." });
+        // }
          
 
         // Insert into truck_schedules table

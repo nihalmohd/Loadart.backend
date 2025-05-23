@@ -16,11 +16,7 @@ export const addLoad = async (req, res) => {
     if (
         !pickupLoc ||
         !deliveryLoc ||
-        !pickupDate ||
-        !material_id ||
-        !capacity_id ||
-        !truck_type_id ||
-        !user_id ||
+        !pickupDate || !capacity_id || !user_id ||
         !no_of_trucks
     ) {
         return res.status(400).json({ message: "All fields except 'comment' are mandatory." });
