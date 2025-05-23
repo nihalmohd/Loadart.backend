@@ -28,7 +28,7 @@ export const updateBidsTruckAndInsertSchedule = async (req, res) => {
             !users_id||
             !materials_id || !bidsLoad_id
         ) {
-            return res.status(400).json({ message: "All fields are required." });
+            return res.status(400).json({ message: "All fields are required" });
         }
 
         // Start a database transaction
