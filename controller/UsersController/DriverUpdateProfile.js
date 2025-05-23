@@ -139,11 +139,7 @@ export const getDriverById = async (req, res) => {
         FROM loadart."UserSubscription" us
         INNER JOIN loadart."SubscriptionPlan" sp
         ON us."planId" = sp."SubscriptionPlanId"
-<<<<<<< HEAD
-        WHERE us."userId" = $1;
-=======
         WHERE us."userId" = $1 and us.status=1;
->>>>>>> 6bcf85cfb5fff1f4fbb95ce40204844516d01084
     `;
 
     try {

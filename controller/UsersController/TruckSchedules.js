@@ -10,12 +10,8 @@ export const updateBidsTruckAndInsertSchedule = async (req, res) => {
         trucks_id, 
         loads_id ,
         users_id,
-<<<<<<< HEAD
-        materials_id
-=======
         materials_id,
         bidsLoad_id
->>>>>>> 6bcf85cfb5fff1f4fbb95ce40204844516d01084
 
     } = req.body;
 
@@ -30,11 +26,7 @@ export const updateBidsTruckAndInsertSchedule = async (req, res) => {
             !trucks_id || 
             !loads_id ||
             !users_id||
-<<<<<<< HEAD
-            !materials_id
-=======
             !materials_id || !bidsLoad_id
->>>>>>> 6bcf85cfb5fff1f4fbb95ce40204844516d01084
         ) {
             return res.status(400).json({ message: "All fields are required" });
         }
@@ -46,30 +38,6 @@ export const updateBidsTruckAndInsertSchedule = async (req, res) => {
         const updateQuery = `
             UPDATE Loadart."bidsLoad"
             SET "bidsLoad_status" = 3
-<<<<<<< HEAD
-            WHERE "user_id" = $1 AND "trucks_id" = $2;
-        `;
-        const updateResult = await pool.query(updateQuery, [users_id, trucks_id]);
-
-        if (updateResult.rowCount === 0) {
-            await pool.query("ROLLBACK");
-            return res.status(404).json({ message: "No matching rows found to update in bidsLoad table." });
-        }
-        
-        
-        const updateTruckQuery = `
-            UPDATE Loadart."bidsTruck"
-            SET "bidsTruck_status" = $1
-            WHERE "user_id" = $2 AND "loads_id" = $3;
-        `;
-        const updateTruckResult = await pool.query(updateTruckQuery, [3, user_id, loads_id]);
-        
-        if (updateTruckResult.rowCount === 0) {
-            return res
-                .status(404)
-                .json({ message: "No matching row found in bidsTruck table for update." });
-        }
-=======
             WHERE "bidsLoad_id"=$1;
         `;
         const updateResult = await pool.query(updateQuery, [bidsLoad_id]);
@@ -104,7 +72,6 @@ export const updateBidsTruckAndInsertSchedule = async (req, res) => {
         //         .status(404)
         //         .json({ message: "No matching row found in bidsTruck table for update." });
         // }
->>>>>>> 6bcf85cfb5fff1f4fbb95ce40204844516d01084
          
 
         // Insert into truck_schedules table
