@@ -11,95 +11,75 @@ export const getMatchingLoads = async (req, res) => {
         no_of_trucks,
         limit,
         offset,
-        user_id // This is always present
+        user_id // Always present
     } = req.body;
 
     try {
-        let pickupDistrict = null;
-        let deliveryDistrict = null;
         let formattedPickupDate = null;
 
-        // Function to extract the last two parts (District + State)
-        const extractDistrict = (location) => {
-            if (!location) return null;
-            const parts = location.split(",").map(part => part.trim());
-            const len = parts.length;
-            return len >= 2 ? `${parts[len - 2]}, ${parts[len - 1]}` : location;
-        };
-
-        console.log("Raw pickupDate from request:", pickupDate);
-
-        // Convert pickupDate to a valid PostgreSQL date format (YYYY-MM-DD)
+        // Convert pickupDate to valid YYYY-MM-DD if provided
         if (pickupDate) {
             const dateObject = new Date(pickupDate);
             if (!isNaN(dateObject.getTime())) {
-                formattedPickupDate = dateObject.toISOString().split("T")[0]; // Extract YYYY-MM-DD
+                formattedPickupDate = dateObject.toISOString().split("T")[0];
             }
         }
 
-        // Extract district + state for both pickup and delivery locations
-        pickupDistrict = extractDistrict(pickupLoc);
-        deliveryDistrict = extractDistrict(deliveryLoc);
+        // Use full pickup and delivery location (trimmed), or null
+        const normalizedPickupLoc = pickupLoc?.trim() || null;
+        const normalizedDeliveryLoc = deliveryLoc?.trim() || null;
 
         const query = `
-        SELECT 
-            l.*, 
-            m.*, 
-            tc.*, 
-            tt.*, 
-            u.*, 
-            ut.*
-        FROM 
-            Loadart."loads" l
-        JOIN 
-            Loadart."materials" m
-        ON 
-            l.material_id = m.materials_id
-        JOIN 
-            Loadart."truck_capacities" tc
-        ON 
-            l.capacity_id = tc.truck_capacities_id
-        JOIN 
-            Loadart."truck_types" tt
-        ON 
-            l.truck_type_id = tt.truck_types_id
-        JOIN 
-            Loadart."users" u
-        ON 
-            l.user_id = u.users_id
-        JOIN 
-            Loadart."user_types" ut
-        ON 
-            u.user_types_id = ut.user_types_id
-        WHERE 
-            ($1::text IS NULL OR l."pickupLoc" ILIKE '%' || $1 || '%') AND
-            ($2::text IS NULL OR l."deliveryLoc" ILIKE '%' || $2 || '%') AND
-            ($3::date IS NULL OR l."pickupDate" >= $3::date) AND
-            ($4::integer IS NULL OR l."material_id" = $4) AND
-            ($5::integer IS NULL OR l."capacity_id" <= $5) AND
-            ($6::integer IS NULL OR l."truck_type_id" = $6) AND
-            l."user_id" != $7  
-        ORDER BY 
-            l."loads_id" DESC  
-        LIMIT $8 OFFSET $9;
-    `;
+            SELECT 
+                l.*, 
+                m.*, 
+                tc.*, 
+                tt.*, 
+                u.*, 
+                ut.*
+            FROM 
+                Loadart."loads" l
+            JOIN 
+                Loadart."materials" m ON l.material_id = m.materials_id
+            JOIN 
+                Loadart."truck_capacities" tc ON l.capacity_id = tc.truck_capacities_id
+            JOIN 
+                Loadart."truck_types" tt ON l.truck_type_id = tt.truck_types_id
+            JOIN 
+                Loadart."users" u ON l.user_id = u.users_id
+            JOIN 
+                Loadart."user_types" ut ON u.user_types_id = ut.user_types_id
+            WHERE 
+                ($1::text IS NULL OR LOWER(TRIM(l."pickupLoc")) ILIKE '%' || LOWER(TRIM($1)) || '%') AND
+                ($2::text IS NULL OR LOWER(TRIM(l."deliveryLoc")) ILIKE '%' || LOWER(TRIM($2)) || '%') AND
+                ($3::date IS NULL OR l."pickupDate" >= $3::date) AND
+                ($4::integer IS NULL OR l."material_id" = $4) AND
+                ($5::integer IS NULL OR l."capacity_id" <= $5) AND
+                ($6::integer IS NULL OR l."truck_type_id" = $6) AND
+                l."user_id" != $7
+            ORDER BY 
+                l."loads_id" DESC
+            LIMIT $8 OFFSET $9;
+        `;
 
-        const itemsPerPage = limit || 12;  
-        const currentOffset = offset || 0;  
+        const itemsPerPage = limit || 12;
+        const currentOffset = offset || 0;
 
         const values = [
-            pickupDistrict || null,  
-            deliveryDistrict || null,
-            formattedPickupDate || null,  
+            normalizedPickupLoc,
+            normalizedDeliveryLoc,
+            formattedPickupDate || null,
             material_id || null,
-            capacity_id || null,  
+            capacity_id || null,
             truck_type_id || null,
-            user_id,  // Ensure this is always present
-            itemsPerPage,  
-            currentOffset  
+            user_id,
+            itemsPerPage,
+            currentOffset
         ];
 
-        // console.log("Query values:", values); // Debugging log
+        // Optional: Debug logs
+        // console.log("SQL Query:", query);
+        // console.log("Query Parameters:", values);
 
         const result = await pool.query(query, values);
 
@@ -111,8 +91,10 @@ export const getMatchingLoads = async (req, res) => {
             message: "Matching loads retrieved successfully.",
             data: result.rows,
         });
+
     } catch (error) {
         console.error("Error retrieving matching loads:", error.message);
         res.status(500).json({ message: "Internal server error" });
     }
 };
+
