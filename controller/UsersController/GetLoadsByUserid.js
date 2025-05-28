@@ -20,11 +20,11 @@ export const getLoadsByUserId = async (req, res) => {
         u.*
     FROM 
         Loadart."loads" l
-    JOIN 
+    LEFT JOIN 
         Loadart."materials" m ON l.material_id = m.materials_id
     JOIN 
         Loadart."truck_capacities" tc ON l.capacity_id = tc.truck_capacities_id
-    JOIN 
+    LEFT JOIN 
         Loadart."truck_types" tt ON l.truck_type_id = tt.truck_types_id
     JOIN 
         Loadart."users" u ON l.user_id = u.users_id
