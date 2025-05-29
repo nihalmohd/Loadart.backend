@@ -25,8 +25,7 @@ export const updateBidsTruckAndInsertSchedule = async (req, res) => {
             !user_id || 
             !trucks_id || 
             !loads_id ||
-            !users_id||
-            !materials_id || !bidsLoad_id
+            !users_id|| !bidsLoad_id
         ) {
             return res.status(400).json({ message: "All fields are required" });
         }

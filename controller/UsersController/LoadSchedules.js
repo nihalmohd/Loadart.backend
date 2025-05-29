@@ -20,7 +20,6 @@ export const updateAndInsertSchedules = async (req, res) => {
             !schedules_date ||
             !pickup_loc ||
             !delivery_loc ||
-            !materials_id ||
             !user_id||
             !users_id ||
             !truck_id ||
