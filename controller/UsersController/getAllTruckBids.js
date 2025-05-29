@@ -59,7 +59,8 @@ export const getTruckBidsWithDetails = async (req, res) => {
         WHERE 
             bl."trucks_id" = $1
         AND 
-            bl."bidsLoad_status" != '4' 
+            bl."bidsLoad_status" != '4' AND 
+            bl."bidsLoad_status" != '3'
         AND 
             bl.user_id != $2
         ORDER BY 
