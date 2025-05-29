@@ -43,11 +43,11 @@ export const getTruckBidsForUserAndPostTruck = async (req, res) => {
         Loadart."trucks" t
     ON 
         bt.trucks_id = t.truck_id
-    JOIN 
+    LEFT JOIN 
         Loadart."truck_types" tt 
     ON 
        t."trucks_type_id" = tt."truck_types_id"
-    JOIN 
+    LEFT JOIN 
        Loadart."materials" m  
     ON 
        l."material_id" = m."materials_id"  
