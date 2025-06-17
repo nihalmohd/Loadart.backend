@@ -76,14 +76,15 @@ export const updateProofOfDelivery = async (req, res) => {
         await client.query("BEGIN");
 
         // Update load_schedules only if schedules_status = 8
-        const loadSchedulesQuery = `
+            const loadSchedulesQuery = `
             UPDATE Loadart."load_schedules" 
             SET 
                 "proof_of_delivery" = $1,
-                "schedules_status" = 9
-            WHERE "schedules_id" = $2 AND "schedules_status"::INTEGER = 8
+                "schedules_status" = '9'
+            WHERE "schedules_id" = $2 AND "schedules_status" = '8'
             RETURNING *;
         `;
+
         const loadResult = await client.query(loadSchedulesQuery, [proof_of_delivery, schedules_id]);
 
         if (loadResult.rowCount === 0) {
