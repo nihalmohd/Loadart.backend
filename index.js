@@ -29,7 +29,7 @@ database();
 
 // Base route
 app.get("/", (req, res) => {
-    res.send("Hello, Loadart Backend!");
+    res.send("Welcome, Loadart Backend!");
 });
 
 // Route definitions
