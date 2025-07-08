@@ -1,4 +1,5 @@
 import pool from "../../Model/Config.js";
+import { translateText } from "../../Utils/Translate.js";
 
 export const insertNegotiation = async (req, res) => {
     const { bid_id, user_id, amount } = req.body;
@@ -104,28 +105,29 @@ export const insertMyLoadBidsNegotiation = async (req, res) => {
     }
 };
 
+
 export const getNegotiationByUserAndBid = async (req, res) => {
-    const { bid_id } = req.query;
+    const { bid_id, lang = "en" } = req.query;
 
     if (!bid_id) {
         return res.status(400).json({ message: "bid_id is required as query parameters." });
     }
 
     const selectQuery = `
-    SELECT 
-        n.*, 
-        u.*
-    FROM 
-        loadart.negotiations n
-    JOIN 
-        loadart.users u
-    ON 
-        n.user_id = u.users_id
-    WHERE 
-        n.bid_id = $1
-    ORDER BY 
-        n."negotiations_id" DESC;  -- Sorting by negotiations_id in descending order
-`;
+        SELECT 
+            n.*, 
+            u.*
+        FROM 
+            loadart.negotiations n
+        JOIN 
+            loadart.users u
+        ON 
+            n.user_id = u.users_id
+        WHERE 
+            n.bid_id = $1
+        ORDER BY 
+            n."negotiations_id" DESC;
+    `;
 
     try {
         const result = await pool.query(selectQuery, [bid_id]);
@@ -134,9 +136,20 @@ export const getNegotiationByUserAndBid = async (req, res) => {
             return res.status(200).json({ message: "No matching negotiation found." });
         }
 
-        res.status(200).json({
+        // Translate the users_name field if lang is not English
+        const translatedNegotiations = await Promise.all(
+            result.rows.map(async (row) => {
+                const translatedName = await translateText(row.users_name, lang);
+                return {
+                    ...row,
+                    users_name: translatedName || row.users_name,
+                };
+            })
+        );
+
+        return res.status(200).json({
             message: "Negotiation retrieved successfully.",
-            negotiation: result.rows,
+            negotiation: translatedNegotiations,
         });
     } catch (error) {
         console.error("Error retrieving negotiation:", error.message);

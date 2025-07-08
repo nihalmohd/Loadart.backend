@@ -1,7 +1,6 @@
 import pool from "../../Model/Config.js";
 import { translateText } from "../../Utils/Translate.js";
 
-
 export const getLoadsByUserId = async (req, res) => {
   const { user_id, page, lang = "en" } = req.query;
 

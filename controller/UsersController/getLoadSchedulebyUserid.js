@@ -1,40 +1,37 @@
 import pool from "../../Model/Config.js";
+import { translateText } from "../../Utils/Translate.js";
 
 export const getLoadSchedulesByUser = async (req, res) => {
-    const { users_id, date_filter } = req.query;
-         console.log(date_filter,users_id,"hello");
-         
+    const { users_id, date_filter, lang = "en" } = req.query;
+
     try {
-        // Check if users_id is provided
         if (!users_id) {
             return res.status(400).json({ message: "users_id is required." });
         }
 
         // Base query
         let query = `
-        SELECT 
-            schedules.*, 
-            trucks.*, 
-            materials.*
-        FROM 
-            Loadart."load_schedules" AS schedules
-        LEFT JOIN 
-            Loadart."trucks" AS trucks
-        ON 
-            schedules."truck_id" = trucks."truck_id"
-        LEFT JOIN 
-            Loadart."materials" AS materials
-        ON 
-            schedules."materials_id" = materials."materials_id"
-        WHERE 
-            schedules."users_id" = $1
-        ORDER BY 
-            schedules."schedules_id" DESC;  -- Sorting by schedules_id in descending order
-    `;
-    
-        const queryParams = [users_id]; 
+            SELECT 
+                schedules.*, 
+                trucks.*, 
+                materials.*
+            FROM 
+                Loadart."load_schedules" AS schedules
+            LEFT JOIN 
+                Loadart."trucks" AS trucks
+            ON 
+                schedules."truck_id" = trucks."truck_id"
+            LEFT JOIN 
+                Loadart."materials" AS materials
+            ON 
+                schedules."materials_id" = materials."materials_id"
+            WHERE 
+                schedules."users_id" = $1
+        `;
 
-        // Apply date filter conditions
+        const queryParams = [users_id];
+
+        // Date filter conditions
         if (date_filter) {
             let dateCondition = "";
             if (date_filter === "last_day") {
@@ -46,22 +43,36 @@ export const getLoadSchedulesByUser = async (req, res) => {
             } else if (date_filter === "last_year") {
                 dateCondition = `AND schedules."schedules_date" >= NOW() - INTERVAL '1 year'`;
             }
-
             query += ` ${dateCondition}`;
         }
 
-        // Execute query
+        query += ` ORDER BY schedules."schedules_id" DESC`;
+
         const result = await pool.query(query, queryParams);
 
-        // Check if no data found
         if (result.rows.length === 0) {
             return res.status(200).json({ message: "No data found for the given criteria.", data: [] });
         }
 
-        // Send response
+        // Translate relevant fields
+        const translatedData = await Promise.all(
+            result.rows.map(async (row) => {
+                const pickupLocTranslated = await translateText(row.pickup_loc, lang);
+                const deliveryLocTranslated = await translateText(row.delivery_loc, lang);
+                const materialsNameTranslated = await translateText(row.materials_name, lang);
+
+                return {
+                    ...row,
+                    pickup_loc: pickupLocTranslated || row.pickup_loc,
+                    delivery_loc: deliveryLocTranslated || row.delivery_loc,
+                    materials_name: materialsNameTranslated || row.materials_name,
+                };
+            })
+        );
+
         res.status(200).json({
             message: "Data retrieved successfully.",
-            data: result.rows,
+            data: translatedData,
         });
     } catch (error) {
         console.error("Error retrieving load schedules:", error.message);

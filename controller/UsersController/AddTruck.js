@@ -1,23 +1,45 @@
-import pool from "../../Model/Config.js"; 
+import pool from "../../Model/Config.js";
+import { translateToEnglish } from "../../Utils/Translate.js";
+
 
 export const insertTruck = async (req, res) => {
-    const { regNumber, trucks_type_id, capacity_id, insurance, rc, model_id, manufacturer_id, user_id, location } = req.body;
+    const {
+        regNumber,
+        trucks_type_id,
+        capacity_id,
+        insurance,
+        rc,
+        model_id,
+        manufacturer_id,
+        user_id,
+        location,
+    } = req.body;
 
-    
-    if (!regNumber || !capacity_id || !insurance || !rc  || !user_id ) {
+    if (!regNumber || !capacity_id || !insurance || !rc || !user_id) {
         return res.status(400).json({ message: "All fields are required." });
     }
 
-    const insertTruckQuery = `
-    INSERT INTO loadart.trucks 
-    ("regNumber", "trucks_type_id", "capacity_id", "insurance", "rc", "user_id", "location")
-    VALUES ($1, $2, $3, $4, $5, $6, $7)
-    RETURNING *;
-`;
-
-    const values = [regNumber, trucks_type_id, capacity_id, insurance, rc, user_id, location];
-
     try {
+        // Translate location to English
+        const translatedLocation = location ? await translateToEnglish(location) : null;
+
+        const insertTruckQuery = `
+            INSERT INTO loadart.trucks 
+            ("regNumber", "trucks_type_id", "capacity_id", "insurance", "rc", "user_id", "location")
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
+            RETURNING *;
+        `;
+
+        const values = [
+            regNumber,
+            trucks_type_id,
+            capacity_id,
+            insurance,
+            rc,
+            user_id,
+            translatedLocation,
+        ];
+
         const result = await pool.query(insertTruckQuery, values);
 
         if (result.rows.length === 0) {
@@ -26,7 +48,7 @@ export const insertTruck = async (req, res) => {
 
         res.status(201).json({
             message: "Truck added successfully.",
-            data: result.rows[0], 
+            data: result.rows[0],
         });
     } catch (error) {
         console.error("Error inserting truck:", error.message);

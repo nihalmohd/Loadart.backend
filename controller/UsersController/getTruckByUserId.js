@@ -1,7 +1,9 @@
 import pool from "../../Model/Config.js";
+import { translateText } from "../../Utils/Translate.js";
+
 
 export const getTrucksByUserId = async (req, res) => {
-    const { user_id, trucks_status } = req.query;
+    const { user_id, trucks_status, lang = "en" } = req.query;
     const limit = 20;
 
     if (!user_id) {
@@ -54,13 +56,35 @@ export const getTrucksByUserId = async (req, res) => {
             return res.status(200).json({ message: "No trucks found for the given criteria." });
         }
 
+        let translatedData = result.rows;
+
+        // Apply translation only if target language is not English
+        if (lang !== "en") {
+            translatedData = await Promise.all(result.rows.map(async (row) => {
+                return {
+                    ...row,
+                    truck_capacities_name: row.truck_capacities_name
+                        ? await translateText(row.truck_capacities_name, lang)
+                        : null,
+                    truck_types_name: row.truck_types_name
+                        ? await translateText(row.truck_types_name, lang)
+                        : null,
+                    postTrucks_from: row.postTrucks_from
+                        ? await translateText(row.postTrucks_from, lang)
+                        : null,
+                    postTrucks_to: row.postTrucks_to
+                        ? await translateText(row.postTrucks_to, lang)
+                        : null,
+                };
+            }));
+        }
+
         res.status(200).json({
             message: "Trucks retrieved successfully.",
-            data: result.rows,
+            data: translatedData,
         });
     } catch (error) {
         console.error("Error retrieving trucks:", error.message);
         res.status(500).json({ message: "Internal server error" });
     }
 };
-    

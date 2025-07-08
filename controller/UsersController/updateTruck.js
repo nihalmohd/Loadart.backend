@@ -1,17 +1,29 @@
 import pool from "../../Model/Config.js";
+import { translateToEnglish } from "../../Utils/Translate.js";
 
 export const updateTruck = async (req, res) => {
     try {
-        const { truck_id, regNumber, trucks_type_id, capacity_id, location } = req.body;
+        let { truck_id, regNumber, trucks_type_id, capacity_id, location } = req.body;
 
         if (!truck_id) {
             return res.status(400).json({ message: "truck_id is required" });
         }
 
+        // Translate location to English before storing
+        if (location) {
+            location = await translateToEnglish(location);
+        }
+
         const updateQuery = `
             UPDATE loadart.trucks
-            SET "regNumber" = $1, "trucks_type_id" = $2, "capacity_id" = $3, "location" = $4, "updatedAt" = NOW()
-            WHERE truck_id = $5
+            SET 
+                "regNumber" = $1, 
+                "trucks_type_id" = $2, 
+                "capacity_id" = $3, 
+                "location" = $4, 
+                "updatedAt" = NOW()
+            WHERE 
+                truck_id = $5
             RETURNING *;
         `;
 

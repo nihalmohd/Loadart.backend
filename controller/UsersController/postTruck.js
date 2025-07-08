@@ -1,4 +1,5 @@
 import pool from "../../Model/Config.js";
+import { translateToEnglish } from "../../Utils/Translate.js";
 
 export const insertPostTrucks = async (req, res) => {
     try {
@@ -17,10 +18,15 @@ export const insertPostTrucks = async (req, res) => {
             });
         }
 
-        
+        // Translate fields to English
+        const translatedFrom = postTrucks_from ? await translateToEnglish(postTrucks_from) : null;
+        const translatedTo = postTrucks_to ? await translateToEnglish(postTrucks_to) : null;
+        const translatedComments = comments ? await translateToEnglish(comments) : null;
+
+        // Format datetime if needed
         if (postTrucks_dateTime && !postTrucks_dateTime.includes("-")) {
-            const todayDate = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
-            postTrucks_dateTime = `${todayDate}T${postTrucks_dateTime}`; // Prepend today's date
+            const todayDate = new Date().toISOString().split('T')[0];
+            postTrucks_dateTime = `${todayDate}T${postTrucks_dateTime}`;
         }
 
         await pool.query("BEGIN");
@@ -45,14 +51,16 @@ export const insertPostTrucks = async (req, res) => {
             VALUES ($1, $2, $3, $4, $5, $6)
             RETURNING *;
         `;
+
         const insertValues = [
             postTrucks_dateTime || null, 
-            postTrucks_from, 
-            postTrucks_to, 
+            translatedFrom, 
+            translatedTo, 
             postTrucks_capacity_id, 
-            comments || null, 
+            translatedComments, 
             truck_id
         ];
+
         const insertResult = await pool.query(insertQuery, insertValues);
 
         await pool.query("COMMIT");
@@ -69,7 +77,7 @@ export const insertPostTrucks = async (req, res) => {
             return res.status(400).json({
                 error: 'Invalid column name in the query. Please verify your database schema.',
             });
-        } 
+        }
 
         return res.status(500).json({
             error: 'Internal Server Error',
@@ -77,4 +85,3 @@ export const insertPostTrucks = async (req, res) => {
         });
     }
 };
-      

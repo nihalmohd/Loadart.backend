@@ -1,12 +1,17 @@
 import pool from "../../Model/Config.js";
+import { translateToEnglish } from "../../Utils/Translate.js";
 
 export const updateLoad = async (req, res) => {
     try {
-        const { loads_id, pickupLoc, deliveryLoc, pickupDate, material_id, truck_type_id, capacity_id } = req.body;
+        let { loads_id, pickupLoc, deliveryLoc, pickupDate, material_id, truck_type_id, capacity_id } = req.body;
 
         if (!loads_id) {
             return res.status(400).json({ message: "loads_id is required" });
         }
+
+        // Translate pickup and delivery locations to English before storing
+        if (pickupLoc) pickupLoc = await translateToEnglish(pickupLoc);
+        if (deliveryLoc) deliveryLoc = await translateToEnglish(deliveryLoc);
 
         const query = `
             UPDATE Loadart."loads"

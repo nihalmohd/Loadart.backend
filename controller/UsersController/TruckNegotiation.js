@@ -1,4 +1,5 @@
 import pool from "../../Model/Config.js";
+import { translateText } from "../../Utils/Translate.js";
 
 export const insertTruckNegotiation = async (req, res) => {
     const { bid_id, user_id, amount } = req.body;
@@ -104,26 +105,27 @@ export const insertMyTruckNegotiation = async (req, res) => {
 
 
 export const getTruckNegotiationByUserAndBid = async (req, res) => {
-    const { bid_id } = req.query;
+    const { bid_id, lang = "en" } = req.query;
 
     if (!bid_id) {
-        return res.status(400).json({ message: " bid_id is required as query parameters." });
+        return res.status(400).json({ message: "bid_id is required as query parameters." });
     }
+
     const selectQuery = `
-    SELECT 
-        n.*,
-        u.*
-    FROM 
-        loadart."truckNegotiations" n
-    JOIN 
-        loadart.users u
-    ON 
-        n.user_id = u.users_id
-    WHERE 
-        n.bid_id = $1
-    ORDER BY 
-        n."truckNegotiations_id" DESC;  -- Sorting by truckNegotiations_id in descending order
-`;
+        SELECT 
+            n.*,
+            u.*
+        FROM 
+            loadart."truckNegotiations" n
+        JOIN 
+            loadart.users u
+        ON 
+            n.user_id = u.users_id
+        WHERE 
+            n.bid_id = $1
+        ORDER BY 
+            n."truckNegotiations_id" DESC;
+    `;
 
     try {
         const result = await pool.query(selectQuery, [bid_id]);
@@ -132,14 +134,25 @@ export const getTruckNegotiationByUserAndBid = async (req, res) => {
             return res.status(200).json({ message: "No matching negotiation found." });
         }
 
+        // Translate fields
+        const translatedNegotiations = await Promise.all(
+            result.rows.map(async (item) => {
+                const translated = { ...item };
+
+                if (translated.users_name)
+                    translated.users_name = await translateText(translated.users_name, lang);
+
+                return translated;
+            })
+        );
+
         res.status(200).json({
             message: "Negotiation retrieved successfully.",
-            negotiation: result.rows,
+            negotiation: translatedNegotiations,
         });
     } catch (error) {
         console.error("Error retrieving negotiation:", error.message);
         res.status(500).json({ message: "Internal server error" });
     }
 };
-
 
